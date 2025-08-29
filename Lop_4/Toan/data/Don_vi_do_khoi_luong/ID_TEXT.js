@@ -1,0 +1,15 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='Thực hành đơn vị đo khối lượng';
+hashIDText['ID_TEXT2']='30 ta =';
+hashIDText['ID_TEXT3']='1tấn = 10tạ';
+hashIDText['ID_TEXT4']='1tạ = 10yến';
+hashIDText['ID_TEXT5']='1yến = 10kg';
+hashIDText['ID_TEXT6']='1kg = 10hg';
+hashIDText['ID_TEXT7']='1hg = 10dag';
+hashIDText['ID_TEXT8']='1dag = 10g';
+hashIDText['ID_TEXT9']='1000g = 1kg';
+hashIDText['ID_TEXT10']='tấn        tạ        yến       kg         hg        dag        g';
+hashIDText['ID_TEXT11']='Submit';
+hashIDText['ID_TEXT12']='Nhập số thích hợp vào ô trống.';
+hashIDText['ID_TEXT13']='good work';

@@ -1,0 +1,815 @@
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Vong_6</title>
+<script type="text/javascript" src="/js/kinetic-v5.1.0.js">object</script>
+<script type="text/javascript" src="/js/buzz.js">sound</script>
+<script type="text/javascript" src="/js/paintlib-v5.1.0.js">paint</script>
+<script type="text/javascript" src="http://code.responsivevoice.org/responsivevoice.js">Text to speak</script>
+<script type="text/javascript" src="/data/Vong_6/ID_TEXT.js">ResourceIDText</script>
+<script type="text/javascript" src="/js/LacVietJScript-v5.1.0.js">JScrip</script>
+<script type="text/javascript">
+var arNumber=[0,0,0,0,0];
+var m_size=20;
+var m_index=0;
+var m_sai=0;
+var arPhep=[0,0,0,0,0];
+function  CreateRam(){
+   var Count = 0;
+   for (var i = 0; i < m_size/2; i++)
+   {
+    var bb = true;
+    var iNN,x,y,nc;
+    while (bb)
+    {
+    x= Random(50)+10;
+    y =  Random(5)+2;
+    nc= Random(2);
+    if(nc==0)
+    iNN = x*y;
+    else {
+	  while(x%y!=0)
+		{
+			x=  Random(90)+10;
+			y =  Random(5)+2;
+		}
+	iNN = x/y;
+	}
+    for (var j = 0 ; j < Count;j++)
+    { 
+      if (arNumber[j] == iNN)
+         break;
+    }
+    if (j >= Count)
+       bb = false;
+    }
+    arNumber[Count] =iNN;
+    if(nc==0)arPhep[Count]="x"; else arPhep[Count]=":";
+    Count++;
+  } 
+}
+var m_start="";
+var m_end="";
+
+function InitBai1()
+{
+m_sai=0;
+m_start="";
+m_end="";
+CreateRam();
+var xx=m_size/2;// gan=
+ for (var k = 0; k < m_size/2; k++){
+	arNumber[xx]=arNumber[k];
+	arPhep[xx]=arPhep[k];
+	xx++;
+	}
+ var tam=0;// tron
+ for(var i = 0; i<m_size; i++)
+	{
+		var x= Random(m_size);
+		var y= Random(m_size);
+		while(x==y)
+			y= Random(m_size);
+      	tam= arNumber[x];
+		arNumber[x]=arNumber[y];
+		arNumber[y]=tam;
+
+		tam= arPhep[x];
+		arPhep[x]=arPhep[y];
+		arPhep[y]=tam;
+      }
+ for (k = 0; k < m_size; k++){
+	var xxx= Random(3);
+	if(xxx==0)
+	   SetText("","o_so_"+k,+arNumber[k]);
+	else {
+	if(arPhep[k]=="x")
+  	{
+    		var y =  Random(5)+2;
+		while(arNumber[k]%y!=0)
+			y =  Random(5)+2;
+		SetText("","o_so_"+k,+arNumber[k]/y+ " x "+y);
+	 }
+	else if(arPhep[k]==":")// chia
+	  {
+		var y =  Random(5)+2;
+		SetText("","o_so_"+k,arNumber[k]*y+" : "+y);
+	 }
+	}
+	SetShowObject("","o_so_"+k,1);
+	SetColor("","o_so_"+k,-1,-1,-1);
+	MoveObjectTo("","o_so_"+k,-1,-1,10,5,3);
+	}
+SetText("","obj_view","");
+SetText("","phut","5");
+SetText("","giay","0");
+m_index=0;
+SetTimerPage(1000);
+	InvalidateObj("","");
+}
+function FinishMove(){
+	SetShowObject("",m_start,0);
+	SetShowObject("",m_end,0);
+	InvalidateObj("","");
+}
+function  Check()
+{
+	if(m_start!="" && m_end!="" &&m_start!=m_end)
+	{	
+		var _s= replaceStr(GetText("",m_start),"x","*");
+		_s= replaceStr(_s,":","/");
+
+		var _e= replaceStr(GetText("",m_end),"x","*");
+		    _e= replaceStr(_e,":","/");
+		if(ExecAsThread(_s) == ExecAsThread(_e))
+		{
+			MoveObjectTo("",m_start,GetLeft("","obj_view"),GetTop("","obj_view"),10,2,1,"FinishMove()");
+			MoveObjectTo("",m_end,GetLeft("","obj_view"),GetTop("","obj_view"),10,2,1,"FinishMove()");
+			PlaySound("ID_TRUE");
+			m_index++;
+			m_sai=0;	
+		}
+		else {
+			SetColor("",m_start);
+			SetColor("",m_end);
+			PlaySound("ID_FALSE");
+			m_sai++;
+		}
+		m_start="";
+		m_end="";		
+	}
+	if(m_index==m_size/2){
+		KillTimerPage();
+		SetText("","label","Tốt");
+		var g=60 - GetText("","giay");
+		var ph= 4 - GetText("","phut");
+		SetText("","m_diem",ph +":"+g);
+		SetShowObject("","bang_diem",1);
+		}
+	else if(m_sai>=3)
+		{
+		InitBai1();
+		}
+	InvalidateObj("","");
+}
+function ClickNumber()
+{
+	if(m_start=="")
+	{
+		m_start= GetName("");
+		SetColor("","","#FF6600");
+	} 
+	else m_end= GetName("");
+	if(m_end!=m_start)
+	{
+		SetColor("","","#FF6600");
+		Delay("Check()",200);
+	}
+	else m_end="";
+InvalidateObj("","");
+}
+function StartTime()
+{
+	var s= GetText("","giay");
+	if(s==0){
+		var p= GetText("","phut");
+		s= 60;
+		p--;
+		if(p==-1)
+		{
+		SetText("","label","Hết thời gian.");
+		SetText("","m_diem","0:0");
+		SetShowObject("","bang_diem",1);
+		KillTimerPage();
+		return;
+		}
+	      SetText("","phut",p);
+	}
+	s--;
+	SetText("","giay",s);
+	InvalidateObj("","");
+}
+//
+var curentpos=0;
+var m_dapan="";
+var nextpos=0;
+var m_finish= false;
+function InitBai3()
+{
+curentpos=0;
+nextpos=0;
+SetShowObject("","msg",0);
+InvalidateObj("","");
+AllowEditText("","m_kq",1);
+MoveObjectTo("","tho",-1,-1);
+SetShowObject("","m_kq",1);
+m_finish= false;
+}
+function MoveTho( key)
+{
+  
+  switch(key){
+	case "&":
+	{
+		nextpos= curentpos;
+		nextpos=nextpos-9;
+		break; //len
+	}
+	case "(": //xuong
+	{
+		nextpos= curentpos;
+		nextpos=nextpos+9;
+		break;
+	}
+	case "%": //trai
+	{
+		nextpos= curentpos;
+		nextpos=nextpos-1;
+		break;
+	}
+	case "'": //phai
+	{
+		nextpos= curentpos;
+		nextpos=nextpos+1;
+		break;
+	}
+	default:
+		return;
+  }
+  var obj= "o_"+nextpos;
+	if(FindObj("",obj)!="")
+	{
+		
+		var cl= GetColor("",obj,"xxxx");
+		if(cl=="rgba(0, 0, 0, 0)"){
+		MoveObjectTo("","tho",GetLeft("",obj),GetTop("",obj));
+		curentpos=nextpos;
+		}
+		else if(cl=="ID_STOP")
+			return;
+		else if(cl=="ID_CARROT")
+			{
+			SetShowObject("","m_kq",0);
+			SetText("","m_kq","");
+			MoveObjectTo("","tho",GetLeft("",obj),GetTop("",obj));
+			SetText("","cau_hoi","Bạn đã hoàn thành!");
+			SetShowObject("","msg",1);
+			m_finish=true;
+		}
+		else{
+			var text= GetText("",obj);
+			var idx= indexOf(text,"|",0);
+			if(idx==-1) idx= indexOf(text,"?",0);
+			if(idx!="-1"){
+			SetText("","cau_hoi",subString(text,0,idx));
+			m_dapan=subString(text,idx+1);
+			SetText("","m_kq","");
+			SetShowObject("","msg",1);
+			}
+		}
+		InvalidateObj("","");
+	}	
+}
+function KiemTra()
+{
+	if(GetText("","m_kq")==m_dapan){
+		var obj= "o_"+nextpos;
+		SetShowObject("","msg",0);
+		MoveObjectTo("","tho",GetLeft("",obj),GetTop("",obj));
+		curentpos=nextpos;
+		InvalidateObj("","");
+	}
+	if(m_finish==true)
+		InitBai3();	
+}
+function CloseMsg()
+{
+	SetShowObject("","msg",0);
+
+}
+folder_Resource =host+'Vong_6';
+function Page_1()
+{
+  return;
+}
+function Page_1_OnTimer()
+{
+StartTime();
+  return;
+}
+
+function Page_2_OnKeyDown()
+{
+  var key= GetKeyDown("");
+MoveTho(key);
+  return;
+}
+function Page_2()
+{	
+InitBai3();
+  return;
+}
+function Page_2_OnTimer()
+{
+  return;
+}
+ 
+  window.onload = function() {
+ var canvas = document.createElement('canvas');
+if (!canvas.getContext) {
+alert("Trinh duyet khong ho tro");
+return;
+} 
+ document.getElementById("Doc").textContent = ""; 
+ stage = new Kinetic.Stage({
+ container: "Doc", 
+ width: 640,
+ height: 400 
+ });
+
+ var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
+var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,640,400,'','rgba(255, 255, 183, 1.00)','','','','ID_IMAGE7.PNG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(255, 255, 183, 0)','2','2','0','','0','0','0','0',0,0,'');
+Page_1.add(Page_1_Backrounnd);
+var obj_view = CreText('obj_view',671,-10,125,60,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','ID_IMAGE1.PNG',28,'Arial','Bold','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(0, 128, 192, 1.00)','2','0','rgba(255, 255, 255, 255)','0','0','4','1',0,0, 'rgba(192, 192, 192, 255)',0,1.50);
+obj_view.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(obj_view);
+var Text_6 = CreText('Text_6',290,375,79,24,":",'rgba(0, 0, 0, 0.59)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(0, 0, 0, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(Text_6);
+var Text_4 = CreText('Text_4',2,48,641,49,"             Bài 1: Em hãy tìm các cặp ô chứa số, phép tính có kết quả bằng nhau trong bảng sau.",'rgba(0, 0, 0, 0.39)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',20,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(Text_4);
+var Text_3 = CreText('Text_3',47,103,562,265,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',8,'rgba(255, 255, 224, 255)','rgba(255, 255, 0, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(Text_3);
+var o_so_0 = CreText('o_so_0',50,106,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_0);
+var o_so_1 = CreText('o_so_1',161,106,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_1);
+var o_so_2 = CreText('o_so_2',272,106,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_2);
+var o_so_3 = CreText('o_so_3',383,106,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_3);
+var o_so_4 = CreText('o_so_4',495,106,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_4);
+var o_so_5 = CreText('o_so_5',50,171,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_5);
+var o_so_6 = CreText('o_so_6',161,171,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_6);
+var o_so_7 = CreText('o_so_7',272,171,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_7);
+var o_so_8 = CreText('o_so_8',383,171,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_8);
+var o_so_9 = CreText('o_so_9',495,171,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_9.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_9);
+var o_so_10 = CreText('o_so_10',50,235,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_10.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_10);
+var o_so_11 = CreText('o_so_11',161,235,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_11.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_11);
+var o_so_12 = CreText('o_so_12',272,235,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_12.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_12);
+var o_so_13 = CreText('o_so_13',383,235,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_13.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_13);
+var o_so_14 = CreText('o_so_14',495,235,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_14.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_14);
+var o_so_15 = CreText('o_so_15',50,301,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_15.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_15);
+var o_so_16 = CreText('o_so_16',161,301,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_16.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_16);
+var o_so_17 = CreText('o_so_17',272,301,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_17.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_17);
+var o_so_18 = CreText('o_so_18',383,301,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_18.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_18);
+var o_so_19 = CreText('o_so_19',495,301,110,64,"",'rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',2,2,'rgba(192, 192, 192, 255)',0,1.50);
+o_so_19.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ClickNumber();
+  return;
+}
+ );
+Page_1.add(o_so_19);
+var Text_1 = CreText('Text_1',2,-2,130,55,"Vòng 6",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 0, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Bold','center','middle',1,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(Text_1);
+var Text_5 = CreText('Text_5',7,57,37,32,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 0, 1.00)','rgba(255, 255, 255, 1.00)','ID_IMAGE4.PNG',20,'Arial','Bold','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(Text_5);
+var m_diem = CreText('m_diem',191,159,231,109,"",'rgba(236, 217, 255, 0.98)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Bold','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(236, 217, 255, 0.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(m_diem);
+var bt_lam_lai = CreText('bt_lam_lai',274,240,80,25,"Bắt Đầu",'rgba(64, 0, 128, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(128, 0, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+bt_lam_lai.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+InitBai1();
+SetShowObject("","bang_diem",0);
+  return;
+}
+ );
+Page_1.add(bt_lam_lai);
+var t_mess = CreText('t_mess',192,160,229,16,"Thông báo điểm",'rgba(64, 0, 128, 0.98)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','left','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(128, 0, 255, 0.00)','4','1','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(t_mess);
+var label = CreText('label',188,177,233,24,"Làm Bài",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(label);
+var phut = CreText('phut',291,377,38,24,"0",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(phut);
+var giay = CreText('giay',333,377,38,24,"0",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(giay);
+var Text_8 = CreText('Text_8',606,369,30,30,"››",'rgba(0, 128, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 0, 1.00)','',20,'Arial','Bold','center','middle',2,'0.00','0','0',3,'rgba(255, 255, 255, 255)','rgba(0, 128, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Text_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+NextPage();
+  return;
+}
+ );
+Page_1.add(Text_8);
+var bang_diem = new Kinetic.Group({name:'bang_diem',x:0,y:0,width:251,height:113});
+bang_diem.add(m_diem);
+bang_diem.add(label);
+bang_diem.add(t_mess);
+bang_diem.add(bt_lam_lai);
+Page_1.add(bang_diem);
+stage.add(Page_1);
+
+ var Page_2 = new Kinetic.Layer({name: 'Page_2',callback:'Page_2()'});
+var Page_2_Backrounnd = CreText('Page_2_Backrounnd',0,0,450,400,'','rgba(176, 216, 255, 1.00)','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(176, 216, 255, 0)','0','0','0','','0','0','0','0',0,0,'');
+Page_2.add(Page_2_Backrounnd);
+var Text_1 = CreText('Text_1',48,53,361,340,"",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',5,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(Text_1);
+var o_0 = CreText('o_0',53,58,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_0);
+var o_1 = CreText('o_1',92,58,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_1);
+var o_2 = CreText('o_2',131,58,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',36,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 0, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_2);
+var o_3 = CreText('o_3',170,58,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_3);
+var o_4 = CreText('o_4',209,58,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_4);
+var o_5 = CreText('o_5',248,58,36,33,"Viết số gồm hai chục, năm đơn vị và tám trăm.|825",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_5);
+var o_6 = CreText('o_6',287,58,36,33,"Người ta xếp 84 gói bánh vào các thùng, mỗi thùng 4 gói. Số thùng bánh xếp được là?|21",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM13.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_6);
+var o_7 = CreText('o_7',326,58,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_7);
+var o_8 = CreText('o_8',366,58,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_8);
+var o_9 = CreText('o_9',53,95,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_9);
+var o_10 = CreText('o_10',92,95,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_10);
+var o_11 = CreText('o_11',131,95,36,33,"Tháng 10 có 4 tuần 3 ngày, Tháng 10 có số ngày là?|31",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM14.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_11);
+var o_12 = CreText('o_12',170,95,36,33,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_12);
+var o_13 = CreText('o_13',209,95,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_13);
+var o_14 = CreText('o_14',248,95,36,33,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_14);
+var o_15 = CreText('o_15',287,95,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_15);
+var o_16 = CreText('o_16',326,95,36,33,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_16);
+var o_17 = CreText('o_17',366,95,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_17);
+var o_18 = CreText('o_18',53,133,36,33,"Một phép chia có số chia là 6. Số dư lớn nhất có thể có trong phép chia đó là?|5",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM0.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_18);
+var o_19 = CreText('o_19',92,133,36,33,"Bể thứ nhất chứa 256l nước. Bể thứ hai chứa được 212l nước. Hỏi cả hai bể chứa bao nhiêu lít nước?|468",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_19);
+var o_20 = CreText('o_20',131,133,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_20);
+var o_21 = CreText('o_21',170,133,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_21);
+var o_22 = CreText('o_22',209,133,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_22);
+var o_23 = CreText('o_23',248,133,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_23);
+var o_24 = CreText('o_24',287,133,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_24);
+var o_25 = CreText('o_25',326,133,36,33,"Một phép chia có số chia là 5, thương là 24, số dư là 3. Số bị chia của phép chia đó là:|123",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM11.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_25);
+var o_26 = CreText('o_26',366,133,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_26);
+var o_27 = CreText('o_27',53,170,36,33,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_27);
+var o_28 = CreText('o_28',92,170,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_28);
+var o_29 = CreText('o_29',131,170,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_29);
+var o_30 = CreText('o_30',170,170,36,33,"Khối lớp Bốn có 235 học sinh, khối lớp Ba có 216 học sinh. Hỏi hai khối có bao nhiêu học sinh?|451",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_30);
+var o_31 = CreText('o_31',209,170,36,33,"Một phép chia có số chia là 6, thương là số lớn nhất có hai chữ số, số dư là số dư lớn nhất có thể có trong phép chia. Số bị chia của phép chia đó là?|599",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM2.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_31);
+var o_32 = CreText('o_32',248,170,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_32);
+var o_33 = CreText('o_33',287,170,36,33,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_33);
+var o_34 = CreText('o_34',326,170,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_34);
+var o_35 = CreText('o_35',366,170,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_35);
+var o_36 = CreText('o_36',53,206,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_36);
+var o_37 = CreText('o_37',92,207,36,33,"Một phép chia có số chia là 5, số dư là 1, để phép chia là phép chia hết, và thương tăng thêm 2 đơn vị. Thì cần thêm vào số bị chia bao nhiêu đơn vi?|9",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM3.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_37);
+var o_38 = CreText('o_38',131,207,36,33,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_38);
+var o_39 = CreText('o_39',170,207,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_39);
+var o_40 = CreText('o_40',209,207,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_40);
+var o_41 = CreText('o_41',248,207,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_41);
+var o_42 = CreText('o_42',287,207,36,33,"Người ta chia 79l dầu vào các can, mỗi can 5l. Vậy cần ít nhất bao nhiêu can để chứa hết số dầu trên?|16",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM4.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_42);
+var o_43 = CreText('o_43',326,207,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_43);
+var o_44 = CreText('o_44',366,207,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_44);
+var o_45 = CreText('o_45',53,244,36,33,"Mai gấp được 145 ngôi sao. Mai tặng bạn 78 ngôi sao. Hỏi Mai còn lại bao nhiêu ngôi sao?|67",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_45);
+var o_46 = CreText('o_46',92,244,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_46);
+var o_47 = CreText('o_47',131,244,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_47);
+var o_48 = CreText('o_48',170,244,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_48);
+var o_49 = CreText('o_49',209,244,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_49);
+var o_50 = CreText('o_50',248,244,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_50);
+var o_51 = CreText('o_51',287,244,36,33,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_51);
+var o_52 = CreText('o_52',326,244,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_52);
+var o_53 = CreText('o_53',366,244,36,33,"Có bao nhiêu số có hai chữ số mà tổng các chữ số bằng 9?|9",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_53);
+var o_54 = CreText('o_54',53,281,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_54);
+var o_55 = CreText('o_55',92,281,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_55);
+var o_56 = CreText('o_56',131,281,36,33,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_56);
+var o_57 = CreText('o_57',170,281,36,33,"Một số chia cho 4 thì được 16, lấy số đo chia cho 6 thì số dư là:|4",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM10.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_57);
+var o_58 = CreText('o_58',209,281,36,33,"Có bao nhiêu số có hai chữ số mà tổng các chữ số bẳng 14?|5",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_58);
+var o_59 = CreText('o_59',248,281,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_59);
+var o_60 = CreText('o_60',287,281,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_60);
+var o_61 = CreText('o_61',326,281,36,33,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_61);
+var o_62 = CreText('o_62',366,281,36,33,"Một số chia cho 5 thì kết quả là 27. Nếu lấy số đó chia cho 3 thì kết quả là:|45",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM7.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_62);
+var o_63 = CreText('o_63',53,318,36,33,"Một số chia cho 6 được bao nhiêu cộng với 24 thì được kết quả là 40. Số đó là:|96",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM8.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_63);
+var o_64 = CreText('o_64',92,318,36,33,"Trong đợt thu hoạch vừa qua nhà bác Hùng và bác Mai thu hoạch được tất cả 456 bắp ngô. Biết nhà bác Mai thu hoạch 234 bắp. Tính số bắp ngô nhà bác Hùng thu được.|222",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_64);
+var o_65 = CreText('o_65',131,318,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_65);
+var o_66 = CreText('o_66',170,318,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_66);
+var o_67 = CreText('o_67',209,318,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_67);
+var o_68 = CreText('o_68',248,318,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_68);
+var o_69 = CreText('o_69',287,318,36,33,"Mẹ mua 45 quả cam, mẹ mang biếu bà 15 quả, số còn lại mẹ bày lên các đĩa để tiếp khách, mỗi đĩa 6 quả. Hỏi mẹ bày lên được bao nhiêu đĩa?|5",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM9.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_69);
+var o_70 = CreText('o_70',326,318,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_70);
+var o_71 = CreText('o_71',366,318,36,33,"+",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_71);
+var o_72 = CreText('o_72',53,355,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_72);
+var o_73 = CreText('o_73',92,355,36,33,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_73);
+var o_74 = CreText('o_74',131,355,36,33,"Năm nay mẹ 36 tuổi, tuổi con bằng 1/6 tuổi mẹ. Vậy hai năm sau con bao nhiêu tuổi?|8",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_ITEM14.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_74);
+var o_75 = CreText('o_75',170,355,36,33,"Hình tam giác ABC có cạnh AB dài 25cm, cạnh BC dài 36cm; cạnh CA ngắn hơn cạnh BC 9cm. Tính chu vi tam giác ABC.|88",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_75);
+var o_76 = CreText('o_76',209,355,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_76);
+var o_77 = CreText('o_77',248,355,36,33,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_STOP.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_77);
+var o_78 = CreText('o_78',287,355,36,33,"Tìm số có ba chữ số biết chữ số hàng trăm hơn chữ số hàng chục 6 đơn vị, chữ số hàng chục trừ đi chữ số hàng đơn vị bằng 3.|930",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_78);
+var o_79 = CreText('o_79',326,355,36,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_79);
+var o_80 = CreText('o_80',366,355,36,33,"-",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','ID_CARROT.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',1,'rgba(0, 128, 255, 255)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(o_80);
+var tho = CreText('tho',54,58,36,33,"",'rgba(255, 104, 32, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','ID_THO.PNG',16,'Arial','Normal','center','middle',3,'0.00','0','0',0,'rgba(0, 128, 255, 255)','rgba(255, 104, 32, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(204, 255, 204, 255)',0,1.50);
+Page_2.add(tho);
+var Text_8 = CreText('Text_8',13,60,30,30,"",'rgba(0, 128, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 0, 1.00)','ID_IMAGE26.PNG',20,'Arial','Bold','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(0, 128, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(255, 255, 255, 255)',0,1.50);
+Text_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+NextPage();
+  return;
+}
+ );
+Page_2.add(Text_8);
+var Text_3 = CreText('Text_3',414,357,30,30,"",'rgba(102, 102, 102, 1.00)','rgba(102, 102, 102, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 0, 1.00)','ID_IMAGE26.PNG',20,'Arial','Bold','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(102, 102, 102, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(255, 255, 255, 255)',0,1.50);
+Text_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+NextPage();
+  return;
+}
+ );
+Page_2.add(Text_3);
+var cau_hoi = CreText('cau_hoi',50,176,364,90,"Số viên bi của Minh bằng 1/2 số viên bi của Tùng. Nếu Tùng cho Minh 4 viên bi thì số bi của hai bạn bằng nhau. Hỏi Tùng có bao nhiêu viên bi?|16",'rgba(128, 0, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(255, 255, 255, 255)','rgba(64, 0, 128, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(cau_hoi);
+var m_kq = CreText('m_kq',293,245,64,18,"642",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(102, 102, 102, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+m_kq.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+AllowEditText("","",1);
+  return;
+}
+ );
+Page_2.add(m_kq);
+var bt_ok = CreText('bt_ok',363,245,48,18,"OK",'rgba(64, 0, 128, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Bold','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(128, 0, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+bt_ok.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+KiemTra();
+  return;
+}
+ );
+Page_2.add(bt_ok);
+var title = CreText('title',50,176,364,18,"CÂU HỎI",'rgba(64, 0, 128, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(128, 0, 255, 1.00)','4','1','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(title);
+var close_msg = CreText('close_msg',397,176,17,18,"x",'rgba(64, 0, 128, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',10,'Arial','Bold','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(128, 0, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+close_msg.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+CloseMsg();
+  return;
+}
+ );
+Page_2.add(close_msg);
+var Text_4 = CreText('Text_4',1,1,449,45,"              Bài 2: Bạn hãy di chuyển con thỏ đến củ cà rốt bằng các phím mủi tên (←↑→↓)",'rgba(0, 128, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(0, 128, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(Text_4);
+var Text_5 = CreText('Text_5',1,5,37,32,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 0, 1.00)','rgba(255, 255, 255, 1.00)','ID_IMAGE4.PNG',20,'Arial','Bold','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+Page_2.add(Text_5);
+var Text_2 = CreText('Text_2',3,367,30,30,"‹‹",'rgba(0, 128, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 0, 1.00)','',20,'Arial','Bold','center','middle',2,'0.00','0','0',3,'rgba(255, 255, 255, 255)','rgba(0, 128, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Text_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+PrevPage();
+  return;
+}
+ );
+Page_2.add(Text_2);
+var msg = new Kinetic.Group({name:'msg',x:0,y:0,width:368,height:94});
+msg.add(cau_hoi);
+msg.add(title);
+msg.add(m_kq);
+msg.add(bt_ok);
+msg.add(close_msg);
+Page_2.add(msg);
+stage.add(Page_2);
+InitLacVietScript();
+};
+</script>
+</head>
+<body style="text-align: center">
+<div id="Doc" style="vertical-align: middle; text-align: center; width: 100%; height: 100%; font-size: xx-large;">Loading...</div>
+</body>
+</html>

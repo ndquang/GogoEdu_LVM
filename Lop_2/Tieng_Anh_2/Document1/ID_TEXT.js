@@ -1,0 +1,13 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='bukgkg';
+hashIDText['ID_TEXT2']='aygyuyu';
+hashIDText['ID_TEXT3']='b';
+hashIDText['ID_TEXT4']='a';
+hashIDText['ID_TEXT5']='xádasd';
+hashIDText['ID_TEXT6']='aÁá';
+hashIDText['ID_TEXT7']='b';
+hashIDText['ID_TEXT8']='a';
+hashIDText['ID_TEXT9']='a';
+hashIDText['ID_TEXT10']='b';
+hashIDText['ID_TEXT11']='Used to add optional pitch (range 0 to 2), rate (range 0 to 1.5), volume (range 0 to 1) and callbacks.\r\nPitch, rate and volume may not affect audio on some browser combinations, older versions of Chrome on Windows for example.';

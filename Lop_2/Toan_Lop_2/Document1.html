@@ -1,0 +1,57 @@
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Document1</title>
+<script type="text/javascript" src="js/kinetic-v4.0.5.js">object</script>
+<script type="text/javascript" src="js/buzz.js">sound</script>
+<script type="text/javascript" src="js/paintlib.js">paint</script>
+<script type="text/javascript" src="http://code.responsivevoice.org/responsivevoice.js">Text to speak</script>
+<script type="text/javascript" src="https://googledrive.com/host/0B7xXjXVUsGWdLVhGekNINl9OWXM/Document1/ID_TEXT.js">ResourceIDText</script>
+<script type="text/javascript" src="js/LacVietJScript.js">JScrip</script>
+<script type="text/javascript">
+
+
+folder_Resource ='Document1';
+
+function Page_1()
+{
+AllowEditText("","Text_1",1);
+  return;
+}
+
+window.onload = function () {
+    var canvas = document.createElement('canvas');
+    if (!canvas.getContext) {
+        alert("Trinh duyet khong ho tro");
+        return;
+    }
+    canvas.tabindex = '1';
+    document.getElementById("Doc").textContent = "";
+    stage = new Kinetic.Stage({
+        container: "Doc",
+        width: 800,
+        height: 450
+    });
+
+    var Page_1 = new Kinetic.Layer({ name: 'Page_1', callback: 'Page_1()' });
+    var Page_1_Backrounnd = new Kinetic.Text(InitText('Page_1_Backrounnd', 0, 0, 800, 450, 'Background', 'rgba(255, 255, 255, 1.00)', '', '', '', '', 12, 'Times New Roman', '', 'left', 'center', 0, '0.00', '0', 0, '0', 0, 'rgba(0, 0, 0, 0)', '0', '0', '0', '', '0', '0', '0', '0', 0, 0, ''));
+    Page_1.add(Page_1_Backrounnd);
+    var Text_1 = new Kinetic.Text(InitText('Text_1', 126, 46, 427, 139, "A", 'rgba(255, 0, 0, 1.00)', 'rgba(255, 255, 255, 1.00)', 'rgba(0, 0, 0, 1.00)', 'rgba(255, 255, 255, 1.00)', '', 72, 'Arial', 'Bold', 'center', 'middle', 0, '0.00', '0', '0', 1, 'rgba(139, 0, 0, 255)', 'rgba(255, 0, 0, 1.00)', '0', '0', 'rgba(0, 0, 0, 0)', '0', '0', '4', '0', 0, 0, 'rgba(0, 0, 0, 0)'));
+    Text_1.on('mouseup touchend dragend', function (evt)/*---dragend---*/
+    {
+        m_pgObjCaller = this;
+        AllowEditText("", "", 1);
+        return;
+    }
+ );
+    Page_1.add(Text_1);
+    stage.add(Page_1);
+    InitLacVietScript();
+};
+</script>
+</head>
+<body style="text-align: center">
+<div id="Doc" style="vertical-align: middle; text-align: center; width: 100%; height: 100%; font-size: xx-large;">Loading...</div>
+ 
+</body>
+</html>

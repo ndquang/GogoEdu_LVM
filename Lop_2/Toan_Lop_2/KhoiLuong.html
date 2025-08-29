@@ -1,0 +1,1841 @@
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>KhoiLuong</title>
+<script type="text/javascript" src="js/kinetic-v4.0.5.js">object</script>
+<script type="text/javascript" src="js/buzz.js">sound</script>
+<script type="text/javascript" src="js/paintlib.js">paint</script>
+<script type="text/javascript" src="js/google-tts.js">Text to speak</script>
+<script type="text/javascript" src="KhoiLuong/ID_TEXT.js">ResourceIDText</script>
+<script type="text/javascript" src="js/LacVietJScript.js">JScrip</script>
+<script type="text/javascript">
+var sound=1;
+function PlayMusic( page){
+	if( sound==1){
+		SetRsc("","sound","ID_NO_SOUND");
+		InvalidateObj("","sound");
+		StopSound();
+		sound=0;
+	}else{
+		PlayWave("","","ID_BG"+page);
+		SetRsc("","sound","ID_SOUND");
+		InvalidateObj("","sound");
+		sound=1;
+	}
+}
+function DisplayMusic( page){
+	if(sound==0){
+		SetRsc("","sound","ID_NO_SOUND");
+		InvalidateObj("","sound");
+	}else{
+		PlayWave("","","ID_BG"+page);
+		SetRsc("","sound","ID_SOUND");
+		InvalidateObj("","sound");
+	}
+}
+/********************** Cau 1 To mau nhung vat nang ***************************************/
+var ImgNo1=0;
+function RandomFillHeavy(){
+	ImgNo1++;
+	if(ImgNo1==5)	ImgNo1=1;
+	SetRsc("","fillheavy","ID_1_"+ImgNo1);
+	InvalidateObj("","fillheavy");
+}
+/*---------- Set mau -------------*/
+function setColorFill( r, g, b)
+{
+	SetVar("m_red",r);
+	SetVar("m_green",g);
+	SetVar("m_blue",b);
+	var id= GetVar("m_color");
+	SetRsc("","choose_color","ID_COLOR_"+id);
+	InvalidateObj("","choose_color");
+	PlayWave("","","ID_COLOR");
+}
+/*------------To mau --------------*/
+function FillPicture(){
+	var red,blue,green;
+	red=GetVar("m_red");
+	blue=GetVar("m_blue");
+	green=GetVar("m_green");
+	FillImage("","",red,green,blue);
+}
+/********************** Cau 2 Chon nhung vat nang hon **************************************/
+var kqTrai=["","1","1","0","0","0","0","1","1","1","1","1","1","0","1","1","1","1","0"];
+var ImgNo2;
+var nangnhe;
+function RandomHeavier(){
+	ImgNo2= Random(18)+1;
+	nangnhe = Random(2); /* 0 nhe 1 nang*/
+	if(nangnhe == 0)	SetText("","nangnhe","nhẹ hơn");
+	else 			SetText("","nangnhe","nặng hơn");
+	SetRsc("","debai","ID_2_"+ImgNo2);
+	InvalidateObj("","debai");
+	SetShowObject("","Animate _DUNG",0);
+}
+function KhenDung(){
+	var khen= Random(4);
+	PlayWave("","","ID_KHEN_"+khen);
+	SetShowObject("","Animate _DUNG",1);
+	Delay(3000);
+}
+/********************** Cau 3 **************************************************************/
+var rotate=0;
+var angle=2;
+var kctruoc=0;
+var ktin=0;
+var kttraiin =1;
+var ktvatin;
+var klg3=  ["","4","9","5","2","3","3","4","6","5","7"+
+			,"9","9","9","8","7","8","9","7","8","8"];
+var quacan=[10];
+var mktquain=[0,0,0,0,0,0,0,0,0,0];
+var klg=0;
+var can_vat;
+var cau3Flag;
+/*-------- Hien thi so sanh ----------------*/
+function SoSanh( hien,  amthanh){
+	for(var i=1;i<=3;i++){
+		SetShowObject("","sosanh_"+i,hien);
+		if(amthanh==1){
+			PlayWave("","","ID_DUNG");
+		}
+	}
+}
+/*-------- Kiem tra do can bang cua can -----------*/
+function KTCanBang(){
+	if(rotate!=0){
+		SetShowObject("","muiten",0);
+		SoSanh(0,0);
+	}else if(rotate==0){
+		SetShowObject("","muiten",1);
+		if(ktvatin ==1 || kttraiin == 1) SoSanh(1,1);
+	}
+}
+function /*-------- Quay thanh ngang can ------------------*/
+Quay(var rd)
+{
+		RotateObj("","can_ngang",rd);
+		var t= GetTop("","can_trai");
+		var l= GetLeft("","can_trai");
+		var kc= ceil(sin(rd*3.1416/180)*(GetWidth("","can_ngang")/2));
+		var kctru= kc-kctruoc;
+		kctruoc=kc;
+		MoveObjectTo("","can_trai",l,t-kctru);
+		t= GetTop("","can_phai");
+		l= GetLeft("","can_phai");
+		MoveObjectTo("","can_phai",l,t+kctru);
+			var left,top;
+			if(can_vat !=""){
+			left =GetLeft("",can_vat);
+			top =GetTop("",can_vat)-kctru;
+			MoveObjectTo("",can_vat,left,top);
+			}
+		 	left = GetLeft("","an_cantrai");
+			top = GetTop("","an_cantrai")-kctru;				
+			MoveObjectTo("","an_cantrai",left,top);
+
+			left = GetLeft("","an_canphai");
+			top = GetTop("","an_canphai")+kctru;				
+			MoveObjectTo("","an_canphai",left,top);
+			for(var i=0;i<10;i++)
+				if(quacan[i]!="")
+					MoveObjectTo("",quacan[i],GetLeft("",quacan[i]),GetTop("",quacan[i])+kctru);
+			if(cau3Flag==1)	KTCanBang();
+}
+/* Tra ve vi tri ban dau cho doi tuong cau 3 va 4*/
+function ViTriDau(){
+	for(var ii=0;ii<10;ii++){
+		MoveObjectTo("","canqua_"+ii,-1,-1);
+		quacan[ii]="";
+	}
+	MoveObjectTo("","can_ngang",-1,-1);
+	MoveObjectTo("","can_trai",-1,-1);
+	MoveObjectTo("","can_phai",-1,-1);
+	MoveObjectTo("","an_cantrai",-1,-1);
+	MoveObjectTo("","an_canphai",-1,-1);
+	rotate=0;
+	kctruoc=0;
+	ktvatin=0;
+	RotateObj("","can_ngang",0);
+
+}
+/* random lay hinh*/
+function RandomCau3(){
+	var element= Random(20)+1;
+	klg=klg3[element];
+	can_vat="";
+	kttraiin=1;
+	SetRsc("","can_vat","ID_3_"+ element);
+	InvalidateObj("","can_vat");
+	SetRsc("","sosanh_1","ID_3_"+ element);
+	InvalidateObj("","sosanh_1");
+	SetText("","sosanh_2","?");
+	for(var ii=0;ii<=3;ii++){
+		SetShowObject("","sosanh_"+ii,0);
+	}
+	MoveObjectTo("","can_vat",-1,-1);
+	ViTriDau();
+	for(var j=0;j<10;j++)	mktquain[j]=0;
+}
+function SoSanh1(){
+	var dv=0;
+	for(var i=0;i<10;i++)
+		if(quacan[i]!="")
+			dv++;
+	if((dv!=0 && kttraiin==0) || (dv!=0 && ktvatin==1)){/* Da duoc can */
+		if(klg == GetText("","") && klg == dv){
+			var khen= Random(4);
+			SetText("","sosanh_2",klg);
+			PlayWave("","","ID_KHEN_"+khen);
+			Delay(3000);
+			RandomCau3();
+		}else{
+			PlayWave("","","ID_DONGVIEN");
+		}
+	}else{
+		PlayWave("","","ID_SAI");
+	}
+}
+function /*----------QuaCanUp  QuaCanDown khi dat qua can --------*/
+var ktquain=0;
+QuaCanUp(){ 
+	var vt= rightStr(GetName(""),1);
+	if((RectInRect("","an_canphai","")==1&& ktin==0)||(RectInRect("","an_canphai","")==1&& ktin==1 && mktquain[vt]==0)){
+		rotate+=angle;
+		quacan[vt] = GetName("");
+		Quay(rotate);
+		ktquain=1;
+		mktquain[vt]=ktquain;
+	}
+	else if((RectInRect("","an_canphai","")==0 && ktin==1) || (RectInRect("","an_canphai","")==0 && ktin==0 && mktquain[vt]==1))
+	{
+		rotate-=angle;
+		quacan[vt] = "";
+		Quay(rotate);
+		ktquain=0;
+		mktquain[vt]=ktquain;
+		MoveObjectTo("","",-1,-1);
+	}else if(ktin==0){
+		MoveObjectTo("","",-1,-1);
+	}
+}
+function QuaCanDown(){
+	if(RectInRect("","an_canphai","")==1){
+		ktin=1; /* o trong*/
+	}else{
+		ktin=0; /* o ngoai*/
+		ktquain=0;
+	}
+}
+/****************** cau 4 **************************************/
+var klg4=  ["","4","5","6","7","5","8","5","4","5","3"+
+			,"4","4","3","5","4","5","2","9","8","7"+
+			,"3","4","2","2","3","2","2","4","2","5"+
+			,"3","5","9","4","6","5","9","5","6","8"];
+var a=[6];
+var element;
+var klgvat;
+var count4=0;
+/*Tinh khoi luong*/
+function MoveCanVat(){
+	can_vat= GetName("");
+	element= a[rightStr(can_vat,1)-1];
+	klg=klg4[element];
+	klgvat= klg*angle;
+}
+function CanVat_Down(){
+	if(RectInRect("","an_cantrai","")==1){
+		kttraiin=1; /* tu trong lay ra*/
+	}else{
+		kttraiin=0;  /* lay ra out */
+	}
+	var no = rightStr(GetName(""),1);
+	if( GetText("","klg_"+ no)== "?" && can_vat == "") {
+		SetMoveView("","",1);
+	}else{
+		SetMoveView("","",0);
+	}
+}
+function CanVat_Up(){
+	if((RectInRect("","an_cantrai","")==1&& kttraiin==0)||(RectInRect("","an_cantrai","")==1&& kttraiin==1 && ktvatin==0)){	
+		MoveCanVat();
+		var top= GetTop("","an_cantrai");
+		var left= GetLeft("","an_cantrai");
+		MoveObjectTo("",can_vat,left,top);
+		rotate-=klgvat;
+		Quay(rotate);
+		ktvatin=1;
+		SetMoveView("",can_vat,0);
+	}else if(kttraiin==0){
+		MoveObjectTo("","",-1,-1);	
+	}
+}
+function RandomImage( range, a, num)
+{
+	var Count = 0;
+	for (var ii = 0; ii < num ; ii++)
+  	{
+    		var bb = true;
+		var iImagef ;
+    		while (bb){
+			iImagef = Random(range)+1;
+			for (var itest = 0 ; itest < Count; itest++){ 
+      			if (a[itest] == iImagef){
+		      	   break;
+	      		}
+		      }
+			if (itest >= Count)
+			      bb = false;
+    		}
+		a[Count] = iImagef;
+    		Count++;
+   	}
+}
+function RandomCau4(){
+	can_vat="";
+	RandomImage(40,a,6);
+	for(var i=0;i<6;i++){
+		var ii=i+1;
+		SetRsc("","can_vat_"+ii,"ID_4_"+a[i]);  /* ID chua random*/
+		InvalidateObj("","can_vat_"+ii);
+		SetMoveView("","can_vat_"+ii,1);
+		MoveObjectTo("","can_vat_"+ii,-1,-1);
+		SetText("","klg_"+ii,"?");
+		SetFontColor("","klg_"+ii,RGB(255,0,0));
+	}
+	ViTriDau();
+	count4=0;
+	for(var j=0;j<10;j++)	mktquain[j]=0;
+}
+function SoSanh4(){
+	var dv=0;
+	for(var i=0;i<10;i++)
+		if(quacan[i]!="")
+			dv++;
+	if(dv!=0){
+		if(klg == GetText("","") && klg == dv){
+			var khen= Random(4);
+			PlayWave("","","ID_KHEN_"+khen);
+			Delay(2000);
+			SetText("","klg_"+ rightStr(can_vat,1),klg);
+			SetFontColor("","klg_"+ rightStr(can_vat,1),RGB(255,225,255));
+			MoveObjectTo("",can_vat,-1,-1);
+			can_vat="";
+			ktvatin=0;
+			for(var ii=0;ii<10;ii++){
+				MoveObjectTo("","canqua_"+ii,-1,-1);
+				quacan[ii]="";
+				mktquain[ii]=0;
+				SetMoveView("","can_vat_"+ii,1);
+			}
+			count4++;
+			if(count4==6){
+				Delay(5000);
+				RandomCau4();
+			}
+		}else{
+			PlayWave("","","ID_DONGVIEN");
+		}
+	}else{
+		PlayWave("","","ID_SAI");
+	}
+}
+/****************** cau 5 Chon vat nang hon ********************/
+var kq4=   ["","3","7","3","5","4","5","9","8","10","9"+
+			,"5","3","1","3","4","5","10","8","8","6"+
+			,"5","9","5","3","2","6","4","3","3","7"+
+			,"2","3","7","3","3","8","6","8","5","3"];
+var klvat1=0;
+var klvat2=0;
+var vat1,vat2;
+var count5=1;
+/*  Random hinh anh*/
+function RandomCau5(){
+	count5 = Random(40)+1;
+	if(count5%2!=0){
+		vat1= count5;
+		vat2= count5+1;
+	}else{
+		vat1= count5;
+		vat2= count5-1;
+	}
+	klvat1=kq4[vat1];
+	klvat2=kq4[vat2];
+	nangnhe= Random(2);
+	if(nangnhe == 0)	SetText("","nangnhe","nhẹ hơn");
+	else 			SetText("","nangnhe","nặng hơn");
+	/* Ben phai*/
+	SetRsc("","vat_can_1","ID_5_"+vat1);
+	InvalidateObj("","vat_can_1");
+	SetRsc("","dv_can_1","ID_DV_"+klvat1);
+	InvalidateObj("","dv_can_1");
+	/* Ben trai*/
+	SetRsc("","vat_can_2","ID_5_"+vat2);
+	InvalidateObj("","vat_can_2");
+	SetRsc("","dv_can_2","ID_DV_"+klvat2);
+	InvalidateObj("","dv_can_2");
+	for(var i=1;i<=7;i++)
+		SetShowObject("","sosanh_"+i,0);
+	count5+=2;
+}
+/* ------- so sanh ket qua (chon vat nang)----------------*/
+function SoSanh5( vat){
+	if(GetShowObject("","sosanh_7")== 0){
+	if(nangnhe==1){
+		if((vat==1 && klvat1>klvat2)||(vat==2 && klvat1<klvat2) ){
+			var khen= Random(4);
+			PlayWave("","","ID_KHEN_"+khen);
+			Delay(1500);
+			SetText("","sosanh_1",klvat1);
+			SetText("","sosanh_2",klvat2);
+			if(klvat1>klvat2){
+				SetText("","sosanh_4",klvat1 +" > "+ klvat2);
+				SetRsc("","sosanh_5","ID_5_"+vat1);
+				SetRsc("","sosanh_7","ID_5_"+vat2);
+			}else{
+				SetText("","sosanh_4",klvat2 +" > "+ klvat1);
+				SetRsc("","sosanh_5","ID_5_"+vat2);
+				SetRsc("","sosanh_7","ID_5_"+vat1);
+			}
+			SetText("","sosanh_6","nặng hơn");
+			InvalidateObj("","sosanh_6");
+			InvalidateObj("","sosanh_5");
+			InvalidateObj("","sosanh_7");
+			for(var i=1;i<=7;i++){	
+				Delay(1000);
+				SetShowObject("","sosanh_"+i,1);
+				PlayWave("","","ID_DUNG");
+			}	
+		}else {
+			PlayWave("","","ID_SAI");
+		}
+	}else{
+		if((vat==1 && klvat1 < klvat2)||(vat==2 && klvat1>klvat2) ){
+			var khen= Random(4);
+			PlayWave("","","ID_KHEN_"+khen);
+			Delay(1500);
+			SetText("","sosanh_1",klvat1);
+			SetText("","sosanh_2",klvat2);
+			if(klvat1<klvat2){
+				SetText("","sosanh_4",klvat1 +" < "+ klvat2);
+				SetRsc("","sosanh_5","ID_5_"+vat1);
+				SetRsc("","sosanh_7","ID_5_"+vat2);
+			}else{
+				SetText("","sosanh_4",klvat2 +" < "+ klvat1);
+				SetRsc("","sosanh_5","ID_5_"+vat2);
+				SetRsc("","sosanh_7","ID_5_"+vat1);
+			}
+			SetText("","sosanh_6","nhẹ hơn");
+			InvalidateObj("","sosanh_6");
+			InvalidateObj("","sosanh_5");
+			InvalidateObj("","sosanh_7");
+			for(var i=1;i<=7;i++){	
+				Delay(1000);
+				SetShowObject("","sosanh_"+i,1);
+				PlayWave("","","ID_DUNG");
+			}	
+		}else {
+			PlayWave("","","ID_SAI");
+		}
+	}
+	}
+}
+/*************************  CAU 6  ******************************/
+var klg6=  ["","4","5","7","8","6","8","5","4","5","3"+
+			,"4","5","3","6","4","5","2","9","8","7"+
+			,"3","6","9","4","7","5","9","5","6","8"];
+var b=[6];
+var doquay=36;
+var gocquay;
+var dacan=0;
+var count6=0;
+function RandomCau6(){
+	RandomImage(30,b,6);
+	RotateObj("","kim_quay",0);
+	for(var i=0;i<6;i++){
+		var ii=i+1;
+		SetRsc("","can_vat_"+ii,"ID_6_"+b[i]); 
+		InvalidateObj("","can_vat_"+ii);
+		SetMoveView("","can_vat_"+ii,1);
+		MoveObjectTo("","can_vat_"+ii,-1,-1);
+	}
+	SetText("","hienthiklg","");
+	count6=0;
+	dacan=0;
+	can_vat="";
+}
+function MoveCanVat6( move1){
+	can_vat= GetName("");
+	for(var i=1;i<=6;i++){
+		if("can_vat_"+i != can_vat){
+			SetMoveView("","can_vat_"+i,move1);
+		}
+	}
+}
+function CanVat_Up6(){
+	if(RectInRect("","an_canvat","")==1){
+		MoveCanVat6(0);
+		element= b[rightStr(can_vat,1)-1];
+		klg=klg6[element];
+		gocquay= klg*doquay;
+		RotateObj("","kim_quay",gocquay);
+		SetText("","hienthiklg",klg);
+		if(dacan==0){
+			var top1 = GetTop("","")+4;
+			var left1 = GetLeft("","");
+			MoveObjectTo("","",left1 ,top1);
+			top1 = GetTop("","matcan")+4;
+			left1 = GetLeft("","matcan");
+			MoveObjectTo("","matcan",left1 ,top1);
+			PlayWave("","","ID_DUNG");
+		}
+		dacan=1;
+	}else if(RectInRect("","an_canvat","")==0 && GetMoveView("","")!=0){
+		RotateObj("","kim_quay",0);
+		SetText("","hienthiklg","");
+		MoveObjectTo("","matcan",-1,-1);
+	}
+	if(dacan==1){
+		if((RectInRect("","lonhon5","")==1 && klg > 5) || (RectInRect("","nhohon5","")==1 && klg <= 5)){
+			var khen= Random(4);
+			PlayWave("","","ID_KHEN_"+khen);
+			MoveCanVat6(1);
+			var top = GetTop("","lonhon5")+18;
+			var left = GetLeft("","");
+			MoveObjectTo("","",left ,top);
+			dacan =0;
+			count6++;
+			if(count6==6){
+				Delay(4000);
+				RandomCau6();
+			}
+		}else if((RectInRect("","lonhon5","")==1 && klg <= 5) || (RectInRect("","nhohon5","")==1 && klg > 5)){
+			PlayWave("","","ID_DONGVIEN_1");
+			MoveObjectTo("","",-1,-1);
+		}
+	}else {
+			MoveObjectTo("","",-1,-1);
+			/*SpeakVN("","","Hãy cân vật để biết khối lượng");*/
+	}
+}
+/*********************** CAU 7  *************************/
+var klvat3;/* Su dung lai bien cua cau 5 klvat1,klvat2,vat1,vat2*/
+var vat3;
+var c=[3];
+var d=[3];
+/*  Random ko trung hinh anh khong trung khoi luong*/
+function RandomImage7( range, a, b, num)/*a doituong, b khoi luong*/
+{
+	var Count = 0;
+	for (var ii = 0; ii < num ; ii++)
+  	{
+    		var bb = true;
+		var iImagef ;
+		var klg;
+    		while (bb){
+			iImagef = Random(range)+1;
+			for (var itest = 0 ; itest < Count; itest++){ 
+      			if (a[itest] == iImagef || b[itest] == kq4[iImagef]){
+		      	   break;
+	      		}
+		      }
+			if (itest >= Count)
+			      bb = false;
+    		}
+		a[Count] = iImagef;
+		b[Count] = kq4[iImagef];
+    		Count++;
+   	}
+}
+function RandomCau7(){
+	RandomImage7(40,c,d,3);
+	nangnhe= Random(2);
+	if(nangnhe == 0)	SetText("","nangnhe","nhẹ nhất");
+	else 			SetText("","nangnhe","nặng nhất");
+	SetShowObject("","Animate _DUNG",0);
+	for(var i=0;i<4;i++){
+		var j=i+1;
+		SetRsc("","vat_can_"+j,"ID_5_"+c[i]);
+		InvalidateObj("","vat_can_"+j);
+		SetRsc("","dv_can_"+j,"ID_DV_"+d[i]);
+		InvalidateObj("","dv_can_"+j);
+	}
+}
+/*Sap sep lai mang da random theo thu tu be den lon 1 min end max*/
+function SapXepBeLon( a, num){
+	var temp;
+	for(var ii=0;ii<num;ii++){
+		for(var jj=ii+1;jj<num;jj++){
+			if(a[ii]>=a[jj]){
+				temp=a[ii];
+				a[ii]=a[jj];
+				a[jj]=temp;
+			}
+		}
+	}
+}
+function SoSanh7(){
+	vat1=d[0];
+	vat2=d[1];
+	vat3=d[2];
+	SapXepBeLon(d,3); /*sap xep mang khoi luong*/
+	var vatchon= rightStr(GetName(""),1)-1;
+	var ptu=c[vatchon];
+	var khoiluong= kq4[ptu];
+	if((nangnhe == 0 && khoiluong == d[0])||(nangnhe == 1 && khoiluong == d[2])){
+		KhenDung();
+		RandomCau7();
+	}else{
+		PlayWave("","","ID_DONGVIEN");
+	}
+}
+/************************   CAU 8    ***************************/
+var cc=[4];
+var dd=[4];
+var count8;
+function RandomCau8(){
+	count8=0;
+	RandomImage7(40,cc,dd,4);
+	nangnhe= Random(2);
+	if(nangnhe == 0)	SetText("","nangnhe","vật nặng đặt trên vật nhẹ đặt dưới");/*lon den nho*/
+	else 			SetText("","nangnhe","vật nhẹ đặt trên vật nặng đặt dưới");/*nho den lon*/
+	SetShowObject("","Animate _DUNG",0);
+	for(var i=0;i<4;i++){
+		var j=i+1;
+		SetRsc("","vat_can_"+j,"ID_5_"+cc[i]);
+		InvalidateObj("","vat_can_"+j);
+		SetText("","klg_"+j,dd[i]);
+		InvalidateObj("","klg_"+j);
+		SetMoveView("","vat_can_"+j,1);
+		MoveObjectTo("","vat_can_"+j,-1,-1);
+		MoveObjectTo("","klg_"+j,-1,-1);
+	}
+	SapXepBeLon(dd,4); /*sap xep mang khoi luong*/
+	for(var ii=0;ii<4;ii++){
+		var jj=ii+1;
+		if(nangnhe == 1){
+			SetText("","an_sort_"+jj,dd[ii]);
+			InvalidateObj("","an_sort_"+jj);
+		}else{
+			SetText("","an_sort_"+jj,dd[3-ii]);
+			InvalidateObj("","an_sort_"+jj);
+		}
+	}
+}
+function CanVatSort_Up(){
+	var vatchon= rightStr(GetName(""),1);
+	var ptu=cc[vatchon-1];
+	var khoiluong= kq4[ptu];
+	var sort1=1;
+	/*while(RectInRect("","an_sort_"+sort1,"")==1){*/
+	var i=1;
+	for(i=1;i<=4;i++)
+		{
+		if(RectInRect("","an_sort_"+i,"")==1)
+		{
+		  	if(khoiluong == GetText("","an_sort_"+i))
+			{
+				var left = GetLeft("","an_sort_"+i)+55;
+				var top = GetTop("","an_sort_"+i)+ GetHeight("","an_sort_"+i)- GetHeight("","")+6;	
+				MoveObjectTo("","",left,top);
+				left = GetLeft("","")+25;
+				top = GetTop("","")+25;	
+				MoveObjectTo("","klg_"+vatchon,left,top);
+				count8++;
+				if(count8==4)
+				{
+					SetShowObject("","Animate _DUNG",1);
+					KhenDung();
+					Delay(2000);
+					RandomCau8();
+				}
+			}
+			else
+			{
+				PlayWave("","","ID_DONGVIEN");
+				MoveObjectTo("","",-1,-1);
+			}
+			break;
+		}
+		}
+		if(i>4)
+			MoveObjectTo("","",-1,-1);
+
+}
+
+
+
+
+folder_Resource ='KhoiLuong'; 
+styteView = 'Ver';
+
+function Page_1()
+{	
+	SetVar("m_red","255");
+	SetVar("m_blue","255");
+	SetVar("m_green","255");
+	SetVar("m_color",4);
+	SetShowObject("","Name",0);
+	setColorFill(255,255,50);
+	SetCursor("","fillheavy","ID_ICO");
+	RandomFillHeavy();
+	DisplayMusic(1);
+
+}
+
+function Page_2()
+{	
+	RandomHeavier();
+	DisplayMusic(2);
+}
+
+function Page_3()
+{
+	DisplayMusic(3);
+	cau3Flag=1;
+	for(var i=0;i<10;i++)
+		SetMoveView("","canqua_"+i,1);
+	SetMoveView("","can_vat",1);
+	RandomCau3();
+}
+function Page_3_OnTimer()
+{
+  return;
+}
+
+function Page_4(){
+	DisplayMusic(4);
+	cau3Flag=0;
+	for(var i=0;i<10;i++){
+		SetMoveView("","canqua_"+i,1);
+	}
+	RandomCau4();
+}
+
+function Page_5(){
+	RandomCau5();
+	DisplayMusic(5);
+}
+
+function Page_6()
+{	
+	DisplayMusic(6);
+	RandomCau6();
+}
+
+function Page_7(){
+	DisplayMusic(7);
+	SetShowObject("","Animate _DUNG",0);
+	RandomCau7();
+}
+
+function Page_8(){
+	DisplayMusic(8);
+	RandomCau8();
+}
+ 
+  window.onload = function() {
+ var canvas = document.createElement('canvas');
+if (!canvas.getContext) {
+alert("Trinh duyet khong ho tro");
+return;
+} 
+ document.getElementById("Doc").textContent = ""; 
+ stage = new Kinetic.Stage({
+ container: "Doc", 
+ width: 640,
+ height: 3840 
+ });
+
+ var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()',x:0,y:0});
+var Page1_Backrounnd = new Kinetic.Text(InitText('Page1_Backrounnd',0,0,640,480,'Background','rgba(255, 255, 255, 1.00)','','','','ID_BG_1.JPG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(0, 0, 0, 0)','2','2','0','','0','0','0','0',0,0,''));
+Page_1.add(Page1_Backrounnd);
+var fillheavy = new Kinetic.Text(InitText('fillheavy',48,67,505,276,'','rgba(0, 0, 0, 0)','','','','ID_1_2.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+fillheavy.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+  FillPicture();
+}
+ );
+Page_1.add(fillheavy);
+var color_1 = new Kinetic.Text(InitText('color_1',167,394,27,26,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Times New Roman','Normal','center','middle',0,'0.00','32','32',2,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+color_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	SetVar("m_color",1);
+	setColorFill(255,15,15);
+}
+
+
+ );
+Page_1.add(color_1);
+var color_2 = new Kinetic.Text(InitText('color_2',199,394,27,26,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Times New Roman','Normal','center','middle',0,'0.00','32','32',2,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+color_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	SetVar("m_color",2);
+	setColorFill(255,113,255);
+}
+
+
+ );
+Page_1.add(color_2);
+var color_3 = new Kinetic.Text(InitText('color_3',231,394,27,26,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Times New Roman','Normal','center','middle',0,'0.00','32','32',2,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+color_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	SetVar("m_color",3);
+	setColorFill(255,150,0);
+}
+
+
+ );
+Page_1.add(color_3);
+var color_4 = new Kinetic.Text(InitText('color_4',259,394,27,26,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Times New Roman','Normal','center','middle',0,'0.00','32','32',2,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+color_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	SetVar("m_color",4);
+	setColorFill(255,255,50);
+}
+
+
+ );
+Page_1.add(color_4);
+var color_5 = new Kinetic.Text(InitText('color_5',291,394,27,26,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Times New Roman','Normal','center','middle',0,'0.00','32','32',2,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+color_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	SetVar("m_color",5);
+	setColorFill(63,203,3);
+}
+
+
+ );
+Page_1.add(color_5);
+var color_6 = new Kinetic.Text(InitText('color_6',319,394,27,26,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Times New Roman','Normal','center','middle',0,'0.00','32','32',2,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+color_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	SetVar("m_color",6);
+	setColorFill(15,213,255);
+}
+
+
+ );
+Page_1.add(color_6);
+var color_7 = new Kinetic.Text(InitText('color_7',351,394,27,26,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Times New Roman','Normal','center','middle',0,'0.00','32','32',2,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+color_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	SetVar("m_color",7);
+	setColorFill(0,0,255);
+}
+
+
+ );
+Page_1.add(color_7);
+var color_8 = new Kinetic.Text(InitText('color_8',381,394,27,26,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Times New Roman','Normal','center','middle',0,'0.00','32','32',2,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+color_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	SetVar("m_color",8);
+	setColorFill(255,255,255);
+}
+
+
+ );
+Page_1.add(color_8);
+var choose_color = new Kinetic.Text(InitText('choose_color',117,395,42,33,'','rgba(0, 0, 0, 0)','','','','ID_COLOR_4.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_1.add(choose_color);
+var random = new Kinetic.Text(InitText('random',477,398,31,26,'','rgba(0, 0, 0, 0)','','','','ID_RANDOM.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+random.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_CAUTIEP");
+	RandomFillHeavy();
+}
+ );
+Page_1.add(random);
+var next = new Kinetic.Text(InitText('next',569,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_NEXT_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+next.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	PlayWave("","","ID_TRANGTIEP");
+	NextPage();
+}
+
+ );
+Page_1.add(next);
+var prev = new Kinetic.Text(InitText('prev',6,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_PRINT.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+prev.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_THOAT");
+	Print("fillheavy");
+}
+
+ );
+Page_1.add(prev);
+var tieude = new Kinetic.Text(InitText('tieude',94,439,448,24,"Bạn hãy tô màu những đồ vật nặng",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','center','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','2','1','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(tieude);
+var sound = new Kinetic.Text(InitText('sound',524,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_SOUND.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+sound.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	PlayMusic(1);}
+ );
+Page_1.add(sound);
+var home = new Kinetic.Text(InitText('home',87,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_HOME.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+home.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_THOAT");
+	CloseFile();
+}
+
+ );
+Page_1.add(home);
+var openfile = new Kinetic.Text(InitText('openfile',417,396,24,28,'','rgba(0, 0, 0, 0)','','','','ID_OPEN.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+openfile.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;	
+	var file= Browse("*.jpg;*.bmp;*.gif;*.eps;*.wmf;*.pmg",0);
+	if(file=="")
+	return;
+	AddRsc("ID_1_5",file,"IMAGE_OBJ");
+	SetRsc("","fillheavy","ID_1_5");
+	InvalidateObj("","fillheavy");
+return;
+}
+ );
+Page_1.add(openfile);
+var save = new Kinetic.Text(InitText('save',445,396,24,28,'','rgba(0, 0, 0, 0)','','','','ID_SAVE.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+save.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+	var filename= Browse("*.jpg;*.bmp;*.gif;*.eps;*.wmf;*.pmg",1);
+	ExportObj("","fillheavy",filename);
+  return;
+}
+ );
+Page_1.add(save);
+stage.add(Page_1);
+
+ var Page_2 = new Kinetic.Layer({name: 'Page_2',callback:'Page_2()',x:0,y:480});
+var Page2_Backrounnd = new Kinetic.Text(InitText('Page2_Backrounnd',0,0,640,480,'Background','rgba(123, 123, 192, 1.00)','','','','ID_BG_2.JPG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(123, 123, 192, 0)','2','2','0','','0','0','0','0',0,0,''));
+Page_2.add(Page2_Backrounnd);
+var debai = new Kinetic.Text(InitText('debai',123,108,446,215,'','rgba(0, 0, 0, 0)','','','','ID_2_8.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_2.add(debai);
+var tieude = new Kinetic.Text(InitText('tieude',33,440,447,24,"Bạn hãy chọn bên có vật            ",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','center','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','3','2','4','1',0,0,'rgba(0, 85, 0, 255)'));
+Page_2.add(tieude);
+var bentrai = new Kinetic.Text(InitText('bentrai',118,106,221,222,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+bentrai.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+	if( (kqTrai[ImgNo2]==0 && nangnhe==0) || (kqTrai[ImgNo2]==1 && nangnhe==1)){
+		KhenDung();
+		RandomHeavier();
+	}else{	
+		PlayWave("","","ID_DONGVIEN");
+	}
+}
+ );
+Page_2.add(bentrai);
+var benphai = new Kinetic.Text(InitText('benphai',352,106,216,222,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+benphai.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+	if( (kqTrai[ImgNo2]==1 && nangnhe==0) || (kqTrai[ImgNo2]==0 && nangnhe==1)){
+		KhenDung();
+		RandomHeavier();
+	}else{	
+		PlayWave("","","ID_DONGVIEN");
+	}
+}
+ );
+Page_2.add(benphai);
+var prev = new Kinetic.Text(InitText('prev',6,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_BACK_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+prev.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	PlayWave("","","ID_TRANGTIEP");
+	PrevPage();
+}
+ );
+Page_2.add(prev);
+var next = new Kinetic.Text(InitText('next',569,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_NEXT_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+next.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	PlayWave("","","ID_TRANGTIEP");
+	NextPage();
+}
+
+ );
+Page_2.add(next);
+var random = new Kinetic.Text(InitText('random',477,398,31,26,'','rgba(0, 0, 0, 0)','','','','ID_RANDOM.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+random.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_CAUTIEP");
+	RandomHeavier();
+}
+ );
+Page_2.add(random);
+var sound = new Kinetic.Text(InitText('sound',524,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_SOUND.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+sound.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	PlayMusic(2);}
+ );
+Page_2.add(sound);
+var home = new Kinetic.Text(InitText('home',87,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_HOME.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+home.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_THOAT");
+	CloseFile();
+}
+
+ );
+Page_2.add(home);
+var nangnhe = new Kinetic.Text(InitText('nangnhe',357,440,114,24,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','left','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','3','2','4','1',0,0,'rgba(0, 85, 0, 255)'));
+Page_2.add(nangnhe);
+var Animate_DUNG = new Kinetic.Text(InitText('Animate _DUNG',216,19,224,105,'','rgba(0, 0, 0, 0)','','','','ID_ANIMATE_GIF1.GIF',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_2.add(Animate_DUNG);
+stage.add(Page_2);
+
+ var Page_3 = new Kinetic.Layer({name: 'Page_3',callback:'Page_3()',x:0,y:960});
+var Page3_Backrounnd = new Kinetic.Text(InitText('Page3_Backrounnd',0,0,640,480,'Background','rgba(123, 123, 192, 1.00)','','','','ID_BG_3.JPG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(123, 123, 192, 0)','2','2','0','','0','0','0','0',0,0,''));
+Page_3.add(Page3_Backrounnd);
+var sosanh_3 = new Kinetic.Text(InitText('sosanh_3',172,15,319,136,"nặng bằng",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(255, 255, 255, 1.00)','ID_KETQUA3.PNG',16,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_3.add(sosanh_3);
+var can_ngang = new Kinetic.Text(InitText('can_ngang',238,276,189,5,'','rgba(0, 0, 0, 0)','','','','ID_THANHNGANG.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_3.add(can_ngang);
+var can_trai = new Kinetic.Text(InitText('can_trai',180,228,131,54,'','rgba(0, 0, 0, 0)','','','','ID_BANCAN.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_3.add(can_trai);
+var can_phai = new Kinetic.Text(InitText('can_phai',362,228,131,54,'','rgba(0, 0, 0, 0)','','','','ID_BANCAN.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_3.add(can_phai);
+var an_canphai = new Kinetic.Text(InitText('an_canphai',371,177,112,62,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_3.add(an_canphai);
+var an_cantrai = new Kinetic.Text(InitText('an_cantrai',188,177,112,62,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_3.add(an_cantrai);
+var can_vat = new Kinetic.Text(InitText('can_vat',64,265,97,87,'','rgba(0, 0, 0, 0)','','','','ID_3_10.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+	var klgvat= klg*angle; 
+	if((RectInRect("","an_cantrai","")==1&& kttraiin==0)||(RectInRect("","an_cantrai","")==1&& kttraiin==1 && ktvatin==0)){
+		can_vat="can_vat";
+		rotate-=klgvat;
+		Quay(rotate);
+		ktvatin=1;
+		var top= GetTop("","an_cantrai")-20;
+		var left= GetLeft("","an_cantrai")+10;
+		MoveObjectTo("",can_vat,left,top);
+	}else if(RectInRect("","an_cantrai","")==0 && ktvatin==1){	
+		can_vat="";
+		rotate+=klgvat;
+		ktvatin=0;
+		Quay(rotate);	
+		MoveObjectTo("","",-1,-1);	
+	}else if(kttraiin==0){
+		MoveObjectTo("","",-1,-1);
+	}
+}
+ );
+can_vat.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+	if(RectInRect("","an_cantrai","")==1)
+		kttraiin=1; // tu trong lay ra
+	else
+		kttraiin=0;  // lay ra out
+}
+ );
+Page_3.add(can_vat);
+var canqua_1 = new Kinetic.Text(InitText('canqua_1',536,295,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; QuaCanUp();}
+ );
+canqua_1.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this; QuaCanDown();}
+ );
+Page_3.add(canqua_1);
+var canqua_2 = new Kinetic.Text(InitText('canqua_2',561,295,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_2.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_3.add(canqua_2);
+var canqua_3 = new Kinetic.Text(InitText('canqua_3',586,295,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+
+ );
+canqua_3.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;	QuaCanDown();}
+ );
+Page_3.add(canqua_3);
+var canqua_6 = new Kinetic.Text(InitText('canqua_6',586,255,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_6.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_3.add(canqua_6);
+var canqua_5 = new Kinetic.Text(InitText('canqua_5',561,255,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_5.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_3.add(canqua_5);
+var canqua_4 = new Kinetic.Text(InitText('canqua_4',537,255,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+
+ );
+canqua_4.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this; QuaCanDown();}
+ );
+Page_3.add(canqua_4);
+var canqua_8 = new Kinetic.Text(InitText('canqua_8',579,216,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_8.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_3.add(canqua_8);
+var canqua_7 = new Kinetic.Text(InitText('canqua_7',548,216,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_7.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_3.add(canqua_7);
+var canqua_9 = new Kinetic.Text(InitText('canqua_9',579,179,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_9.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_9.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_3.add(canqua_9);
+var canqua_0 = new Kinetic.Text(InitText('canqua_0',547,179,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_0.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_3.add(canqua_0);
+var can_de = new Kinetic.Text(InitText('can_de',314,273,36,55,'','rgba(0, 0, 0, 0)','','','','ID_DECAN.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_3.add(can_de);
+var sosanh_1 = new Kinetic.Text(InitText('sosanh_1',213,50,60,58,'','rgba(0, 0, 0, 0)','','','','ID_3_10.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_3.add(sosanh_1);
+var random = new Kinetic.Text(InitText('random',477,398,31,26,'','rgba(0, 0, 0, 0)','','','','ID_RANDOM.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+random.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_CAUTIEP");
+	RandomCau3();
+}
+ );
+Page_3.add(random);
+var sosanh_2 = new Kinetic.Text(InitText('sosanh_2',377,59,41,46,"",'rgba(0, 0, 0, 0)','rgba(75, 0, 130, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',22,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(255, 0, 0, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+Page_3.add(sosanh_2);
+var prev = new Kinetic.Text(InitText('prev',6,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_BACK_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+prev.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	MoveObjectTo("","can_vat",-1,-1);
+	ViTriDau();
+	/*RandomCau3();*/
+	PlayWave("","","ID_TRANGTIEP");
+	PrevPage();
+}
+ );
+Page_3.add(prev);
+var next = new Kinetic.Text(InitText('next',569,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_NEXT_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+next.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	MoveObjectTo("","can_vat",-1,-1);
+	ViTriDau();
+	/*RandomCau3();*/
+	PlayWave("","","ID_TRANGTIEP");
+	NextPage();
+}
+
+ );
+Page_3.add(next);
+var tieude = new Kinetic.Text(InitText('tieude',87,440,460,24,"Bạn hãy cân vật trên xe đẩy hàng và cho biết khối lượng",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','center','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','3','2','4','1',0,0,'rgba(0, 85, 0, 255)'));
+Page_3.add(tieude);
+var muiten = new Kinetic.Text(InitText('muiten',234,267,195,21,'','rgba(0, 0, 0, 0)','','','','ID_GIF_MUITEN.GIF',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_3.add(muiten);
+var sound = new Kinetic.Text(InitText('sound',524,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_SOUND.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+sound.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	PlayMusic(3);}
+ );
+Page_3.add(sound);
+var so_0 = new Kinetic.Text(InitText('so_0',129,397,335,27,'','rgba(0, 0, 0, 0)','','','','ID_BUTTON.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_3.add(so_0);
+var so_1 = new Kinetic.Text(InitText('so_1',131,396,25,29,"1",'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	SoSanh1();	}
+ );
+Page_3.add(so_1);
+var so_2 = new Kinetic.Text(InitText('so_2',164,396,29,29,"2",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_3.add(so_2);
+var so_3 = new Kinetic.Text(InitText('so_3',200,396,25,29,"3",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_3.add(so_3);
+var so_4 = new Kinetic.Text(InitText('so_4',230,396,29,29,"4",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_3.add(so_4);
+var so_5 = new Kinetic.Text(InitText('so_5',264,396,29,29,"5",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_3.add(so_5);
+var so_6 = new Kinetic.Text(InitText('so_6',297,396,29,29,"6",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_3.add(so_6);
+var so_7 = new Kinetic.Text(InitText('so_7',332,396,29,29,"7",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_3.add(so_7);
+var so_8 = new Kinetic.Text(InitText('so_8',366,396,29,29,"8",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_3.add(so_8);
+var so_9 = new Kinetic.Text(InitText('so_9',400,396,29,29,"9",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_9.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_3.add(so_9);
+var so_10 = new Kinetic.Text(InitText('so_10',434,396,29,29,"10",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_10.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_3.add(so_10);
+var home = new Kinetic.Text(InitText('home',87,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_HOME.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+home.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_THOAT");
+	CloseFile();
+}
+
+ );
+Page_3.add(home);
+stage.add(Page_3);
+
+ var Page_4 = new Kinetic.Layer({name: 'Page_4',callback:'Page_4()',x:0,y:1440});
+var Page4_Backrounnd = new Kinetic.Text(InitText('Page4_Backrounnd',0,0,640,480,'Background','rgba(255, 255, 255, 1.00)','','','','ID_BG_4.JPG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(0, 0, 0, 0)','2','2','0','','0','0','0','0',0,0,''));
+Page_4.add(Page4_Backrounnd);
+var so_0 = new Kinetic.Text(InitText('so_0',129,397,335,27,'','rgba(0, 0, 0, 0)','','','','ID_BUTTON.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_4.add(so_0);
+var klg_3 = new Kinetic.Text(InitText('klg_3',237,133,55,28,"?",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 0, 0, 1.00)','ID_KHUNG_XANH.PNG',26,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_4.add(klg_3);
+var klg_4 = new Kinetic.Text(InitText('klg_4',343,133,55,28,"?\r\n",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 0, 0, 1.00)','ID_KHUNG_XANH.PNG',26,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_4.add(klg_4);
+var klg_5 = new Kinetic.Text(InitText('klg_5',440,133,55,28,"?",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 0, 0, 1.00)','ID_KHUNG_XANH.PNG',26,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_4.add(klg_5);
+var klg_6 = new Kinetic.Text(InitText('klg_6',539,133,55,28,"?",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 0, 0, 1.00)','ID_KHUNG_XANH.PNG',26,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_4.add(klg_6);
+var klg_1 = new Kinetic.Text(InitText('klg_1',36,133,55,28,"?",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 0, 0, 1.00)','ID_KHUNG_XANH.PNG',26,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_4.add(klg_1);
+var prev = new Kinetic.Text(InitText('prev',6,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_BACK_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+prev.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	for(var i=1;i<=6;i++)
+		MoveObjectTo("","can_vat_"+i,-1,-1);
+	ViTriDau();
+	/*RandomCau4();*/
+	PlayWave("","","ID_TRANGTIEP");
+	PrevPage();
+}
+ );
+Page_4.add(prev);
+var next = new Kinetic.Text(InitText('next',569,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_NEXT_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+next.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	for(var i=1;i<=6;i++)
+		MoveObjectTo("","can_vat_"+i,-1,-1);
+	ViTriDau();
+	PlayWave("","","ID_TRANGTIEP");
+	GoToPage("6. Page 6");
+}
+
+ );
+Page_4.add(next);
+var can_ngang = new Kinetic.Text(InitText('can_ngang',264,304,190,4,'','rgba(0, 0, 0, 0)','','','','ID_THANHNGANG.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_4.add(can_ngang);
+var can_trai = new Kinetic.Text(InitText('can_trai',204,252,135,58,'','rgba(0, 0, 0, 0)','','','','ID_BANCAN.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_4.add(can_trai);
+var can_phai = new Kinetic.Text(InitText('can_phai',388,252,135,58,'','rgba(0, 0, 0, 0)','','','','ID_BANCAN.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_4.add(can_phai);
+var an_canphai = new Kinetic.Text(InitText('an_canphai',399,218,116,46,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_4.add(an_canphai);
+var an_cantrai = new Kinetic.Text(InitText('an_cantrai',237,196,73,68,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_4.add(an_cantrai);
+var can_de = new Kinetic.Text(InitText('can_de',339,300,40,55,'','rgba(0, 0, 0, 0)','','','','ID_DECAN.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_4.add(can_de);
+var canqua_1 = new Kinetic.Text(InitText('canqua_1',536,318,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; QuaCanUp();}
+ );
+canqua_1.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this; QuaCanDown();}
+ );
+Page_4.add(canqua_1);
+var canqua_2 = new Kinetic.Text(InitText('canqua_2',560,318,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_2.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_4.add(canqua_2);
+var canqua_3 = new Kinetic.Text(InitText('canqua_3',585,318,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+
+ );
+canqua_3.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;	QuaCanDown();}
+ );
+Page_4.add(canqua_3);
+var canqua_6 = new Kinetic.Text(InitText('canqua_6',585,282,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_6.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_4.add(canqua_6);
+var canqua_5 = new Kinetic.Text(InitText('canqua_5',560,282,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_5.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_4.add(canqua_5);
+var canqua_4 = new Kinetic.Text(InitText('canqua_4',536,282,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+
+ );
+canqua_4.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this; QuaCanDown();}
+ );
+Page_4.add(canqua_4);
+var canqua_8 = new Kinetic.Text(InitText('canqua_8',581,245,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_8.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_4.add(canqua_8);
+var canqua_7 = new Kinetic.Text(InitText('canqua_7',553,245,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_7.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_4.add(canqua_7);
+var canqua_9 = new Kinetic.Text(InitText('canqua_9',582,214,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_9.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_9.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_4.add(canqua_9);
+var canqua_0 = new Kinetic.Text(InitText('canqua_0',555,214,29,26,'','rgba(0, 0, 0, 0)','','','','ID_QUACANX_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+canqua_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;  QuaCanUp(); }
+ );
+canqua_0.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;  QuaCanDown(); }
+ );
+Page_4.add(canqua_0);
+var klg_2 = new Kinetic.Text(InitText('klg_2',142,133,55,28,"?",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 0, 0, 1.00)','ID_KHUNG_XANH.PNG',26,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_4.add(klg_2);
+var tieude = new Kinetic.Text(InitText('tieude',91,441,455,24,"Cân những vật trong quầy hàng và cho biết khối lượng",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','center','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','3','2','4','1',0,0,'rgba(0, 85, 0, 255)'));
+Page_4.add(tieude);
+var sound = new Kinetic.Text(InitText('sound',524,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_SOUND.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+sound.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	PlayMusic(4);}
+ );
+Page_4.add(sound);
+var can_vat_1 = new Kinetic.Text(InitText('can_vat_1',27,64,73,68,'','rgba(0, 0, 0, 0)','','','','ID_4_38.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+CanVat_Up();
+}
+ );
+can_vat_1.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;	CanVat_Down();}
+ );
+Page_4.add(can_vat_1);
+var can_vat_2 = new Kinetic.Text(InitText('can_vat_2',130,63,73,68,'','rgba(0, 0, 0, 0)','','','','ID_4_20.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVat_Up();}
+
+ );
+can_vat_2.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;	CanVat_Down();}
+
+ );
+Page_4.add(can_vat_2);
+var can_vat_3 = new Kinetic.Text(InitText('can_vat_3',235,60,73,68,'','rgba(0, 0, 0, 0)','','','','ID_4_4.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVat_Up();}
+ );
+can_vat_3.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;	CanVat_Down();}
+
+ );
+Page_4.add(can_vat_3);
+var can_vat_4 = new Kinetic.Text(InitText('can_vat_4',334,64,73,68,'','rgba(0, 0, 0, 0)','','','','ID_4_22.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVat_Up();}
+ );
+can_vat_4.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;	CanVat_Down();}
+
+ );
+Page_4.add(can_vat_4);
+var can_vat_5 = new Kinetic.Text(InitText('can_vat_5',431,64,73,68,'','rgba(0, 0, 0, 0)','','','','ID_4_10.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVat_Up();}
+ );
+can_vat_5.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;	CanVat_Down();}
+
+ );
+Page_4.add(can_vat_5);
+var can_vat_6 = new Kinetic.Text(InitText('can_vat_6',530,64,73,68,'','rgba(0, 0, 0, 0)','','','','ID_4_19.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVat_Up();}
+
+ );
+can_vat_6.on('mousedown touchstart',function(evt){
+m_pgObjCaller = this;	CanVat_Down();}
+
+ );
+Page_4.add(can_vat_6);
+var random = new Kinetic.Text(InitText('random',477,398,31,26,'','rgba(0, 0, 0, 0)','','','','ID_RANDOM.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+random.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_CAUTIEP");
+	RandomCau4();
+}
+ );
+Page_4.add(random);
+var so_1 = new Kinetic.Text(InitText('so_1',131,396,25,29,"1",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	SoSanh4();	}
+ );
+Page_4.add(so_1);
+var so_2 = new Kinetic.Text(InitText('so_2',164,396,29,29,"2",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_4.add(so_2);
+var so_3 = new Kinetic.Text(InitText('so_3',200,396,25,29,"3",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_4.add(so_3);
+var so_4 = new Kinetic.Text(InitText('so_4',230,396,29,29,"4",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_4.add(so_4);
+var so_5 = new Kinetic.Text(InitText('so_5',264,396,29,29,"5",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_4.add(so_5);
+var so_6 = new Kinetic.Text(InitText('so_6',297,396,29,29,"6",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_4.add(so_6);
+var so_7 = new Kinetic.Text(InitText('so_7',332,396,29,29,"7",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_4.add(so_7);
+var so_8 = new Kinetic.Text(InitText('so_8',366,396,29,29,"8",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_4.add(so_8);
+var so_9 = new Kinetic.Text(InitText('so_9',400,396,29,29,"9",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_9.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_4.add(so_9);
+var so_10 = new Kinetic.Text(InitText('so_10',434,396,29,29,"10",'rgba(0, 0, 0, 0)','rgba(255, 254, 153, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','',16,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(0, 0, 0, 0)','rgba(230, 230, 250, 1.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+so_10.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	GetScriptObj("","so_1",0);	}
+ );
+Page_4.add(so_10);
+var home = new Kinetic.Text(InitText('home',87,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_HOME.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+home.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_THOAT");
+	CloseFile();
+}
+
+ );
+Page_4.add(home);
+stage.add(Page_4);
+
+ var Page_5 = new Kinetic.Layer({name: 'Page_5',callback:'Page_5()',x:0,y:1920});
+var Page5_Backrounnd = new Kinetic.Text(InitText('Page5_Backrounnd',0,0,640,480,'Background','rgba(123, 123, 192, 1.00)','','','','ID_BG_5.JPG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(123, 123, 192, 0)','2','2','0','','0','0','0','0',0,0,''));
+Page_5.add(Page5_Backrounnd);
+var vat_can_1 = new Kinetic.Text(InitText('vat_can_1',95,150,97,88,'','rgba(0, 0, 0, 0)','','','','ID_5_23.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+vat_can_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;SoSanh5(1);}
+ );
+Page_5.add(vat_can_1);
+var vat_can_2 = new Kinetic.Text(InitText('vat_can_2',326,150,97,88,'','rgba(0, 0, 0, 0)','','','','ID_5_24.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+vat_can_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;SoSanh5(2);}
+
+ );
+Page_5.add(vat_can_2);
+var dv_can_1 = new Kinetic.Text(InitText('dv_can_1',212,154,77,80,'','rgba(0, 0, 0, 0)','','','','ID_DV_5.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_5.add(dv_can_1);
+var dv_can_2 = new Kinetic.Text(InitText('dv_can_2',444,154,77,80,'','rgba(0, 0, 0, 0)','','','','ID_DV_3.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_5.add(dv_can_2);
+var sosanh_1 = new Kinetic.Text(InitText('sosanh_1',214,277,67,44,"3",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','ID_KHUNG_XANH.PNG',26,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_5.add(sosanh_1);
+var sosanh_2 = new Kinetic.Text(InitText('sosanh_2',454,277,67,44,"7",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','ID_KHUNG_XANH.PNG',26,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_5.add(sosanh_2);
+var sosanh_3 = new Kinetic.Text(InitText('sosanh_3',167,14,295,136,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(255, 255, 255, 1.00)','ID_KETQUA.PNG',28,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_5.add(sosanh_3);
+var random = new Kinetic.Text(InitText('random',477,398,31,26,'','rgba(0, 0, 0, 0)','','','','ID_RANDOM.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+random.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_CAUTIEP");
+	RandomCau5();
+}
+ );
+Page_5.add(random);
+var prev = new Kinetic.Text(InitText('prev',6,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_BACK_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+prev.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	PlayWave("","","ID_TRANGTIEP");
+	GoToPage("6. Page 6");
+}
+ );
+Page_5.add(prev);
+var next = new Kinetic.Text(InitText('next',569,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_NEXT_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+next.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	PlayWave("","","ID_TRANGTIEP");
+	GoToPage("7. Page 7");
+}
+
+ );
+Page_5.add(next);
+var tieude = new Kinetic.Text(InitText('tieude',52,438,451,24,"Bạn hãy chọn đồ vật                   ",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','center','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','3','2','4','1',0,0,'rgba(0, 85, 0, 255)'));
+Page_5.add(tieude);
+var sound = new Kinetic.Text(InitText('sound',524,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_SOUND.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+sound.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	PlayMusic(5);}
+ );
+Page_5.add(sound);
+var sosanh_7 = new Kinetic.Text(InitText('sosanh_7',360,65,61,52,'','rgba(0, 0, 0, 0)','','','','ID_5_24.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_5.add(sosanh_7);
+var sosanh_5 = new Kinetic.Text(InitText('sosanh_5',207,65,61,52,'','rgba(0, 0, 0, 0)','','','','ID_5_23.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_5.add(sosanh_5);
+var sosanh_6 = new Kinetic.Text(InitText('sosanh_6',270,79,94,33,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_5.add(sosanh_6);
+var sosanh_4 = new Kinetic.Text(InitText('sosanh_4',242,31,145,40,"7 > 3",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',26,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_5.add(sosanh_4);
+var home = new Kinetic.Text(InitText('home',87,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_HOME.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+home.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_THOAT");
+	CloseFile();
+}
+
+ );
+Page_5.add(home);
+var nangnhe = new Kinetic.Text(InitText('nangnhe',363,438,134,24,"vật nhẹ đặt trên vật nặng đặt dưới",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','left','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','3','2','4','1',0,0,'rgba(0, 85, 0, 255)'));
+Page_5.add(nangnhe);
+stage.add(Page_5);
+
+ var Page_6 = new Kinetic.Layer({name: 'Page_6',callback:'Page_6()',x:0,y:2400});
+var Page6_Backrounnd = new Kinetic.Text(InitText('Page6_Backrounnd',0,0,640,480,'Background','rgba(255, 255, 255, 1.00)','','','','ID_BG_6.JPG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(0, 0, 0, 0)','2','2','0','','0','0','0','0',0,0,''));
+Page_6.add(Page6_Backrounnd);
+var matcan = new Kinetic.Text(InitText('matcan',493,195,128,37,'','rgba(0, 0, 0, 0)','','','','ID_matcan.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_6.add(matcan);
+var an_canvat = new Kinetic.Text(InitText('an_canvat',491,141,125,75,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_6.add(an_canvat);
+var TIEU_DE = new Kinetic.Text(InitText('TIEU_DE',85,429,464,40,"Bạn hãy cân vật và sau đó phân loại vật theo khối lượng ",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_6.add(TIEU_DE);
+var can_vat_1 = new Kinetic.Text(InitText('can_vat_1',20,288,77,68,'','rgba(0, 0, 0, 0)','','','','ID_6_15.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; CanVat_Up6();}
+ );
+Page_6.add(can_vat_1);
+var can_vat_2 = new Kinetic.Text(InitText('can_vat_2',94,288,77,68,'','rgba(0, 0, 0, 0)','','','','ID_6_23.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVat_Up6();}
+
+ );
+Page_6.add(can_vat_2);
+var can_vat_3 = new Kinetic.Text(InitText('can_vat_3',172,288,77,68,'','rgba(0, 0, 0, 0)','','','','ID_6_28.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVat_Up6();}
+ );
+Page_6.add(can_vat_3);
+var can_vat_4 = new Kinetic.Text(InitText('can_vat_4',253,288,77,68,'','rgba(0, 0, 0, 0)','','','','ID_6_20.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVat_Up6();}
+ );
+Page_6.add(can_vat_4);
+var can_vat_5 = new Kinetic.Text(InitText('can_vat_5',329,288,77,68,'','rgba(0, 0, 0, 0)','','','','ID_6_24.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVat_Up6();}
+ );
+Page_6.add(can_vat_5);
+var can_vat_6 = new Kinetic.Text(InitText('can_vat_6',407,288,77,68,'','rgba(0, 0, 0, 0)','','','','ID_6_22.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+can_vat_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVat_Up6();}
+
+ );
+Page_6.add(can_vat_6);
+var prev = new Kinetic.Text(InitText('prev',6,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_BACK_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+prev.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	for(var i=1;i<=6;i++)
+		MoveObjectTo("","can_vat_"+i,-1,-1);
+	PlayWave("","","ID_TRANGTIEP");
+	GoToPage("4. Page 4");
+}
+ );
+Page_6.add(prev);
+var home = new Kinetic.Text(InitText('home',87,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_HOME.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+home.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_THOAT");
+	CloseFile();
+}
+
+ );
+Page_6.add(home);
+var random = new Kinetic.Text(InitText('random',477,398,31,26,'','rgba(0, 0, 0, 0)','','','','ID_RANDOM.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+random.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_CAUTIEP");
+	RandomCau6();
+}
+ );
+Page_6.add(random);
+var sound = new Kinetic.Text(InitText('sound',524,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_SOUND.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+sound.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	PlayMusic(6);}
+ );
+Page_6.add(sound);
+var next = new Kinetic.Text(InitText('next',569,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_NEXT_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+next.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	for(var i=1;i<=6;i++)
+		MoveObjectTo("","can_vat_"+i,-1,-1);
+	PlayWave("","","ID_TRANGTIEP");
+	GoToPage("5. Page 5");
+}
+
+ );
+Page_6.add(next);
+var kim_quay = new Kinetic.Text(InitText('kim_quay',550,253,9,44,'','rgba(0, 0, 0, 0)','','','','ID_KIM.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_6.add(kim_quay);
+var Drawtext_1 = new Kinetic.Text(InitText('Draw text_1',39,26,179,18,"nhỏ hơn hoặc bằng 5",'rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','center','middle',0,'0.00','32','32',2,'rgba(0, 0, 139, 255)','rgba(0, 0, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',2,4,'rgba(0, 0, 139, 255)'));
+Page_6.add(Drawtext_1);
+var Drawtext_2 = new Kinetic.Text(InitText('Draw text_2',418,26,179,18,"lớn hơn 5",'rgba(0, 0, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','center','middle',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(0, 0, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',2,4,'rgba(0, 0, 139, 255)'));
+Page_6.add(Drawtext_2);
+var hienthiklg = new Kinetic.Text(InitText('hienthiklg',524,347,65,37,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','ID_KHUNG_XANH.PNG',31,'Verdana','Bold','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','1',0,0, 'rgba(0, 0, 0, 0)'));
+Page_6.add(hienthiklg);
+var nhohon5 = new Kinetic.Text(InitText('nhohon5',23,57,290,82,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_6.add(nhohon5);
+var lonhon5 = new Kinetic.Text(InitText('lonhon5',335,57,276,82,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_6.add(lonhon5);
+stage.add(Page_6);
+
+ var Page_7 = new Kinetic.Layer({name: 'Page_7',callback:'Page_7()',x:0,y:2880});
+var Page7_Backrounnd = new Kinetic.Text(InitText('Page7_Backrounnd',0,0,640,480,'Background','rgba(255, 255, 255, 1.00)','','','','ID_BG_7.JPG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(0, 0, 0, 0)','2','2','0','','0','0','0','0',0,0,''));
+Page_7.add(Page7_Backrounnd);
+var prev = new Kinetic.Text(InitText('prev',6,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_BACK_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+prev.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	PlayWave("","","ID_TRANGTIEP");
+	GoToPage("5. Page 5");
+}
+ );
+Page_7.add(prev);
+var home = new Kinetic.Text(InitText('home',87,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_HOME.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+home.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_THOAT");
+	CloseFile();
+}
+
+ );
+Page_7.add(home);
+var random = new Kinetic.Text(InitText('random',477,398,31,26,'','rgba(0, 0, 0, 0)','','','','ID_RANDOM.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+random.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_CAUTIEP");
+	RandomCau7();
+}
+ );
+Page_7.add(random);
+var sound = new Kinetic.Text(InitText('sound',524,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_SOUND.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+sound.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	PlayMusic(7);}
+ );
+Page_7.add(sound);
+var next = new Kinetic.Text(InitText('next',569,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_NEXT_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+next.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	PlayWave("","","ID_TRANGTIEP");
+	NextPage();
+}
+
+ );
+Page_7.add(next);
+var vat_can_1 = new Kinetic.Text(InitText('vat_can_1',48,179,77,68,'','rgba(0, 0, 0, 0)','','','','ID_5_2.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+vat_can_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;SoSanh7();}
+ );
+Page_7.add(vat_can_1);
+var dv_can_1 = new Kinetic.Text(InitText('dv_can_1',149,187,57,60,'','rgba(0, 0, 0, 0)','','','','ID_DV_7.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_7.add(dv_can_1);
+var vat_can_2 = new Kinetic.Text(InitText('vat_can_2',231,179,77,68,'','rgba(0, 0, 0, 0)','','','','ID_5_28.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+vat_can_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;SoSanh7();}
+
+ );
+Page_7.add(vat_can_2);
+var dv_can_2 = new Kinetic.Text(InitText('dv_can_2',325,187,57,60,'','rgba(0, 0, 0, 0)','','','','ID_DV_3.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_7.add(dv_can_2);
+var vat_can_3 = new Kinetic.Text(InitText('vat_can_3',413,179,77,68,'','rgba(0, 0, 0, 0)','','','','ID_5_36.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+vat_can_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;SoSanh7();}
+
+ );
+Page_7.add(vat_can_3);
+var dv_can_3 = new Kinetic.Text(InitText('dv_can_3',507,187,57,60,'','rgba(0, 0, 0, 0)','','','','ID_DV_8.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_7.add(dv_can_3);
+var tieude = new Kinetic.Text(InitText('tieude',41,439,451,24,"Bạn hãy chọn đồ vật                   ",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','center','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','3','2','4','1',0,0,'rgba(0, 85, 0, 255)'));
+Page_7.add(tieude);
+var nangnhe = new Kinetic.Text(InitText('nangnhe',352,439,134,24,"vật nhẹ đặt trên vật nặng đặt dưới",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','left','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','3','2','4','1',0,0,'rgba(0, 85, 0, 255)'));
+Page_7.add(nangnhe);
+var Animate_DUNG = new Kinetic.Text(InitText('Animate _DUNG',215,18,224,105,'','rgba(0, 0, 0, 0)','','','','ID_ANIMATE_GIF1.GIF',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_7.add(Animate_DUNG);
+stage.add(Page_7);
+
+ var Page_8 = new Kinetic.Layer({name: 'Page_8',callback:'Page_8()',x:0,y:3360});
+var Page8_Backrounnd = new Kinetic.Text(InitText('Page8_Backrounnd',0,0,640,480,'Background','rgba(255, 255, 255, 1.00)','','','','ID_BG_8.JPG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(0, 0, 0, 0)','2','2','0','','0','0','0','0',0,0,''));
+Page_8.add(Page8_Backrounnd);
+var vat_can_1 = new Kinetic.Text(InitText('vat_can_1',374,152,77,68,'','rgba(0, 0, 0, 0)','','','','ID_5_37.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+vat_can_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVatSort_Up();}
+ );
+Page_8.add(vat_can_1);
+var vat_can_2 = new Kinetic.Text(InitText('vat_can_2',482,152,77,68,'','rgba(0, 0, 0, 0)','','','','ID_5_34.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+vat_can_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVatSort_Up();}
+
+ );
+Page_8.add(vat_can_2);
+var vat_can_3 = new Kinetic.Text(InitText('vat_can_3',375,269,77,68,'','rgba(0, 0, 0, 0)','','','','ID_5_17.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+vat_can_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVatSort_Up();}
+
+ );
+Page_8.add(vat_can_3);
+var vat_can_4 = new Kinetic.Text(InitText('vat_can_4',474,269,77,68,'','rgba(0, 0, 0, 0)','','','','ID_5_2.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+vat_can_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;CanVatSort_Up();}
+
+ );
+Page_8.add(vat_can_4);
+var prev = new Kinetic.Text(InitText('prev',6,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_BACK_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+prev.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	PlayWave("","","ID_TRANGTIEP");
+	PrevPage();
+}
+ );
+Page_8.add(prev);
+var home = new Kinetic.Text(InitText('home',87,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_HOME.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+home.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_THOAT");
+	CloseFile();
+}
+
+ );
+Page_8.add(home);
+var random = new Kinetic.Text(InitText('random',477,398,31,26,'','rgba(0, 0, 0, 0)','','','','ID_RANDOM.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+random.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;
+	PlayWave("","","ID_CAUTIEP");
+	RandomCau8();
+}
+ );
+Page_8.add(random);
+var sound = new Kinetic.Text(InitText('sound',524,399,27,25,'','rgba(0, 0, 0, 0)','','','','ID_SOUND.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+sound.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this;	PlayMusic(8);}
+ );
+Page_8.add(sound);
+var next = new Kinetic.Text(InitText('next',569,383,65,66,'','rgba(0, 0, 0, 0)','','','','ID_NEXT_NOR.PNG',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+next.on('mouseup touchend dragend',function(evt)/*---dragend---*/{
+m_pgObjCaller = this; 
+	PlayWave("","","ID_TRANGTIEP");
+	GoToPage("1. Page 1");
+}
+
+ );
+Page_8.add(next);
+var tieude = new Kinetic.Text(InitText('tieude',88,440,451,24,"Sắp xếp theo thứ tự                   ",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','left','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','3','2','4','1',0,0,'rgba(0, 85, 0, 255)'));
+Page_8.add(tieude);
+var nangnhe = new Kinetic.Text(InitText('nangnhe',251,440,302,24,"vật nhẹ đặt trên vật nặng đặt dưới",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Bold','left','top',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','3','2','4','1',0,0,'rgba(0, 85, 0, 255)'));
+Page_8.add(nangnhe);
+var Animate_DUNG = new Kinetic.Text(InitText('Animate _DUNG',226,29,224,105,'','rgba(0, 0, 0, 0)','','','','ID_ANIMATE_GIF1.GIF',0,'','','','',0,'0.00','32','32',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','1',0,0, 'rgba(128, 128, 128, 255)'));
+Page_8.add(Animate_DUNG);
+var klg_1 = new Kinetic.Text(InitText('klg_1',406,174,25,25,"5",'rgba(255, 255, 255, 1.00)','rgba(75, 0, 130, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(75, 0, 130, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(255, 0, 0, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+Page_8.add(klg_1);
+var klg_2 = new Kinetic.Text(InitText('klg_2',514,174,25,25,"3",'rgba(255, 255, 255, 1.00)','rgba(75, 0, 130, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(75, 0, 130, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(255, 0, 0, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+Page_8.add(klg_2);
+var klg_3 = new Kinetic.Text(InitText('klg_3',407,293,25,25,"9",'rgba(255, 255, 255, 1.00)','rgba(75, 0, 130, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(75, 0, 130, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(255, 0, 0, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+Page_8.add(klg_3);
+var klg_4 = new Kinetic.Text(InitText('klg_4',506,291,25,25,"8",'rgba(255, 255, 255, 1.00)','rgba(75, 0, 130, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Verdana','Normal','center','middle',2,'0.00','32','32',3,'rgba(75, 0, 130, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(255, 0, 0, 255)','0','0','4','3',0,0,'rgba(0, 0, 0, 0)'));
+Page_8.add(klg_4);
+var an_sort_1 = new Kinetic.Text(InitText('an_sort_1',30,21,179,47,"3",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_8.add(an_sort_1);
+var an_sort_2 = new Kinetic.Text(InitText('an_sort_2',30,89,178,45,"5",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_8.add(an_sort_2);
+var an_sort_3 = new Kinetic.Text(InitText('an_sort_3',30,159,178,45,"8",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_8.add(an_sort_3);
+var an_sort_4 = new Kinetic.Text(InitText('an_sort_4',30,228,178,45,"9",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',18,'Verdana','Normal','center','middle',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Page_8.add(an_sort_4);
+stage.add(Page_8);
+InitLacVietScript();
+};
+</script>
+</head>
+<body style="text-align: center">
+<div id="Doc" style="vertical-align: middle; text-align: center; width: 100%; height: 100%; font-size: xx-large;">Loading...</div>
+</body>
+</html>

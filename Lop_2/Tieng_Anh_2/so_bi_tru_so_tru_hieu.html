@@ -1,0 +1,948 @@
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>so_bi_tru_so_tru_hieu</title>
+<script type="text/javascript" src="js/kinetic-v4.0.5.js">object</script>
+<script type="text/javascript" src="js/buzz.js">sound</script>
+<script type="text/javascript" src="js/paintlib.js">paint</script>
+<script type="text/javascript" src="http://code.responsivevoice.org/responsivevoice.js">Text to speak</script>
+<script type="text/javascript" src="so_bi_tru_so_tru_hieu/ID_TEXT.js">ResourceIDText</script>
+<script type="text/javascript" src="js/LacVietJScript.js">JScrip</script>
+<script type="text/javascript">
+var a_kq=["b","c","a","b","c","d","b","a","b"];
+var a_tl=[0,0,0,0];
+function InitBaiHoc(){
+	for(var i=0;i<9;i++)
+		{
+		SetShowObject("Trang_1","check_"+i,0);
+		SetCursor("Trang_1","a_"+i,"pointer");
+		SetCursor("Trang_1","b_"+i,"pointer");
+		SetCursor("Trang_1","c_"+i,"pointer");
+		SetCursor("Trang_1","d_"+i,"pointer");
+		SetFontColor("Trang_1","a_"+i,"#000000");
+		SetFontColor("Trang_1","b_"+i,"#000000");
+		SetFontColor("Trang_1","c_"+i,"#000000");
+		SetFontColor("Trang_1","d_"+i,"#000000");
+		SetText("Trang_1","check_"+i,"");
+		a_tl[i]=0;
+		}
+SetShowObject("Trang_1","begin",1);
+SetCursor("Trang_1","begin","pointer");
+SetCursor("Trang_1","nghe_doc","pointer");
+SetCursor("Trang_1","lam_lai","pointer");
+SetShowObject("Trang_1","m_diem",0);
+SetShowObject("Trang_1","lam_lai",0);
+SetText("Trang_1","m_diem","" );
+InvalidateObj("Trang_1","");
+}
+
+function ChonTL(){
+	Play=0;
+	var name= GetName("Trang_1");
+	var t=  GetTop("Trang_1",name)-2;
+	var l=  GetLeft("Trang_1",name);
+	var cau = rightStr(name,1);
+	a_tl[cau]= leftStr(name,1);
+	SetText("Trang_1","check_"+cau,a_tl[cau]);
+	MoveObjectTo("Trang_1","check_"+cau,l-3,t+3);
+	SetShowObject("Trang_1","check_"+cau,1);
+	InvalidateObj("Trang_1","");
+}
+function Diem1(){
+ var diem=0;
+ for(var i=0;i<9;i++){
+	if(toLowerCase(a_kq[i]) != toLowerCase(a_tl[i]))
+	{
+		SetFontColor("Trang_1",a_kq[i]+"_"+i,"#008000");
+		SetFontColor("Trang_1",a_tl[i]+"_"+i,"#CC0000");
+	}
+	else {
+		diem=diem+1;
+		SetFontColor("Trang_1",a_kq[i]+"_"+i,"#008000");
+	    }
+	}
+ return diem;
+}
+
+var g_midiVol=32767;
+var Play=0 ;
+var b_showgroup=0;
+var keyOldValue="";
+var keyNewValue="";
+var objectShowKey="";
+var name_keyboard="Group_1";
+function   GetKeyBoNumber(){
+	keyNewValue = "_"+ GetText("",objectShowKey) + GetText("","");
+	keyNewValue =rightStr(keyNewValue ,length(keyNewValue)-1);
+	SetText("",objectShowKey,keyNewValue);
+	InvalidateObj("",objectShowKey);
+}
+function   ShowKeyNum( namekey){
+SetShowObject("Trang_1","Group_1",0);
+SetShowObject("Trang_2","Group_1",0);
+SetShowObject("Trang_3","Group_1",0);
+var x_to= GetLeft("","")+ GetWidth("","")- GetWidth("",namekey);
+var y_to= GetTop("","")+ GetHeight("","");
+if (GetHeight("", namekey) + y_to > 480)
+    y_to= GetTop("","")- GetHeight("",namekey);
+if (x_to<0) x_to=1;
+MoveObjectTo("",namekey,x_to,y_to);
+SetShowObject("",namekey,1);
+InvalidateObj("Trang_1",namekey);
+keyOldValue= GetText("","");
+objectShowKey= GetName("");
+}
+
+function DS()
+{
+var ct= GetText("Trang_2","");
+if(ct!= "Đ")
+	SetText("Trang_2","","Đ");
+else SetText("Trang_2","","S");
+InvalidateObj("Trang_2","");
+}
+var a_kq2=["38","14","24","0","62","62","34","50","0","7","4","4","0","8","6"];
+function Bai2()
+{
+for(var i=0;i<15;i++){
+	SetText("Trang_2","tl2_"+i,"");
+	SetCursor("Trang_2","tl2_"+i,"pointer");
+	SetFontColor("Trang_2","tl2_"+i,"#0000ff");
+	}
+}
+function Diem2(){
+ var diem=0;
+ for(var i=0;i<15;i++){
+	if(a_kq2[i] == GetText("Trang_2","tl2_"+i))
+	{
+		SetFontColor("Trang_2","tl2_"+i,"#008000");
+diem=diem+1;
+	}
+	else 
+		SetFontColor("Trang_2","tl2_"+i,"#CC0000");
+	}
+ return diem;
+}
+
+
+folder_Resource ='so_bi_tru_so_tru_hieu'; 
+styteView = 'Ver';
+
+function Trang_1()
+{
+LineHeight("Trang_1","noi_dung",1.8);
+InitBaiHoc();
+  return;
+}
+
+function Trang_2()
+{
+ for(var i=0; i<5; i++)
+	LineHeight("Trang_2","de_"+i,1.8);
+SetShowObject("Trang_2","Group_1",0);
+SetShowObject("Trang_2","bang_diem",0);
+SetMoveView("Trang_2","bang_diem",1);
+SetShowObject("Trang_2","nop_bai",1);
+Bai2();
+InvalidateObj("Trang_2","");
+  return;
+}
+ 
+  window.onload = function() {
+ var canvas = document.createElement('canvas');
+if (!canvas.getContext) {
+alert("Trinh duyet khong ho tro");
+return;
+} 
+ document.getElementById("Doc").textContent = ""; 
+ stage = new Kinetic.Stage({
+ container: "Doc", 
+ width: 640,
+ height: 960 
+ });
+
+ var Trang_1 = new Kinetic.Layer({name: 'Trang_1',callback:'Trang_1()',x:0,y:0});
+var Trang_1_Backrounnd = new Kinetic.Text(InitText('Trang_1_Backrounnd',0,0,640,480,'Background','rgba(255, 228, 202, 1.00)','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(255, 228, 202, 0)','0','3','0','','0','0','0','0',0,0,''));
+Trang_1.add(Trang_1_Backrounnd);
+var cau_0 = new Kinetic.Text(InitText('cau_0',11,27,538,17,"1. Biết số bị trừ là 45, số trừ là 23. Vậy hiệu là:",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(cau_0);
+var cau_1 = new Kinetic.Text(InitText('cau_1',11,65,538,26,"2. Hai số có tổng bằng 8 và hiệu bằng 2. Hai số đó là:",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(cau_1);
+var cau_2 = new Kinetic.Text(InitText('cau_2',11,112,538,25,"3. Hai số có hiệu bằng 10, số bị trừ là 18. Vậy số trừ là:",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(cau_2);
+var cau_3 = new Kinetic.Text(InitText('cau_3',11,158,538,28,"4. Hai số liên tiếp nhau có hiệu bằng bao nhiêu?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(cau_3);
+var a_0 = new Kinetic.Text(InitText('a_0',36,45,76,22,"A. 68",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_0);
+var b_0 = new Kinetic.Text(InitText('b_0',137,45,76,23,"B. 22",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_0);
+var c_0 = new Kinetic.Text(InitText('c_0',255,45,76,22,"C. 77",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_0);
+var a_1 = new Kinetic.Text(InitText('a_1',36,93,76,22,"A. 1 và 7",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_1);
+var b_1 = new Kinetic.Text(InitText('b_1',137,93,76,19,"B. 6 và 2",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_1);
+var c_1 = new Kinetic.Text(InitText('c_1',255,93,76,19,"C. 5 và 3",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_1);
+var a_2 = new Kinetic.Text(InitText('a_2',36,137,76,22,"A. 8",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_2);
+var b_2 = new Kinetic.Text(InitText('b_2',137,137,76,22,"B. 7",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_2);
+var c_2 = new Kinetic.Text(InitText('c_2',255,137,76,22,"C. 6",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_2);
+var a_3 = new Kinetic.Text(InitText('a_3',36,182,76,22,"A. 0",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_3);
+var b_3 = new Kinetic.Text(InitText('b_3',137,182,76,22,"B. 1",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_3);
+var c_3 = new Kinetic.Text(InitText('c_3',255,182,76,22,"C. 2",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_3);
+var check_0 = new Kinetic.Text(InitText('check_0',27,44,18,18,"c",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',14,'Arial','Bold','center','middle',2,'0.00','30','30',1,'rgba(0, 0, 0, 255)','rgba(0, 0, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_0);
+var check_1 = new Kinetic.Text(InitText('check_1',27,89,18,18,"b",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',14,'Arial','Bold','center','middle',2,'0.00','30','30',1,'rgba(0, 0, 0, 255)','rgba(0, 0, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_1);
+var check_2 = new Kinetic.Text(InitText('check_2',27,136,18,18,"b",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',14,'Arial','Bold','center','middle',2,'0.00','30','30',1,'rgba(0, 0, 0, 255)','rgba(0, 0, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_2);
+var check_3 = new Kinetic.Text(InitText('check_3',27,182,18,18,"a",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',14,'Arial','Bold','center','middle',2,'0.00','30','30',1,'rgba(0, 0, 0, 255)','rgba(0, 0, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_3);
+var Text_1 = new Kinetic.Text(InitText('Text_1',173,1,291,25,"Bài 4: SỐ BỊ TRỪ - SỐ TRỪ - HIỆU",'rgba(255, 173, 91, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 0, 0, 1.00)','',12,'Arial','Bold','center','middle',0,'0.00','9','0',0,'rgba(0, 0, 0, 0)','rgba(255, 173, 91, 1.00)','0','2','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(Text_1);
+var d_0 = new Kinetic.Text(InitText('d_0',366,45,76,22,"D. 31",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+d_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(d_0);
+var d_1 = new Kinetic.Text(InitText('d_1',366,93,76,19,"D. 4 và 4",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+d_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(d_1);
+var d_2 = new Kinetic.Text(InitText('d_2',366,137,76,22,"D. 5",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+d_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(d_2);
+var d_3 = new Kinetic.Text(InitText('d_3',366,182,76,22,"D. 3",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+d_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(d_3);
+var a_4 = new Kinetic.Text(InitText('a_4',36,230,76,22,"A. 48",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_4);
+var b_4 = new Kinetic.Text(InitText('b_4',137,230,76,22,"B. 57",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_4);
+var c_4 = new Kinetic.Text(InitText('c_4',255,230,76,22,"C. 24",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_4);
+var check_4 = new Kinetic.Text(InitText('check_4',27,229,18,18,"a",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',14,'Arial','Bold','center','middle',2,'0.00','30','30',1,'rgba(0, 0, 0, 255)','rgba(0, 0, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_4);
+var d_4 = new Kinetic.Text(InitText('d_4',366,230,76,22,"D. 15",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+d_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(d_4);
+var cau_4 = new Kinetic.Text(InitText('cau_4',11,207,538,28,"5. Hiệu của hai số 36 và 12 là:",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(cau_4);
+var a_5 = new Kinetic.Text(InitText('a_5',36,280,76,22,"A. 70",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_5);
+var b_5 = new Kinetic.Text(InitText('b_5',137,280,76,22,"B. 50",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_5);
+var c_5 = new Kinetic.Text(InitText('c_5',255,280,76,22,"C. 30",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_5);
+var check_5 = new Kinetic.Text(InitText('check_5',27,280,18,18,"a",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',14,'Arial','Bold','center','middle',2,'0.00','30','30',1,'rgba(0, 0, 0, 255)','rgba(0, 0, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_5);
+var d_5 = new Kinetic.Text(InitText('d_5',366,280,76,22,"D. 10",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+d_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(d_5);
+var cau_5 = new Kinetic.Text(InitText('cau_5',11,256,538,28,"6. 66 - 26 - 30 = ?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(cau_5);
+var a_6 = new Kinetic.Text(InitText('a_6',36,330,76,22,"A. 11dm",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_6);
+var b_6 = new Kinetic.Text(InitText('b_6',137,330,76,22,"B. 12dm",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_6);
+var c_6 = new Kinetic.Text(InitText('c_6',255,330,76,22,"C. 13dm",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_6);
+var check_6 = new Kinetic.Text(InitText('check_6',27,335,18,18,"a",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',14,'Arial','Bold','center','middle',2,'0.00','30','30',1,'rgba(0, 0, 0, 255)','rgba(0, 0, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_6);
+var d_6 = new Kinetic.Text(InitText('d_6',366,330,76,22,"D. 14dm",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+d_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(d_6);
+var cau_6 = new Kinetic.Text(InitText('cau_6',11,305,630,28,"7. Một sợi dây dài 16dm người ta cắt bỏ đi 4dm. Hỏi sợi dây còn lại dài bao nhiêu đề-xi-mét?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(cau_6);
+var a_7 = new Kinetic.Text(InitText('a_7',36,382,76,22,"A. 0",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_7);
+var b_7 = new Kinetic.Text(InitText('b_7',137,382,76,22,"B. 1",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_7);
+var c_7 = new Kinetic.Text(InitText('c_7',255,382,76,22,"C. 2",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_7);
+var check_7 = new Kinetic.Text(InitText('check_7',27,386,18,18,"a",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',14,'Arial','Bold','center','middle',2,'0.00','30','30',1,'rgba(0, 0, 0, 255)','rgba(0, 0, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_7);
+var d_7 = new Kinetic.Text(InitText('d_7',366,382,76,22,"D. 3",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+d_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(d_7);
+var cau_7 = new Kinetic.Text(InitText('cau_7',11,354,538,28,"8. Hai số bằng nhau có hiệu bằng bao nhiêu?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(cau_7);
+var a_8 = new Kinetic.Text(InitText('a_8',35,430,129,22,"A. 39 và 22",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_8);
+var b_8 = new Kinetic.Text(InitText('b_8',181,430,129,22,"B. 48 và 21",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_8);
+var c_8 = new Kinetic.Text(InitText('c_8',327,430,129,22,"C. 59 và 12",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_8);
+var check_8 = new Kinetic.Text(InitText('check_8',27,433,18,18,"a",'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',14,'Arial','Bold','center','middle',2,'0.00','30','30',1,'rgba(0, 0, 0, 255)','rgba(0, 0, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_8);
+var d_8 = new Kinetic.Text(InitText('d_8',474,430,129,22,"D. 68 và 51",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+d_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(d_8);
+var cau_8 = new Kinetic.Text(InitText('cau_8',11,404,624,28,"9. Hai số nào sau đây có hiệu bằng 27?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(cau_8);
+var Text_0 = new Kinetic.Text(InitText('Text_0',11,456,362,19,"10. Phép tính 38 - 14 = 24 có:",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(Text_0);
+var Image_3 = new Kinetic.Text(InitText('Image_3',2,1,171,25,'','rgba(0, 0, 0, 0)','','','','ID_IMAGE4.PNG',0,'','','','',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','0',0,0, 'rgba(128, 128, 128, 255)'));
+Trang_1.add(Image_3);
+var Image_1 = new Kinetic.Text(InitText('Image_1',466,1,171,25,'','rgba(0, 0, 0, 0)','','','','ID_IMAGE4.PNG',0,'','','','',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','0',0,0, 'rgba(128, 128, 128, 255)'));
+Trang_1.add(Image_1);
+stage.add(Trang_1);
+
+ var Trang_2 = new Kinetic.Layer({name: 'Trang_2',callback:'Trang_2()',x:0,y:480});
+var Trang_2_Backrounnd = new Kinetic.Text(InitText('Trang_2_Backrounnd',0,0,640,480,'Background','rgba(255, 228, 202, 1.00)','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(255, 228, 202, 0)','0','3','0','','0','0','0','0',0,0,''));
+Trang_2.add(Trang_2_Backrounnd);
+var Text_10 = new Kinetic.Text(InitText('Text_10',394,302,23,28,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(Text_10);
+var Text_6 = new Kinetic.Text(InitText('Text_6',203,302,23,28,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(Text_6);
+var Text_4 = new Kinetic.Text(InitText('Text_4',45,303,23,28,"-",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(Text_4);
+var Text_9 = new Kinetic.Text(InitText('Text_9',386,338,81,1,"",'rgba(40, 40, 40, 1.00)','rgba(40, 40, 40, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(0, 0, 0, 0)','rgba(40, 40, 40, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(Text_9);
+var Text_8 = new Kinetic.Text(InitText('Text_8',199,338,81,1,"",'rgba(40, 40, 40, 1.00)','rgba(40, 40, 40, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(0, 0, 0, 0)','rgba(40, 40, 40, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(Text_8);
+var Text_7 = new Kinetic.Text(InitText('Text_7',40,338,81,1,"",'rgba(40, 40, 40, 1.00)','rgba(40, 40, 40, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(0, 0, 0, 0)','rgba(40, 40, 40, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(Text_7);
+var de_3 = new Kinetic.Text(InitText('de_3',193,294,96,94,"b)    5   6\r\n            6\r\n       1",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Arial','Normal','left','top',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(de_3);
+var de_0 = new Kinetic.Text(InitText('de_0',50,-1,400,150,"a) Số bị trừ là:.........\r\nb) Số trừ là:.........\r\nc) Hiệu là:.........\r\n\r\na) Hiệu là:.........\r\nb) Số bị trừ là:.........\r\nc) Số trừ là:.........",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Arial','Normal','left','top',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(de_0);
+var Text_2 = new Kinetic.Text(InitText('Text_2',8,57,362,19,"11. Phép tính     62 - 62 =0 có:",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(Text_2);
+var Text_3 = new Kinetic.Text(InitText('Text_3',8,141,362,19,"12. Tính:",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(Text_3);
+var de_1 = new Kinetic.Text(InitText('de_1',52,160,400,69,"a) 86 - 52 = ...........\r\nb) 80 - 30 = ...........\r\nc) 50 - 50 = ...........",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Arial','Normal','left','top',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(de_1);
+var Text_5 = new Kinetic.Text(InitText('Text_5',2,225,362,19,"13. Chữ số?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',14,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(Text_5);
+var de_2 = new Kinetic.Text(InitText('de_2',37,294,117,119,"a)       7\r\n      5  \r\n      2  3",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Arial','Normal','left','top',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(de_2);
+var tl2_0 = new Kinetic.Text(InitText('tl2_0',140,-9,36,23,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_0);
+var tl2_1 = new Kinetic.Text(InitText('tl2_1',128,9,36,23,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_1);
+var tl2_2 = new Kinetic.Text(InitText('tl2_2',116,30,36,23,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_2);
+var tl2_3 = new Kinetic.Text(InitText('tl2_3',116,69,36,23,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_3);
+var tl2_4 = new Kinetic.Text(InitText('tl2_4',140,90,36,23,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_4);
+var tl2_5 = new Kinetic.Text(InitText('tl2_5',126,108,36,23,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_5);
+var tl2_6 = new Kinetic.Text(InitText('tl2_6',134,152,40,23,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_6);
+var tl2_7 = new Kinetic.Text(InitText('tl2_7',132,170,40,23,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_7);
+var tl2_8 = new Kinetic.Text(InitText('tl2_8',133,191,40,23,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_8);
+var tl2_9 = new Kinetic.Text(InitText('tl2_9',65,293,22,21,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',1,'rgba(0, 0, 0, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_9.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_9);
+var tl2_10 = new Kinetic.Text(InitText('tl2_10',88,315,22,21,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',1,'rgba(0, 0, 0, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_10.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_10);
+var tl2_11 = new Kinetic.Text(InitText('tl2_11',227,313,22,21,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',1,'rgba(0, 0, 0, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_11.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_11);
+var m_diem = new Kinetic.Text(InitText('m_diem',211,121,252,141,"8",'rgba(236, 217, 255, 0.98)','rgba(255, 255, 255, 1.00)','rgba(128, 0, 255, 1.00)','rgba(255, 255, 255, 1.00)','',48,'Arial','Normal','center','middle',0,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(236, 217, 255, 0.00)','0','0','rgba(255, 255, 255, 255)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(m_diem);
+var label = new Kinetic.Text(InitText('label',232,147,201,24,"Bạn được",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',20,'Arial','Normal','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(label);
+var t_mess = new Kinetic.Text(InitText('t_mess',212,122,252,21,"Thông báo điểm",'rgba(64, 0, 128, 0.98)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','left','middle',0,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(128, 0, 255, 0.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(t_mess);
+var bt_lam_lai = new Kinetic.Text(InitText('bt_lam_lai',288,224,95,25,"Làm Lại",'rgba(64, 0, 128, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Arial','Normal','center','middle',0,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(128, 0, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+bt_lam_lai.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+InitBaiHoc();
+Bai2();
+SetShowObject("Trang_2","bang_diem",0);
+SetShowObject("Trang_2","nop_bai",1);
+InvalidateObj("Trang_2","");
+InvalidateObj("Trang_1","");
+  return;
+}
+ );
+Trang_2.add(bt_lam_lai);
+var bg_key = new Kinetic.Text(InitText('bg_key',1,1,129,158,"0",'rgba(229, 229, 229, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(0, 0, 0, 255)','rgba(229, 229, 229, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(bg_key);
+var _0 = new Kinetic.Text(InitText('_0',6,5,35,21,"0",'rgba(238, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',1,0,'rgba(0, 0, 0, 0)'));
+_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(_0);
+var clear_one = new Kinetic.Text(InitText('clear_one',48,5,35,21,"←",'rgba(255, 192, 203, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Verdana','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 228, 225, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',1,0,'rgba(0, 0, 0, 0)'));
+clear_one.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+      keyNewValue = GetText("",objectShowKey);
+   var tkeyNew = leftStr(keyNewValue ,Length(keyNewValue)-1);
+	SetText("",objectShowKey,tkeyNew);
+	InvalidateObj("",objectShowKey);
+  return;
+}
+ );
+Trang_2.add(clear_one);
+var clear_all = new Kinetic.Text(InitText('clear_all',90,5,35,21,"C",'rgba(255, 192, 203, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Verdana','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 228, 225, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',2,0,'rgba(0, 0, 0, 0)'));
+clear_all.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+      keyNewValue = "";
+	SetText("",objectShowKey,"");
+	InvalidateObj("",objectShowKey);;
+  return;
+}
+ );
+Trang_2.add(clear_all);
+var _1 = new Kinetic.Text(InitText('_1',6,31,35,21,"1",'rgba(238, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',1,0,'rgba(0, 0, 0, 0)'));
+_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(_1);
+var _2 = new Kinetic.Text(InitText('_2',48,31,35,21,"2",'rgba(238, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',1,0,'rgba(0, 0, 0, 0)'));
+_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(_2);
+var _3 = new Kinetic.Text(InitText('_3',90,31,35,21,"3",'rgba(238, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',2,0,'rgba(0, 0, 0, 0)'));
+_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(_3);
+var _4 = new Kinetic.Text(InitText('_4',6,57,35,21,"4",'rgba(238, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',1,0,'rgba(0, 0, 0, 0)'));
+_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(_4);
+var _5 = new Kinetic.Text(InitText('_5',48,57,35,21,"5",'rgba(238, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',1,0,'rgba(0, 0, 0, 0)'));
+_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(_5);
+var _6 = new Kinetic.Text(InitText('_6',90,57,35,21,"6",'rgba(238, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',2,0,'rgba(0, 0, 0, 0)'));
+_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(_6);
+var _9 = new Kinetic.Text(InitText('_9',90,83,35,21,"9",'rgba(238, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',2,0,'rgba(0, 0, 0, 0)'));
+_9.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(_9);
+var _8 = new Kinetic.Text(InitText('_8',48,83,35,21,"8",'rgba(238, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',1,0,'rgba(0, 0, 0, 0)'));
+_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(_8);
+var _7 = new Kinetic.Text(InitText('_7',6,83,35,21,"7",'rgba(238, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',1,0,'rgba(0, 0, 0, 0)'));
+_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(_7);
+var dau_lon = new Kinetic.Text(InitText('dau_lon',6,109,35,21,">",'rgba(175, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Verdana','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(228, 250, 250, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',2,0,'rgba(0, 0, 0, 0)'));
+dau_lon.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(dau_lon);
+var dau_bang = new Kinetic.Text(InitText('dau_bang',48,109,35,21,"<",'rgba(175, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Verdana','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(228, 250, 250, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',1,0,'rgba(0, 0, 0, 0)'));
+dau_bang.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(dau_bang);
+var dau_be = new Kinetic.Text(InitText('dau_be',89,109,35,21,"=",'rgba(175, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Verdana','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(228, 250, 250, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',2,0,'rgba(0, 0, 0, 0)'));
+dau_be.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(dau_be);
+var ok = new Kinetic.Text(InitText('ok',88,134,36,21,"OK",'rgba(152, 251, 152, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',10,'Verdana','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(224, 254, 224, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',2,0,'rgba(0, 0, 0, 0)'));
+ok.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+SetShowObject("",name_keyboard,0);
+b_showgroup="0";
+  return;
+}
+ );
+Trang_2.add(ok);
+var huy = new Kinetic.Text(InitText('huy',5,134,35,21,"Hủy",'rgba(255, 192, 203, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',10,'Verdana','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(255, 228, 225, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',2,0,'rgba(0, 0, 0, 0)'));
+huy.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+SetText("",objectShowKey,keyOldValue);
+SetShowObject("",name_keyboard,0);
+b_showgroup="0";
+  return;
+}
+ );
+Trang_2.add(huy);
+var nop_bai = new Kinetic.Text(InitText('nop_bai',247,450,87,25,"Nộp Bài",'rgba(64, 0, 128, 1.00)','rgba(255, 173, 91, 1.00)','rgba(255, 254, 153, 1.00)','rgba(255, 254, 153, 1.00)','',14,'Arial','Normal','center','middle',3,'0.00','5','0',1,'rgba(0, 0, 0, 255)','rgba(128, 0, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+nop_bai.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+var diem= Diem1()+ Diem2();
+diem= round(diem*10/32);
+if(diem>10) diem=10;
+SetText("Trang_2","m_diem",diem);
+SetShowObject("Trang_2","bang_diem",1);
+SetShowObject("Trang_2","nop_bai",0);
+InvalidateObj("Trang_2","");
+InvalidateObj("Trang_1","");
+PlaySound("ID_TEST");
+  return;
+}
+
+ );
+Trang_2.add(nop_bai);
+var bang_diem = new Kinetic.Group({name:'bang_diem',x:0,y:0,width:257,height:145});
+bang_diem.add(m_diem);
+bang_diem.add(label);
+bang_diem.add(t_mess);
+bang_diem.add(bt_lam_lai);
+Trang_2.add(bang_diem);
+var Text_1 = new Kinetic.Text(InitText('Text_1',47,134,35,21,"+",'rgba(175, 238, 238, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',12,'Verdana','Normal','center','middle',3,'0.00','5','0',1,'rgba(127, 127, 127, 255)','rgba(228, 250, 250, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',1,0,'rgba(0, 0, 0, 0)'));
+Text_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+GetKeyBoNumber();
+  return;
+}
+ );
+Trang_2.add(Text_1);
+var de_4 = new Kinetic.Text(InitText('de_4',374,294,96,94,"c)    7   \r\n       1   6\r\n             2",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Arial','Normal','left','top',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(de_4);
+var tl2_12 = new Kinetic.Text(InitText('tl2_12',249,343,22,21,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',1,'rgba(0, 0, 0, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_12.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_12);
+var tl2_13 = new Kinetic.Text(InitText('tl2_13',434,293,22,21,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',1,'rgba(0, 0, 0, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_13.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_13);
+var tl2_14 = new Kinetic.Text(InitText('tl2_14',410,343,22,21,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(0, 0, 255, 1.00)','',16,'Arial','Normal','center','bottom',0,'0.00','32','32',1,'rgba(0, 0, 0, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','1',0,0,'rgba(0, 0, 0, 0)'));
+tl2_14.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ ShowKeyNum(name_keyboard);
+  return;
+}
+ );
+Trang_2.add(tl2_14);
+var Group_1 = new Kinetic.Group({name:'Group_1',x:0,y:0,width:133,height:162});
+Group_1.add(bg_key);
+Group_1.add(_0);
+Group_1.add(clear_one);
+Group_1.add(clear_all);
+Group_1.add(_1);
+Group_1.add(_2);
+Group_1.add(_3);
+Group_1.add(_4);
+Group_1.add(_5);
+Group_1.add(_6);
+Group_1.add(_9);
+Group_1.add(_8);
+Group_1.add(_7);
+Group_1.add(dau_lon);
+Group_1.add(dau_bang);
+Group_1.add(dau_be);
+Group_1.add(ok);
+Group_1.add(huy);
+Group_1.add(Text_1);
+Trang_2.add(Group_1);
+stage.add(Trang_2);
+InitLacVietScript();
+};
+</script>
+</head>
+<body style="text-align: center">
+<div id="Doc" style="vertical-align: middle; text-align: center; width: 100%; height: 100%; font-size: xx-large;">Loading...</div>
+</body>
+</html>

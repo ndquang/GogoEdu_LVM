@@ -1,0 +1,10 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT_DATA']='Mỗi quyển vở có 48 trang. Hỏi 25 quyển vở cùng loại có bao nhiêu trang?1200|trang\r\nBạn Nam đếm số viên gạch lát nền trong phòng học, chiều ngang có 24 viên, chiều dài có 36 viên. Hỏi phòng học đó có bao nhiêu viên gạch?864|viên\r\nCó 823 chấm bi trên mỗi chiếc váy. Hỏi có tất cả bao nhiêu chấm bi trên 24 chiếc váy?19752\r\nMột xưởng sản xuất đồ lưu niệm đặt 336 móc chìa khóa lưu niệm trong mỗi thùng. Hỏi nhà máy sẽ đặt bao nhiêu móc chìa khóa trong 51 thùng?17136|móc khóa\r\nCó 75 túi chứa đầy tiền xu. Có 52 xu trong mỗi túi. Hỏi có tất cả bao nhiêu đồng xu?3900|đồng xu\r\nMột công ty bảo hiểm phải thanh toán 18 yêu cầu của người bệnh. Mỗi yêu cầu họ phải trả 42500 đồng. Hỏi công ty bảo hiểm phải trả bao nhiêu tiền?765000|đồng\r\nTim người khỏe mạnh bình thường mỗi phút đập khoảng 75 lần, Hãy tính số lần đập của tim người đó trong 24 giờ?108000|lần\r\nMột siêu thị bán 13kg đường loại 5200 đồng một ki-lô-gam và 18kg đường loại 5500 đồng một ki-lô-gam. Hỏi khi bán hết hai loại đường trên, siêu thị đó thu được bao nhiêu tiền?166600|đồng\r\nMột trường học có 18 lớp, trong đó có 12 lớp, mỗi lớp có 30 học sinh, và 6 lớp còn lại mỗi lớp có 35 học sinh. Hỏi trường đó có tất cả bao nhiêu học sinh?450|học sinh\r\nTrong tiết chào cờ khối lớp Bốn xếp thành 17 hàng, mỗi hàng có 11 học sinh. Khối lớp Năm xếp thành 15 hàng, mỗi hàng cũng có 11 học sinh. Hỏi cả hai khối có tất cả bao nhiêu học sinh?319|học sinh';
+hashIDText['ID_TEXT1']='Để lát nền một căn phòng có diện tích là ...m² ta cần bao nhiên viên gạch hình vuông có cạnh là ... cm, biết diện tích phần mạch vữa không đáng kể?';
+hashIDText['ID_TEXT2']='OK';
+hashIDText['ID_TEXT3']='good job';
+hashIDText['ID_TEXT4']='44';
+hashIDText['ID_TEXT5']='Đồng ý';
+hashIDText['ID_TEXT6']='Bài toán: Nhân một số với số có hai chữ số';
+hashIDText['ID_TEXT7']='';

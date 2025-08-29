@@ -1,0 +1,12 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='n';
+hashIDText['ID_TEXT2']='i';
+hashIDText['ID_TEXT3']='i';
+hashIDText['ID_TEXT4']='i';
+hashIDText['ID_TEXT5']='l';
+hashIDText['ID_TEXT6']='l';
+hashIDText['ID_TEXT7']='l';
+hashIDText['ID_TEXT8']='l';
+hashIDText['ID_TEXT9']='l';
+hashIDText['ID_TEXT10']='Làm Lại';

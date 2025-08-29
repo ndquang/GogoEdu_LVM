@@ -1,0 +1,17 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='n';
+hashIDText['ID_TEXT2']='i';
+hashIDText['ID_TEXT3']='2';
+hashIDText['ID_TEXT4']='0';
+hashIDText['ID_TEXT5']='1';
+hashIDText['ID_TEXT6']='2';
+hashIDText['ID_TEXT7']='1';
+hashIDText['ID_TEXT8']='l';
+hashIDText['ID_TEXT9']='l';
+hashIDText['ID_TEXT10']='Làm Lại';
+hashIDText['ID_TEXT11']='0';
+hashIDText['ID_TEXT12']='i';
+hashIDText['ID_TEXT13']='i';
+hashIDText['ID_TEXT14']='i';
+hashIDText['ID_TEXT15']='i';

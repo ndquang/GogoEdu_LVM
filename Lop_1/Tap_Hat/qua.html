@@ -1,0 +1,405 @@
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>qua</title>
+<script type="text/javascript" src="/js/kinetic-v5.1.0.js">object</script>
+<script type="text/javascript" src="/js/buzz.js">sound</script>
+<script type="text/javascript" src="/js/paintlib-v5.1.0.js">paint</script>
+<script type="text/javascript" src="http://code.responsivevoice.org/responsivevoice.js">Text to speak</script>
+<script type="text/javascript" src="/data/qua/ID_TEXT.js">ResourceIDText</script>
+<script type="text/javascript" src="js/LacVietJScript-v5.1.0.js">JScrip</script>
+<script type="text/javascript">
+var index=0;
+var m_auto= true;
+var m_size=16;
+var posCau=[18.5,21.4,21.4,24.1,24.1,27.5,27.5,30.8,30.8,33.5,33.5,36,36,40,40,44,62,64.4,64.5,67,67,70.7,71,73.3,73,76,76,79,79,83,83,88];
+function  ConTro(){
+SetCursor("","title","pointer");
+for(var i=1;i<=m_size;i++)
+{
+SetCursor("","cau_"+i,"pointer");
+SetCursor("","_"+i,"pointer");
+}
+SetCursor("","re","pointer");
+}
+function  SetMau()
+{
+	SetFontColor("","cau_"+index,"#006600");
+	SetFontColor("","_"+index,"#006600");
+	if(m_auto==false)
+	  return;
+	index++;
+	if(index>m_size) index=0;
+	SetFontColor("","cau_"+index,"#FF00FF");
+	SetFontColor("","_"+index,"#FF00FF");
+	InvalidateObj("","");
+}
+function  DocCau()
+{
+ m_auto= false;
+SetFontColor("","cau_"+index,"#006600");
+SetFontColor("","_"+index,"#006600");
+StopSound();
+ var name = rightStr(GetName(""),2);
+ name = replaceStr(name,"_","");
+index=name;
+SetFontColor("","cau_"+index,"#FF00FF");
+SetFontColor("","_"+index,"#FF00FF");
+var tam= (index-1)*2;
+KillTimerPage();
+PlayFromTo("ID_ALL",posCau[tam],posCau[tam+1]);
+InvalidateObj("","");
+}
+function  EndNghe(){
+	SetFontColor("","cau_"+index,"#006600");
+	SetFontColor("","_"+index,"#006600");
+	if(m_auto==false)
+	  return;
+	index=0;
+	PlayListSound("EndNghe()","ID_ALL");
+}
+
+function  NgheNhac(){
+StopSound();
+SetFontColor("","cau_"+index,"#006600");
+SetFontColor("","_"+index,"#006600");
+index=0;
+m_auto= true;
+PlayListSound("EndNghe()","ID_ALL");
+SetTimerPage(1000);
+}
+
+
+function  CallBack( name)
+{
+	var time= Random(5)+10;
+	var xt= Random(640);
+	var yt= Random(480);
+	var rota= Random(720);
+	var t = Transparent("",name);
+	if(t==0) t=1; else t=0;
+	transitionTo("",name,time*2000,xt,yt,1,rota,t,0,"CallBack('"+name+"');");
+
+}
+function  Animation(){
+	for(var i=0; i<=4;i++)
+	{
+	var time = Random(5)+10;
+	var xt= Random(640);
+	var yt= Random(480);
+	var rota= Random(720);
+	var name ="note_"+i;
+	transitionTo("",name,time*2000,xt,yt,1,rota,0,0,"CallBack('"+name+"');");
+	}
+}
+folder_Resource =host+'qua';
+
+function Page_1()
+{
+ ConTro();
+  PlayWave("","","ID_GIOITHIEU");
+	if(m_auto== true){
+	SetColorEx("","re","","ID_RE");
+	}
+else {
+	SetColorEx("","re","","ID_NO_RE");
+	}
+
+Animation();
+  return;
+}
+function Page_1_OnTimer()
+{
+var posSound = GetPosSound();
+var tam= index*2;
+if(posSound >= posCau[tam]-1 && posSound < posCau[tam+1])
+{
+	SetMau();
+}
+  return;
+}
+
+ 
+  window.onload = function() {
+ var canvas = document.createElement('canvas');
+if (!canvas.getContext) {
+alert("Trinh duyet khong ho tro");
+return;
+} 
+ document.getElementById("Doc").textContent = ""; 
+ stage = new Kinetic.Stage({
+ container: "Doc", 
+ width: 640,
+ height: 480 
+ });
+
+ var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
+var Page1_Backrounnd = CreText('Page1_Backrounnd',0,0,640,480,'','rgba(255, 255, 255, 1.00)','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(0, 0, 0, 0)','0','0','0','','0','0','0','0',0,0,'');
+Page_1.add(Page1_Backrounnd);
+var Image_1 = CreText('Image_1',10,75,625,343,'','rgba(0, 0, 0, 0)','','','','ID_IMAGE2.JPG',0,'','','','',0,'0.00','30','30',1,'rgba(0, 0, 0, 0)','','2','2','','0','0','4','0',0,0, 'rgba(128, 128, 128, 255)');
+Page_1.add(Image_1);
+var note_4 = CreText('note_4',17,13,109,92,"♥",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',72,'Arial','Normal','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(note_4);
+var note_1 = CreText('note_1',274,243,108,105,"♪",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 255, 1.00)','rgba(255, 255, 255, 1.00)','',72,'Arial','Normal','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(note_1);
+var note_2 = CreText('note_2',9,378,117,107,"♫",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 128, 255, 1.00)','rgba(255, 255, 255, 1.00)','',72,'Arial','Normal','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(note_2);
+var note_3 = CreText('note_3',531,360,110,101,"#",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 104, 32, 1.00)','rgba(255, 255, 255, 1.00)','',72,'Arial','Normal','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(note_3);
+var note_0 = CreText('note_0',525,5,102,103,"☼",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 255, 0, 1.00)','rgba(255, 255, 255, 1.00)','',72,'Arial','Normal','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(note_0);
+var cau_3 = CreText('cau_3',136,269,376,21,"Ăn  vào    thì    chắc   là     chua?    Vâng  Vâng!",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_3);
+var title = CreText('title',98,20,458,48,"QUẢ",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 128, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Bold','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+title.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+KillTimerPage();
+NgheNhac();
+  return;
+}
+ );
+Page_1.add(title);
+var tg = CreText('tg',379,50,222,35,"Nhạc và lời: XANH XANH",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Italic','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(tg);
+var re = CreText('re',580,18,58,51,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','ID_RE.PNG',16,'Arial','Normal','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(0, 0, 0, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+re.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+  if(m_auto== true){
+	m_auto= false;
+	SetColorEx("","","","ID_NO_RE");
+      KillTimerPage();
+	}
+else {
+	m_auto= true;
+	SetColorEx("","","","ID_RE");
+	}
+InvalidateObj("","");
+  return;
+}
+ );
+Page_1.add(re);
+var cau_4 = CreText('cau_4',108,402,362,20,"thì           để          nấu        canh             cua.\r\n",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 0, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_4);
+var cau_1 = CreText('cau_1',135,139,251,21,"Quả      gì   mà ngon ngon  thế?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_1);
+var _2 = CreText('_2',78,267,48,23,"khế.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(_2);
+var _4 = CreText('_4',523,265,56,21,"Chua",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(_4);
+var cau_2 = CreText('cau_2',391,137,195,21,"Xin  thưa     rằng     quả",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_2);
+var cau_5 = CreText('cau_5',135,162,251,21,"Quả      gì   mà da   cứng cứng?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_5);
+var cau_6 = CreText('cau_6',391,160,195,21,"Xin  thưa     rằng     quả",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_6);
+var _6 = CreText('_6',78,292,57,23,"trứng.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(_6);
+var cau_7 = CreText('cau_7',136,292,380,21,"Ăn  vào    thì    nó      làm   sao?      Không  sao!",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_7);
+var _8 = CreText('_8',523,289,56,21,"Ăn",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(_8);
+var cau_8 = CreText('cau_8',108,417,349,21,"vào        người      sẽ          thêm             cao.\r\n",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 0, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_8);
+var cau_9 = CreText('cau_9',135,185,251,21,"Quả      gì   mà lăn  lông     lốc?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_9.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_9);
+var cau_10 = CreText('cau_10',391,183,195,21,"Xin  thưa     rằng     quả",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_10.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_10);
+var _10 = CreText('_10',79,315,57,23,"bóng.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+_10.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(_10);
+var cau_11 = CreText('cau_11',136,315,373,21,"Sao mà    quả  bóng  lại     lăn?       Do   chân!",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_11.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_11);
+var _12 = CreText('_12',523,313,56,21,"Bao",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+_12.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(_12);
+var cau_12 = CreText('cau_12',108,436,349,21,"người     cùng       đá          trên               sân.\r\n",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 0, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_12.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_12);
+var cau_13 = CreText('cau_13',135,208,251,21,"Quả      gì   mà gai  chi      chít?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_13.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_13);
+var cau_14 = CreText('cau_14',391,207,195,21,"Xin  thưa     rằng     quả",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_14.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_14);
+var _14 = CreText('_14',81,337,57,23,"mít.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+_14.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(_14);
+var cau_15 = CreText('cau_15',136,339,377,21,"Ăn  vào    thì    chắc   là     đau?      Không đau!",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_15.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_15);
+var _16 = CreText('_16',523,337,56,21,"Thơm",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+_16.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(_16);
+var cau_16 = CreText('cau_16',110,455,349,23,"lừng       tận          mấy       hôm              sau.\r\n",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 0, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+cau_16.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocCau();
+  return;
+}
+ );
+Page_1.add(cau_16);
+stage.add(Page_1);
+InitLacVietScript();
+};
+</script>
+</head>
+<body style="text-align: center">
+<div id="Doc" style="vertical-align: middle; text-align: center; width: 100%; height: 100%; font-size: xx-large;">Loading...</div>
+</body>
+</html>

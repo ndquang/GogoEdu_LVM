@@ -1,0 +1,14 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='1. Dựa vào biểu đồ dưới đây hãy viết chữ hoặc số thích hợp vào chỗ chấm:';
+hashIDText['ID_TEXT2']='CÁC CON CỦA 5 GIA ĐÌNH';
+hashIDText['ID_TEXT3']='a) Có          gia đình chỉ có một con, đó là các gia\r\n    đình:';
+hashIDText['ID_TEXT4']='b) Gia đình';
+hashIDText['ID_TEXT5']='b) Gia đình                               có 2 con gái \r\n    và gia đình                           có 2 con trai';
+hashIDText['ID_TEXT6']='c) Gia đình cô Hồng có       con trai và       con gái';
+hashIDText['ID_TEXT7']='d) Những gia đình có 1 con gái là :';
+hashIDText['ID_TEXT8']='e) Cả năm gia đình có        người con, trong đó có\r\n    con trai và      con gái';
+hashIDText['ID_TEXT9']='';
+hashIDText['ID_TEXT10']='Gửi GV';
+hashIDText['ID_TEXT11']='Lưu bài làm';
+hashIDText['ID_TEXT12']='Bài tập này bạn đã gởi đến giáo viên của bạn.';

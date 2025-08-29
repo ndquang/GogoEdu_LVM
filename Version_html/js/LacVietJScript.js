@@ -1,0 +1,2426 @@
+﻿var stage;
+var curentPage;
+var g_iCurrentPage;
+var m_pgObjCaller;
+var KeyCode;
+var folder_Resource = 'Resource';
+var m_pointDown = {};
+var url = window.location.pathname;
+//var curentFileName = url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'));
+//var curentFileName = "Resource";
+//var curentFileName = folder_Resource;
+buzz.defaults.formats = ['ogg', 'mp3', 'aac', 'wav'];
+buzz.defaults.preload = 'metadata';
+var m_soundPlaying = new buzz.sound(folder_Resource + "/abc.mp3");
+var m_EndPos;
+var m_StartPos;
+function InitLacVietScript(){
+     var layers = stage.children;
+     for (var n = 1; n < layers.length; n++) {
+         layers[n].hide();
+         layers[n].draw();
+     }
+     layers[0].show();
+     curentPage = layers[0];
+     g_iCurrentPage = 0;
+     stage.getContainer().addEventListener('keydown', doKeyDown, false);
+     curentPage.on("mousedown", MouseDown);
+     var config = curentPage.getInitConfig();
+     FullScreen();
+     if (config.callback)
+         eval(config.callback);
+     
+      };
+      
+ function doKeyDown(evt) {
+     KeyCode = evt;
+     if (typeof (window.OnKeyDown) == 'function') {
+        OnKeyDown();
+     }  
+     return evt;
+ }
+ function MouseDown(evt) {
+     m_pointDown.x = evt.x;
+     m_pointDown.y = evt.y;
+ }
+ var m_dZoomScale=1;
+ function FullScreen() {
+     var wclient = screen.availWidth-10 ;
+     var hclient = screen.availHeight-95;
+     //var dScaleX = wclient / 640;
+     var dScaleX = wclient / stage.getWidth();
+     //var dScaleY = hclient / 480;
+     var dScaleY = hclient / stage.getHeight();
+     m_dZoomScale = Math.min(dScaleX, dScaleY);
+   
+     stage.setSize(stage.getWidth() * m_dZoomScale, stage.getHeight() * m_dZoomScale);
+     stage.setScale(m_dZoomScale);
+   
+    // InvalidateObj("", "");
+ }
+ function removeFlashMarkup(pageName, objname) {
+     var f = document.getElementById(objname);
+     if (f != null)
+         document.body.removeChild(f);
+ }
+ function createFlashMarkup(name, left, top , width, height, uri, pageShow) {
+
+  
+    /*     var wclient = screen.availWidth - 10;
+         var hclient = screen.availHeight - 95;
+         var dScaleX = wclient / stage.getWidth();
+         var dScaleY = hclient / stage.getHeight();
+         m_dZoomScale = Math.min(dScaleX, dScaleY);
+*/
+   
+         var embed = document.createElement('embed');
+         embed.setAttribute('id', name);
+         embed.setAttribute('width', width * m_dZoomScale);
+         embed.setAttribute('height', height * m_dZoomScale);
+
+         var index_ = uri.indexOf('/');
+         //   uri = uri.insert(index_ + 1, ogirin_name);
+
+         embed.setAttribute('src', uri);
+         embed.setAttribute('type', "application/x-shockwave-flash");
+
+         var style = "position: fixed; left: {0}px; top: {1}px; width: {2}px; height: {3}px;".format(left * m_dZoomScale, top * m_dZoomScale, width * m_dZoomScale, height * m_dZoomScale);
+         embed.setAttribute('style', style);
+         document.body.appendChild(embed);
+ 
+   //  var div = document.getElementById(replaceid);
+    // document.getElementsByTagName('body')[0].replaceChild(embed, div);
+ 
+ }
+ String.prototype.insert = function (index, string) {
+     if (index > 0)
+         return this.substring(0, index) + string + this.substring(index, this.length);
+     else
+         return string + this;
+ };
+ function InitText(objectName, x, y, w, h, text, fillNor, fillOver, fontColorN, fontColorV, fillImage, fontSize, fontName, /*fontFormat*/fontStyle, alignH, alignV, t_shape, rotate, posX, posY, lineWidth, lineColor, ColorEnd, BrushType, ModeFill, ColorShowdown, XShowdownText, YShowdownText, BlurShowdown, strokeText, XShowdownRect, YShowdownRect, ColorShowdownRect) {
+     var comnfig = {};
+     if (isNaN(objectName.substring(0,1))==false) objectName = "_" + objectName;  //khong co object mang ten so
+     comnfig.name = objectName;
+     comnfig.x = x;
+     comnfig.y = y;
+     comnfig.width = w;
+     comnfig.height = h;
+     comnfig.text = text;
+     var index_ = fillImage.indexOf('/');
+     // insert prefix
+   //  fillImage = fillImage.insert(index_+1, ogirin_name);
+
+     var valistFileName = fillImage.substring(index_ + 1);
+     valistFileName = valistFileName.replace(/[*:?<>"|\/]/ig, '');
+     fillImage = fillImage.substring(0, index_ + 1) + valistFileName;
+     switch (BrushType) {
+         case "0": //BrushTypeSolidColor
+             {
+                 comnfig.fill = fillNor;
+                 break;
+             }
+         case "2": //ImageFill
+             {
+                 var m_image = new Image();
+                 m_image.onload = function () {
+                     stage.draw();
+                 };
+              
+                 /* m_image.onerror = function () {
+                 this.src = fillImage.substring(0, url.lastIndexOf('.')) + ".PNG";
+
+                 Message("Image not found: " + fillImage);
+                 comnfig.fill = fillNor;
+                 return;
+                 };*/
+                 m_image.onerror = function () {
+                     this.src = fillImage.substring(0, fillImage.lastIndexOf('.')) + ".PNG";
+                     this.onerror = function () {
+                         this.src = fillImage.substring(0, fillImage.lastIndexOf('.')) + ".JPG";
+                         this.onerror = function () {
+                             this.src = fillImage.substring(0, fillImage.lastIndexOf('.')) + ".GIF";
+                             this.onerror = function () {
+                                 Message("Image not found: " + fillImage);
+                                 comnfig.fill = fillNor;
+                                 return;
+                             };
+                         };
+                     };
+                 };
+               
+                 var fillRepeat = 'repeat';
+                 if (ModeFill == 0) fillRepeat = 'center';
+                 else if (ModeFill == 2) fillRepeat = 'stress';
+                 m_image.src = fillImage;
+                 comnfig.fill = {
+                     image: m_image,
+                     offset: [0, 0],
+                     repeat: fillRepeat
+                 }
+                 break;
+             }
+         case "3": //fill Center
+             {
+                 var max = comnfig.height;
+                 if (max > comnfig.width) max=comnfig.width;
+           
+                 comnfig.fill = {
+                     start: {
+                     x: comnfig.width/2,
+                     y: comnfig.height/2,
+                     radius: max/3
+                     },
+                     end: {
+                     x: comnfig.width/2,
+                     y: comnfig.height/2,
+                     radius: max
+                     },
+                     colorStops: [0, fillNor, 1, ColorEnd]
+                 };
+                 break;
+             }
+         case "4": // BrushTypeLinearGradient
+             {
+                 comnfig.fill = {
+                     start: {
+                     x: comnfig.width/2,
+                     y: 0
+                     },
+                     end: {
+                     x: comnfig.width/2,
+                     y: comnfig.height
+                     },
+                     colorStops: [0.5, fillNor, 1, ColorEnd]
+                 };
+                 break;
+             }
+     }
+ //    RGB
+     comnfig.textFill = fontColorN;
+ //    comnfig.alpha = 0.8;
+     //name.m_font = fontFormat;
+     comnfig.fontSize = fontSize*80/100;
+     comnfig.fontFamily = fontName;
+     comnfig.fontStyle = fontStyle;
+    /* name.fillImage = new Image();
+     name.fillImage.onload = function() {
+         stage.draw();
+     };
+     name.fillImage.src = fillImage;*/
+     comnfig.align = alignH;
+    
+    // name.m_AlignVer = alignV;
+    // name.m_Shape = t_shape;
+  
+     if (rotate != 0) {
+         var xf = w / 2;
+         var yf = h / 2;
+         comnfig.x = x+xf;
+         comnfig.y = y+yf;
+         comnfig.offset=[xf, yf];
+         comnfig.rotationDeg = rotate;
+         }
+
+     comnfig.stroke = lineColor;
+     if (lineWidth == 0) lineWidth = 0.0001;
+     comnfig.strokeWidth = lineWidth;
+     comnfig.textStroke = ColorShowdown;
+     if (strokeText == 0) strokeText = 0.0001;
+     comnfig.textStrokeWidth = strokeText;
+ //    comnfig.offset = [0, 0];
+    // comnfig.padding = 5;
+     //name.m_XShowdownText = XShowdownText;
+     //name.m_YShowdownText = YShowdownText;
+     comnfig.verticalAlign = alignV;
+     /*if (alignV=='top')
+         comnfig.padding = 1;
+     else if (alignV == 'middle')
+         comnfig.padding = h / 2;
+     else if (alignV == 'bottom')
+         comnfig.padding = h-20;*/
+     comnfig.shadow = {
+         color: ColorShowdownRect,
+         blur: BlurShowdown,
+         offset: [XShowdownRect, YShowdownRect],
+         alpha: 0.5
+     };
+     switch (t_shape) {
+         case 0:
+             {
+                 comnfig.shapeType = 'Rect';
+                 break;
+             }
+         case 1:
+             {
+                 comnfig.shapeType = 'Ellipse';
+                 // drawEllipse(ctx, xx, yy, shape.w, shape.h);
+                 break;
+             }
+         case 2:
+             {
+                 comnfig.shapeType = 'Circle';
+                 break;
+             }
+         case 3:
+             {
+                 comnfig.shapeType = 'RoundRect';
+                 comnfig.cornerRadius = posX * 45 / 100;
+                 break;
+             }
+         case 4: //tam giác
+             {
+                 comnfig.shapeType = 'Triangula';
+                 comnfig.sides = posX;
+                 break;
+             }
+         case 5:
+             {
+                 comnfig.shapeType = 'Lozenge';
+                 break;
+             }
+         case 6:
+             {
+                 comnfig.shapeType = 'Parallelogram';
+                 comnfig.sides = posX;
+                 break;
+             }
+         case 7:
+             {
+                 comnfig.shapeType = 'Trapezium';
+                 comnfig.sides = posX;
+                 comnfig.sidesY = posY;
+                 break;
+             }
+         case 8:
+             {
+                 comnfig.shapeType = 'Pentagon';
+                 comnfig.sides = 5;
+                 comnfig.sides = posX;
+                 comnfig.sidesY = posY;
+                 break;
+             }
+         case 9:
+             {
+                 comnfig.shapeType = 'RegularPolygon';
+                 comnfig.sides = 8;
+                 var r = w / 2;
+                 if (r > h / 2) r = h / 2;
+                 /*    r = DocToClient(h / 2);
+                 else r = DocToClient(w / 2);*/
+                 comnfig.radius = r;
+                 break;
+             }
+         case 10:
+             {
+                 comnfig.shapeType = 'RegularPolygon';
+                 comnfig.sides = 6;
+                 var r = w / 2;
+                 if (r > h / 2) r = h / 2;
+                 /*    r = DocToClient(h / 2);
+                 else r = DocToClient(w / 2);*/
+                 comnfig.radius = r;
+                 break;
+             }
+         case 11:
+             {
+                 comnfig.shapeType = 'altp';
+                 comnfig.sides = 6;
+                 var r = w / 2;
+                 if (r > h / 2) r = h / 2;
+                 /*    r = DocToClient(h / 2);
+                 else r = DocToClient(w / 2);*/
+                 comnfig.radius = r;
+                 break;
+             }
+             
+     }
+     return comnfig;
+ };
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+        var words = text.split(" ");
+        var line = "";
+        for (var n = 0; n < words.length; n++) {
+            var testLine = line + words[n] + " ";
+            var metrics = context.measureText(testLine);
+            var testWidth = metrics.width;
+            if (testWidth > maxWidth) {
+                context.fillText(line, x, y);
+                line = words[n] + " ";
+                y += lineHeight;
+            }
+            else {
+                line = testLine;
+            }
+        }
+        context.fillText(line, x, y);
+    }
+
+
+    function drawEllipse(ctx, x, y, w, h) {
+        
+       var kappa = .5522848;
+      ox = (w / 2) * kappa, // control point offset horizontal
+      oy = (h / 2) * kappa, // control point offset vertical
+      xe = x + w,           // x-end
+      ye = y + h,           // y-end
+      xm = x + w / 2,       // x-middle
+      ym = y + h / 2;       // y-middle
+      ctx.moveTo(x, ym);
+      ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+      ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+      ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+      ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+      //  ctx.fill();
+    }
+    window.requestAnimFrame = (function(callback) {
+        return window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function(callback) {
+        window.setTimeout(callback, 1000/60 );
+    };
+})();
+/// FindShape Đã OK hàm này không có trong 	CActionManager	
+function FindShape(PageName, nameShape) {
+    var p_Name = null;
+    var o_Object = null;
+    if (typeof nameShape == 'undefined' || nameShape === "") return m_pgObjCaller;
+    if (isNaN(leftStr(nameShape, 1)) == false) nameShape = "_" + nameShape;
+    nameShape = nameShape.toString();
+    if (PageName === "")
+        p_Name = curentPage;
+    else {
+        var layers = stage.children;
+        for (var n = 0; n < layers.length; n++) {
+            if (layers[n].getName() == PageName) {
+                p_Name = layers[n];
+                break;
+            }
+        }
+    }
+    if (nameShape === "") o_Object = m_pgObjCaller;
+    else {
+        
+        if (p_Name != null) {
+            var listObj = p_Name.children;
+            for (var n = 0; n < listObj.length; n++) {
+                if (listObj[n].getName().toLowerCase() == nameShape.toString().toLowerCase()) {
+                    o_Object = listObj[n];
+                    break;
+                }
+            }
+        }
+    }
+    return o_Object;
+};
+// tim page name
+function FindPage(PageName) {
+    var p_Page = null;   
+    if (PageName === "")
+        p_Page = curentPage;
+    else {
+        if (p_Page != null) 
+        {
+                var layers = stage.children;
+                for (var n = 0; n < layers.length; n++) {
+                    if (layers[n].getName() == PageName) {
+                        p_Page = layers[n];
+                        break;
+                    }
+                }
+        }
+    }
+    return p_Page;
+}
+    //////////////////////CRIPT CActionManager
+    //AddRsc dã OK
+    /////////////////////////////////////
+    function AddRsc(m_id, m_file, m_type) {
+      
+        var fso = new ActiveXObject("Scripting.FileSystemObject");
+        if (!fso.FileExists(m_file)) {
+            alert("File Không tồn tại.");
+            return;
+        }
+        var ext = fso.GetExtensionName(m_file);
+        var path = location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1);
+        path = path.replace(/%20/g, ' ');
+        path = path.replace(/\//gi, "\\");
+
+        if (path.indexOf(":") == -1) {// kiem tra da co o dia chưa
+            var d = fso.GetDrive(fso.GetDriveName(m_file));
+            path = d.DriveLetter.toUpperCase() + ":" + path;
+        }
+        else path = path.substring(1);
+        var fileto = "";
+        if (m_type == 'IMAGE_OBJ')
+            path = path + folder_Resource + "\\";            
+         else if(m_type == 'SOUND_OBJ')
+             path = path + folder_Resource + "\\"; 
+             
+           if (!fso.FolderExists(path)) {
+                     fso.CreateFolder(path);
+                 }
+                 
+            fileto =path +m_id+ '.' + ext;
+            fso.CopyFile(m_file, fileto);  
+    }
+    //// chua lam duọc
+    function AllowEditText(pageName, objName, bAllow) {
+        // chua lam duoc khong gõ được
+    }
+    //////////////////
+    //AnimationFly dã OK từ 1 den 8
+    /////////////////////////////////
+    function AnimationFly(pageName, objName, delay,step,styte) {
+        var obj = FindShape(pageName, objName);
+        if (obj == null) return;
+        var xto = obj.getX();
+        var yto = obj.getY();
+        if (styte <= 8) {
+            switch (styte) {
+                case 1:
+                    {
+                        obj.setX(0);
+                        obj.setY(0);
+                        break;
+                    }
+                case 2:
+                    {
+                        //  obj.setX(xto);
+                        obj.setY(0);
+                        break;
+                    }
+                case 3:
+                    {
+                        obj.setX(stage.getWidth());
+                        obj.setY(0);
+                        break;
+                    }
+                case 4:
+                    {
+                        obj.setX(stage.getWidth());
+                        //   obj.setY(yto);
+                        break;
+                    }
+                case 5:
+                    {
+                        obj.setX(stage.getWidth());
+                        obj.setY(stage.getHeight());
+                        break;
+                    }
+                case 6:
+                    {
+                        // obj.setX(xto);
+                        obj.setY(stage.getHeight());
+                        break;
+                    }
+                case 7:
+                    {
+                        obj.setX(0);
+                        obj.setY(stage.getHeight());
+                        break;
+                    }
+                case 8:
+                    {
+                        obj.setX(0);
+                        break;
+                    }
+                default:
+                    break;
+            }
+            var delx = Math.abs(xto - obj.getX());
+            var dely = Math.abs(yto - obj.getY());
+            var delta = Math.sqrt(delx * delx + dely * dely);
+            var timer = (delta / step) * delay;
+            MoveObject(obj, xto, yto, timer);
+        }
+        else {//lơn hơn 8 gion chơi
+            var period = 2000;
+            var anim = new Kinetic.Animation({
+                func: function(frame) {
+                    var scale = Math.sin(frame.time * 2 * Math.PI / period) + 0.001;
+                    obj.setScale(scale);
+                },
+                node: curentPage
+            });
+            anim.start();
+        }  
+    }
+    ////AnimationMagic chưa làm
+    function AnimationMagic(pageName, objName, delay, step, styte, setID, inout) {
+     
+        SetRsc(pageName, objName, setID);
+       //quang
+    }
+    //// AnimationPage //chuyen qua lai giũ 2 page
+    ////
+    function SetResize(pageName, objName, b_resize, valid) {
+        var curObject = FindShape(pageName, objName);
+        if (curObject == null) return "";
+    }
+    function SetOpacity(pageName, objName, opacity) {
+         var curObject = FindShape(pageName, objName);
+         if (curObject == null) return "";
+          else curObject.setOpacity(opacity);
+     }
+    
+    function AnimationPage(pageTo, pageCurent, delay, step, styte) {
+        GoToPage(pageTo);
+        // Tam thoi GoToPage
+        /*var p_pageTo = FindPage(pageTo);
+        if (p_pageTo == null)
+            return;
+        switch (styte) {
+            case 1:
+                {
+                    p_pageTo.setX(stage.getWidth()-100);
+                    p_pageTo.setY(0);
+                    p_pageTo.show();
+                    p_pageTo.draw();
+                    break;
+                }
+            case 2:
+                {
+                
+                    break;
+                }
+            default:
+                break;
+        }
+        var delx = stage.getWidth();
+        var dely = stage.getHeight();
+        var delta = Math.sqrt(delx * delx + dely * dely);
+        var timer = (delta / step) * delay;
+        MoveObject(curentPage, -stage.getWidth(), 0, timer);
+        MoveObject(p_pageTo, -stage.getWidth(), 0, 2000);
+        */
+
+    }
+    // nhung ham chua lam duoc
+    ////Ham nay tu dong chay sau khi record cac su kien tren man hinh
+    function AutoRunAction(i_timer, stop) {//quang
+    }
+    function BeginRecordAction() {//quang
+    
+    }
+    function Brightness(pageName, objName, trans, state) {//quang
+    }
+    function Browse(typeFile, open) {//quang
+       // window.location = 'file:///' + document.form.selectedFile.value;
+    }
+    function BrowseFile(dirrectorry) {//quang
+    }
+    function ClickToWord(pageName,objName,pos) {//quang
+    }
+      
+    ////
+    ////
+    function CloseFile() {
+        //window.close();
+        curentPage.hide();
+        curentPage.draw();
+    }
+    function ChangeVoice(voice) { 
+
+    }
+    function CloseSocket() {//quang
+       /* if ("WebSocket" in window) {
+            alert("WebSocket is supported by your Browser!");
+            // Let us open a web socket
+            var ws = new WebSocket("ws://localhost:9998/echo");
+            ws.onopen = function() {
+                // Web Socket is connected, send data using send()
+                ws.send("Message to send");
+                alert("Message is sent...");
+            };
+            ws.onmessage = function(evt) {
+                var received_msg = evt.data;
+                alert("Message is received...");
+            };
+            ws.onclose = function() {
+                // websocket is closed.
+                alert("Connection is closed...");
+            };
+        }
+        else {
+            // The browser doesn't support WebSocket
+            alert("WebSocket NOT supported by your Browser!");
+        }*/
+    }
+    function Connect(nameIP, iPort) {
+    // quang
+    }
+    function CopyFile(FileSrc, FileTo) {
+        var fso = new ActiveXObject("Scripting.FileSystemObject");
+        fso.CopyFile(FileSrc, FileTo);
+    }
+    function CreateFolder(path) {
+        var fso = new ActiveXObject("Scripting.FileSystemObject");
+        if (!fso.FolderExists(path)) {
+            fso.CreateFolder(path);
+        }
+    }
+    function CreateNewPage(pageName) {
+        stage.add(new Kinetic.Layer({ name: pageName }));
+    }
+    function CreateObj(pageName, ObjName, ObjType, FileRsc, left, top, width, height) {
+        if (ObjName=="")
+        {
+             var now = new Date();
+             ObjName = now.getTime();
+        }
+         var newobject = new Kinetic.Text(InitText(ObjName, left, top, width, height, FileRsc, 'rgba(0, 0, 0, 0)', 'rgba(255, 255, 255, 1.00)', 'rgba(0, 0, 0, 1)', 'rgba(255, 255, 255, 1.00)', folder_Resource + '/', 14, 'Verdana', 'Normal', 'center', 'middle', 0, '0.00', '30', '30', 0, 'rgba(255, 255, 255, 1)', 'rgba(0, 0, 0, 1)', '0', '0', 'rgba(255, 255, 255, 1)', '0', '0', '4', '0', 0, 0, 'rgba(128, 128, 128, 1)'));
+        var pageContent = FindPage(pageName);
+        pageContent.add(newobject);
+        InvalidateObj();
+        return ObjName;
+    }
+    function DanhVan(tu) {// quang
+        tu.toLowerCase();
+    }
+    function Delay(delay) {
+      //  Message("Delay:" + alert(arguments.callee.name));
+    //    alert("Ham Delay:"+ arguments.callee.name);
+        return;
+      var dt = new Date();
+      while ((new Date()) - dt <= delay) {
+          
+       }
+    }
+    function DeleteObj(pageName, objectName) {
+        var page = FindPage(pageName);
+        if (page == null) return;
+        var object = FindShape(pageName, objectName);
+        if (object == null) return;
+        object.remove();
+        page.draw();
+    }
+     function DestroyObjectHwnd(pageName, objName) {//khong can lam Animationgif
+     }
+     function DivideImage(pageName, objName,x,y,id) {//quang
+     }
+     function DocChu(tu) {//quang
+         tu.toLowerCase();
+     }
+     function DrawPageInObject(pageName,objName) {//quang
+     }
+     function DrawStyte(pageName, objName, iEven) {//quang
+     }
+     function Enable(pageName, objName, m_enable) {//quang
+     }
+     function EnableWndDraw(pageName, objName, bEnable) {//quang
+     }
+     function EndRecordAction() {//quang
+     }
+     function ExecAsThread(command) {
+         eval(command);
+     }
+     function ExeDML(rsc_sql, s_query) {//quang
+     }
+     function ExeQuery(rsc_sql, s_query) {//quang
+     }
+     function ExitApp(rsc_sql, s_query) {
+         window.close();
+     }
+     function ExportObj(pageName, objName, fileName) { //quang
+     }
+     function FileFind(m_Path, strFilter) {
+        /// kết quả đã đúng trã về một list file
+        /* var Fo = new ActiveXObject("Scripting.FileSystemObject");
+         if (Fo.FolderExists(m_Path)) {
+             var FileName = new String();
+             var Extention = new String();
+             var StrOut = new String();
+             FileName = (strFilter.lastIndexOf(".") > -1) ? strFilter.slice(0, strFilter.lastIndexOf(".")) : (strFilter.length > 0) ? strFilter.toLowerCase() : "*"; //Get Searched File Name
+             Extention = (strFilter.lastIndexOf(".") > -1) ? strFilter.slice(strFilter.lastIndexOf(".") + 1).toLowerCase() : "*"; // Get Searched File Extention Name
+
+             var FOo = Fo.GetFolder(m_Path);
+             var FSo = new Enumerator(FOo.Files);
+             for (i = 0; !FSo.atEnd(); FSo.moveNext()) {
+                 if (FileName == "*" || FSo.item().name.slice(0, FSo.item().name.lastIndexOf(".")).toLowerCase().indexOf(FileName) > -1)
+                     if (Extention == "*" || FSo.item().name.slice(FSo.item().name.lastIndexOf(".") + 1).toLowerCase().indexOf(Extention) > -1) {
+                         StrOut += "||"+ FSo.item().name;
+                     i++
+                 }
+             }
+         }*/
+         // lam cho giong ket qua Lac Viêt Disign
+         var Fo = new ActiveXObject("Scripting.FileSystemObject");
+         if (Fo.FolderExists(m_Path)) {
+             var FileName = new String();
+             var Extention = new String();
+             var StrOut = new String();
+             FileName = (strFilter.lastIndexOf(".") > -1) ? strFilter.slice(0, strFilter.lastIndexOf(".")) : (strFilter.length > 0) ? strFilter.toLowerCase() : "*"; //Get Searched File Name
+             Extention = (strFilter.lastIndexOf(".") > -1) ? strFilter.slice(strFilter.lastIndexOf(".") + 1).toLowerCase() : "*"; // Get Searched File Extention Name
+
+             var FOo = Fo.GetFolder(m_Path);
+             var FSo = new Enumerator(FOo.Files);
+             for (i = 0; !FSo.atEnd(); FSo.moveNext()) {
+                 if (FileName == "*" || FSo.item().name.slice(0, FSo.item().name.lastIndexOf(".")).toLowerCase().indexOf(FileName) > -1)
+                     if (Extention == "*" || FSo.item().name.slice(FSo.item().name.lastIndexOf(".") + 1).toLowerCase().indexOf(Extention) > -1) {
+                         //StrOut = FSo.item().name;
+                         StrOut = FSo.item().Path;
+                         break;
+                     i++
+                 }
+             }
+         }
+         return StrOut;
+     }
+     function FillImage(pageName, objName, red, green, blue, x, y) {//quang
+         if (typeof x === "undefined" || typeof y === "undefined") {
+             var ptPoint = stage.getMousePosition();
+             x = ptPoint.x;
+             y = ptPoint.y;
+         }
+         PaintColor("", objName, RGB(red, green, blue));
+         PaintDownObj(x, y, objName, 40);
+     }
+     function FindObj(pageName, objName) {
+         var obj = FindShape(pageName, objName);
+         if (obj) return obj.getName();
+         else return "";
+     }    		
+     function GetBoundsText(pageName, objName,  pt, start, len) {
+         var curObject = FindShape(pageName, objName);
+         if (curObject == null) return null;
+         var text = curObject.getText();
+         if (!isNaN(start) && !isNaN(len))
+             text = text.substr(start, len)
+         var rectBound = curObject.getBoundsText(text);
+           pt.toLowerCase();
+        	if(pt==""||pt=="l")
+        	    return rectBound.actualBoundingBoxLeft;
+			else if(pt=="t")
+				return curObject.getY();		
+			else if(pt=="w")
+			    return rectBound.width;
+			else if(pt=="h")
+				return curObject.getTextHeight()*2;
+			else if(pt=="r")
+			    return rectBound.actualBoundingBoxRight;
+			else if(pt=="b")
+				return curObject.getY()+ curObject.getTextHeight();
+			else return 0;
+        }
+     function GetColCount(rsc_sql, tableName) {//quang
+     }
+     function GetColor(pageName, objName, colorttt) {
+
+         var curObject = FindShape(pageName, objName);
+         if (!curObject) return;
+         if (colorttt == null || typeof colorttt == 'undefined') {
+             var fill = curObject.getFill();
+             if (fill == 'rgba(0, 0, 0, 0)')
+                 return 0; //no fill
+             else if (fill.start && fill.end)
+                 return 2; //2 màu
+             else if (fill.image != null) {
+                 var filename = fill.image.src.substring(fill.image.src.lastIndexOf('/') + 1, fill.image.src.lastIndexOf('.'));
+                 return filename;
+             }
+             else return 1;  //một màu
+         }
+         else { //co tham so phia sau de lay gia tri
+             var fill = curObject.getFill();
+             if (fill.image != null) {
+                 var filename = fill.image.src.substring(fill.image.src.lastIndexOf('/') + 1, fill.image.src.lastIndexOf('.'));
+                 return filename;
+             }
+             else if (fill == 'rgba(0, 0, 0, 0)')
+                 return 'rgba(0, 0, 0, 0)'; //no fill
+             else if (fill.start && fill.end)
+                 return fill.colorStops; //2 màu
+             else return fill; //một màu
+         }
+          return colorttt;
+     }
+     function GetCountCall(end ) { //quang  khoong biet lam gi
+
+     }
+     function GetCountObj(pageName, m_type) {
+         var page = FindPage(pageName);
+         return page.children.length;
+     }
+     function GetCursorPos(pt, docclient) {
+         var ptPoint = stage.getMousePosition();
+         /*if (docclient != null)
+             ClientToDoc(ptPoint);*/
+          if (pt == "" || pt == "x")
+              return ptPoint.x;
+          else
+              return ptPoint.y;
+     }
+     function GetFocusObj() {
+         return m_pgObjCaller.getName();
+     }
+     
+     function GetFolder(styte) {
+      //   if (styte != null) { khoong lay duwowc thu muc Document
+             var fso = new ActiveXObject("Scripting.FileSystemObject");
+             var path = window.location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1);
+             path = path.replace(/%20/g, ' ');
+             path = path.replace(/\//gi, "\\");
+             if (path.indexOf(":") == -1) {// kiem tra da co o dia chưa
+                 var d = fso.GetDrive(fso.GetDriveName("C:\\"));
+                 path = d.DriveLetter.toUpperCase() + ":" + path;
+             }
+             else path = path.substring(1);
+             return path; 
+       //  }
+     }
+     function GetHeight(page, object) {
+         var curObject = FindShape(page, object);
+         if (curObject == null) return "";
+         return curObject.getHeight();
+     }
+     function GetKeyByID(idrsc) {
+         return GetFolder() + "\\" + folder_Resource + "\\" + idrsc + ".PNG";
+     }
+     function GetKeyDown(pageName, format) {
+         if (format != null)
+             return KeyCode.key.charCodeAt(KeyCode.key);
+             else
+                 return KeyCode.key
+     }
+     function GetLeft(page, object) {
+         var curObject = FindShape(page, object);
+         if(curObject== null) return "";
+         if (typeof curObject != 'undefined')
+             return curObject.getX();
+     }
+     function GetMoveClick(page, object) {
+         return false;
+     }
+     function GetMoveView(page, object) {
+         var curObject = FindShape(page, object);
+         return curObject.getDraggable();
+     }
+     function GetName(page, index) {
+         var outName;
+          if(index != null)
+              outName = curentPage.children[index].getName();
+            else outName= m_pgObjCaller.getName();
+            if (!isNaN(outName))
+                return parseInt(outName);
+            else return outName;
+     }
+     function GetNextFocus() {
+         var c_i = m_pgObjCaller.index + 1;
+         if (c_i >= curentPage.children.length) c_i = 0;
+         return curentPage.children[c_i].getName();
+     }
+     function GetPointDown(PageName, ObjName, pt) {
+         if (pt != null) {
+             if (pt == "" || pt == "x")
+                 return m_pointDown.x;
+             else return m_pointDown.y;
+          }
+          else return m_pointDown.x;
+      }
+      function GetPointDownEx(pt, docclient) {
+       /*   if (docclient != null)
+      	    ClientToDoc(m_pointDown);	*/
+	    if(pt==""|| pt=="x")		
+			return m_pointDown.x;
+		else
+			return m_pointDown.y;
+}
+function GetPosSound() {
+    if (m_soundPlaying)
+        return m_soundPlaying.currentTime;
+    else return -1;		
+    }
+
+    function GetRectRestore(pageName, objName, pt) {
+        var curObject = FindShape(pageName, objName);
+        if (curObject == null) return "";
+        var config = curObject.getInitConfig();
+        if (pt!=null)
+		{
+		    if (pt == "" || pt == "l")
+		        return config.x;
+		    else if (pt == "t")
+		        return config.y
+		    else if (pt == "w")
+		        return comnfig.width;
+		    else if (pt == "h")
+		        return comnfig.height;
+		    else if (pt == "r")
+		        return config.x + comnfig.width;
+		    else if (pt == "b")
+		        return config.y + comnfig.height;
+		    else return 0; 
+		}
+		else
+		    return config.x;
+}
+function GetResize(page, object) {//quang
+    return false;
+}
+function GetRGB(rgb, hex) {
+   if (hex[0]=="#") hex=hex.substr(1);
+   if (hex.length==3)
+    {
+    var temp=hex; hex='';
+    temp = /^([a-f0-9])([a-f0-9])([a-f0-9])$/i.exec(temp).slice(1);
+    for (var i=0;i<3;i++) hex+=temp[i]+temp[i];
+    }
+     var triplets = /^([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/i.exec(hex).slice(1);
+     if (rgb === 'r')
+         return parseInt(triplets[0], 16);
+     else if (rgb === 'g') return parseInt(triplets[1], 16);
+     else if (rgb === 'b') return parseInt(triplets[2], 16);
+ }
+ ///
+ function GetRotateObj(pageName, objName) {
+     var curObject = FindShape(pageName, objName);
+     return curObject.getRotationDeg();
+ }
+ function GetRowCount(rsc_sql, tableName) {
+     return 0; //quang
+ }
+ function GetRsc(pageName, objName) {
+     var curObject = FindShape(pageName, objName);
+     if (curObject == null) return "";
+     var config = curObject.getFill();
+     if (typeof config.image == null || typeof config.image == 'undefined') return null;
+     var urlImage = config.image.src;
+     if (typeof urlImage == null || typeof urlImage== 'undefined') return null;
+     return urlImage.substring(urlImage.lastIndexOf('/') + 1, urlImage.lastIndexOf('.'));
+
+ }
+ function EvenToText(iEvent)
+{
+    var st = "";
+    iEvent = parseInt(iEvent);
+	switch(iEvent) {
+	case 0:
+		st= "mouseup";
+		break;
+	case 1:
+		st="mousedown";
+		break;
+	case 2:
+		st="OnKeyDown";
+		break;
+	case 3:
+		st="OnLoadPage";
+		break;
+	case 4:
+		st="OnTimer";	
+		break;
+	case 5:
+		st="OnRightBtUp";	
+		break;
+	case 6:
+		st="mouseover";	
+		break;
+	case 7:
+		st="dblclick";	
+		break;
+	case 8:
+		st="OnRightBt2Click";	
+		break;			
+	case 10:
+		st="mouseout";	
+		break;			
+	default:
+		st="";
+		break;
+}
+		return st;
+}
+function GetScriptObj(pageName, objName, iEven, nocall) {
+    if (typeof objName == 'undefined') return;
+     var curObject = FindShape(pageName, objName);
+     if (curObject == null) return "";
+     var s_Even = EvenToText(iEven);
+     if (s_Even == "") return;
+   
+     var m_script = curObject.eventListeners[s_Even][0].handler.toString();
+     var supIndx = m_script.indexOf('{');
+     var last = m_script.lastIndexOf("}") + 1;
+     var bodyFunce = m_script.substring(supIndx, last);
+     var fune = new Function(bodyFunce);
+     if (typeof m_pgObjCaller != 'undefined') {
+         m_pgObjCaller.off(s_Even);
+         m_pgObjCaller.on(s_Even, fune);
+     }
+     if (typeof nocall == 'undefined') {
+         bodyFunce= bodyFunce.replace("m_pgObjCaller = this;", "")
+         var funeCal = new Function(bodyFunce);
+         funeCal();
+     } 
+ }
+  function SetScriptObj(pageName, objName, m_script ,iEven) {
+     var curObject = FindShape(pageName, objName);
+     if (curObject == null) return "";
+     var s_Even = EvenToText(iEven);
+     var supIndx = m_script.indexOf('{');
+     var last = m_script.lastIndexOf("}")+1;
+     var bodyFunce= m_script.substring(supIndx, last);
+     if (s_Even == "") return;
+     var fune = new Function(bodyFunce);
+     curObject.off(s_Even);
+     curObject.on(s_Even, fune);
+ }
+ 	
+ function GetSelectObj() {
+     return m_pgObjCaller.getName();
+ }
+ function GetSelText(pageName, objName) { //quang
+ }
+ function GetShowObject(pageName, objName) {
+     var curObject = FindShape(pageName, objName);
+     if (curObject == null) return "";
+     else return curObject.getAttrs().visible;
+ }
+ function GetText(pageName, objName) {
+     var curObject = FindShape(pageName, objName);
+     if (curObject == null) return "-1";
+     var output = curObject.getText();
+     if (output == "") return output;
+     if (!isNaN(output))
+         return parseInt(output);
+     else return output;
+ }
+ function GetTextFromID(sID, Catalog) {
+     return Catalog;
+ }
+ function GetTop(pageName, objName) {
+     var curObject = FindShape(pageName, objName);
+     if (curObject == null) return "";
+     if (typeof curObject != 'undefined')
+         return curObject.getY();
+ }
+ function GetTypeObj(pageName, objName) {
+     /*var curObject = FindShape(pageName, objName);
+     if (curObject == null) return "";*/
+     return "Text";
+ }
+ function GetValueTable(rsc_sql, tableName, row, col) {//quang
+ }
+ function GetVar(key) {//quang
+     return myArray[key];
+ }
+ function GetVirtKey(nVirtKey) {//quang
+     var bControl = false;
+     bControl = KeyCode.ctrlKey
+     return bControl;
+ }
+ function GetWidth(page, object) {
+     var curObject = FindShape(page, object);
+     if (curObject == null) return "";
+     return curObject.getWidth();
+ }
+ function GoToPage(pageName) {
+     var p_Page = null;
+     if (pageName == "")
+         p_Page = curentPage;
+     else {
+         pageName = pageName.replace(/ /g, '_');
+         var layers = stage.children;
+         for (var n = 0; n < layers.length; n++) {
+             if (layers[n].getName() == pageName) {
+                 g_iCurrentPage = n;
+                 p_Page = layers[n];
+                 break;
+             }
+         }
+     }
+     if (p_Page != null) {
+
+         curentPage.hide();
+         curentPage.draw();
+         curentPage = p_Page;
+         curentPage.show();
+         curentPage.draw();
+     }
+ }
+ function InitRandom(end) {
+
+ }
+ function InsertPageFromFile(FileName, pos) {
+ }
+ function intersectRectabcd1234(a, b) {
+    return (a.left <= b.right &&
+          b.left <= a.right &&
+          a.top <= b.bottom &&
+          b.top <= a.bottom)
+ }
+ function IntersectRect(page, object, objectBound, bitmap) {
+     var curObject = FindShape(page, object.toString());
+     if (curObject == null) return false;
+     var object2 = FindShape(page, objectBound.toString()); //stage.getShapeByName(objectBound);
+     if (object2 == null) return false;
+     var mousePos = stage.getMousePosition(); 
+     var a = curObject;
+     var o = object2;
+     var rectA = {
+         left: a.getX(),
+         top: a.getY(),
+         right: a.getX()+a.getWidth(),
+         bottom: a.getY()+a.getHeight()
+     };
+     var rectB = {
+         left: o.getX(),
+         top: o.getY(),
+         right: o.getX()+o.getWidth(),
+         bottom: o.getY()+o.getHeight()
+     };
+     return intersectRectabcd1234(rectA,rectB);
+
+
+ }
+
+ function InvalidateObj(pageName, objName) {
+    // var curObject = FindShape(pageName, objName.toString());
+    // if (curObject == null) return false;
+     curentPage.draw();
+    // var context = curObject.getContext();
+    // curObject.drawFunc(context);
+ }
+ function IsFileName(fleName) {
+     var fso = new ActiveXObject("Scripting.FileSystemObject");
+     if (fso)
+         return fso.FileExists(fleName);
+ }
+ function IsRsc(id) {
+     var re = FileFind(folder_Resource + "\\", id);
+     if(re=="")
+         re = FileFind(folder_Resource + "\\", id);
+     return re;  
+ }
+ function KillTimerPage() { 
+    clearInterval(myVarTimerPage);
+ }
+ 
+ function LengthSound(id_sound, from_file) {
+     var snd = new Audio(folder_Resource + "/" + id_sound + ".MP3");
+     var duration = snd.duration;
+     snd.addEventListener("loadedmetadata", function(_event) {
+         //duration = snd.duration;
+ });
+ /*    while (isNaN(duration)) {
+         duration = snd.duration;
+         Delay(10);
+     }*/ //quang
+     return duration;
+ }
+ function Listent(iPort) {//quang
+ }
+ function MarkObj(pageName, objName, Start, End, styteMark, color) {//quang
+ }
+ function Message(text, y_n, k) {
+     if (y_n != null)
+         if (confirm(text)) {
+         return 6;
+     }
+     else return 7;
+     else alert(text);
+    /* $('#modal').reveal({ // The item which will be opened with reveal
+         animation: 'fade',                   // fade, fadeAndPop, none
+         animationspeed: 100,                       // how fast animtions are
+         closeonbackgroundclick: false,              // if you click background will modal close?
+         dismissmodalclass: 'close'    // the class of a button or element that will close an open modal
+     });*/
+ }
+ function transitionTo(page, object, timer, xto, yto, scaleValue, rotDeg, anpha, callback, styteMove) {
+     //"const pageName, const objName, const timer, const xto, const yto, [const scaleValue, const rotDeg, const opacity, const callback])",
+     var curObject = FindShape(page, object);
+     if (curObject == null) return "";
+     var type = "linear";
+     if (typeof styteMove != 'undefined') {
+         var easing = "linear ease-in ease-out ease-in-out back-ease-in back-ease-out back-ease-in-out elastic-ease-in elastic-ease-out elastic-ease-in-out bounce-ease-out bounce-ease-in bounce-ease-in-out strong-ease-in strong-ease-out strong-ease-in-out".split(' ');
+         if (easing.indexOf(styteMove) >= 0)
+             type = styteMove;
+         else {
+             var intk = parseInt(styteMove);
+             if (intk < easing.length)
+                 type = easing[intk];
+         }
+     }
+     //bien luan 1 so bien chưa lam
+     var timer = parseInt(timer) / 1000;
+     var scale = 1;
+     if (typeof scaleValue != 'undefined') {
+         scale = scaleValue;
+     }
+     var rotate = 0;
+     if (typeof rotDeg != 'undefined') {
+         rotate = rotDeg*Math.PI/180;
+     }
+     var opaci = 1;
+     if (typeof anpha != 'undefined') {
+         opaci = anpha;
+     }
+     if (typeof callback != 'undefined') {
+         curObject.transitionTo({
+             x: xto,
+             y: yto,
+             duration: timer,
+             easing: type,
+             rotation: rotate,
+             opacity: opaci,
+             callback: function () { eval(callback) }
+         });
+     }
+     else
+         curObject.transitionTo({
+             x: xto,
+             y: yto,
+             duration: timer,
+             rotation: rotate,
+             easing: type,
+             opacity: opaci
+         });
+    
+ }
+ function MoveObjectTo(page, object, x, y, delay, step, styteMove, callbackFunction ) {
+     var curObject = null;
+     if (object == "") {
+         curObject = m_pgObjCaller;
+     }
+     else {
+         curObject = FindShape(page, object);
+     }
+     if (curObject == null) return;
+     var type = "linear";
+     if (typeof styteMove != 'undefined') {
+         var easing = "linear ease-in ease-out ease-in-out back-ease-in back-ease-out back-ease-in-out elastic-ease-in elastic-ease-out elastic-ease-in-out bounce-ease-out bounce-ease-in bounce-ease-in-out strong-ease-in strong-ease-out strong-ease-in-out".split(' ');
+         if (easing.indexOf(styteMove) >= 0)
+             type = styteMove;
+         else {
+             var intk = parseInt(styteMove);
+             if (intk < easing.length)
+                 type = easing[intk];
+         }
+     }
+
+     var timer = delay * step / 100;
+     var config = curObject.getInitConfig();
+     if (x == -1) x = config.x;
+     if (y == -1) y = config.y;
+
+     if (arguments.length < 5) {
+       
+         curObject.setPosition(x, y);
+         stage.draw();
+     }
+     else {
+         //easing function. can be linear, ease-in, ease-out, ease-in-out, back-ease-in, back-ease-out, back-ease-in-out, elastic-ease-in, elastic-ease-out, elastic-ease-in-out, bounce-ease-out, bounce-ease-in, bounce-ease-in-out, strong-ease-in, strong-ease-out, or strong-ease-in-out linear is the default
+         if (typeof callbackFunction != 'undefined') {
+             curObject.transitionTo({
+                 x: x,
+                 y: y,
+                 duration: timer,
+                 easing: type,
+                 callback: function () { eval(callbackFunction) }
+                 //callback:  eval(callbackFunction)
+             });
+         }
+         else
+             curObject.transitionTo({
+                 x: x,
+                 y: y,
+                 duration: timer,
+                 easing: type
+             });
+     }
+ }
+function MoveObjectToEx(pageName, objName, x, y, width, hight, delay, Autorerse, Repeat, m_bexit) {//quang
+}
+function toHex(num) {
+    if (num == null || num == 0) return "00";
+    var hex = Number(num).toString(16);
+    while (hex.length < 2) {
+        hex = "0" + hex;
+    }
+    return hex;
+}
+function RGB(red, green, blue, a) {
+     var hex = "#" + toHex(red) + toHex(green) + toHex(blue);
+     return hex;
+ }
+ function NewFile(fileName) { //quang
+ }
+ function NextPage() {
+     var layers = stage.children;
+     if (g_iCurrentPage >= layers.length - 1)
+         return;
+     curentPage.hide();
+     curentPage.draw();
+     g_iCurrentPage = g_iCurrentPage + 1;
+     curentPage = layers[g_iCurrentPage];
+     var config = curentPage.getInitConfig();
+     if (config.callback)
+         eval(config.callback);
+     curentPage.show();
+     curentPage.draw();
+ };
+ function ObjFlip(pageName, objName, iHorz, iVert) {
+ }
+ function OpenFile(fileName, pageNameGoto) {
+     //document.open(fileName);
+     fileName= replaceStr(fileName,'\\','');
+     var file_html = fileName.replace(/lvm/g, 'html');
+     var local = window.location.pathname;
+     var dir = local.substring(0, local.lastIndexOf('/')+1);
+     window.open(dir + file_html, "_self");
+    // window.open(dir + file_html);
+     
+ }
+ function OpenFileCHM(m_strFile) {
+ }
+ function OpenFileFromID(id) {
+ }
+ function OpenUrl(m_url) {
+     if (IsFileName(m_url)) {
+         var oShell = new ActiveXObject("Shell.Application");
+         oShell.ShellExecute(m_url, "", "", "open", "1");
+     } else window.open(m_url, "NewWindow", "blah");
+ }
+ function OrderObj(page, object, posType) {
+     var curObject = FindShape(page, object);
+     if (posType == 0)
+         curObject.moveDown();
+     else if (posType == 1)
+         curObject.moveToTop();
+     else if (posType == 2)
+         curObject.moveUp();
+     else if (posType == 3)
+         curObject.moveToBottom();
+ }
+ function PaintCap(page, object, iCap) {
+ }
+ function PaintColor(page, object, color) {
+     var curObject = FindShape(page, object);
+     if (curObject == null) return;
+     var context = curObject.getContext();
+     context.strokeStyle = color
+   
+ }
+ function PaintFillColor(page, object, color) {
+     var curObject = FindShape(page, object);
+     if (curObject == null) return;
+     var context = curObject.getContext();
+   /*  var cl = "#" + Number(color).toString(16);
+     var x_color = getColorValues(cl);*/
+     context.fillStyle = color;
+ }
+ String.prototype.format = function () {
+     var formatted = this;
+     for (arg in arguments) {
+         formatted = formatted.replace("{" + arg + "}", arguments[arg]);
+     }
+     return formatted;
+ };
+ function PaintColorA(page, object, colorA) {
+     var curObject = FindShape(page, object);
+     if (curObject == null) return;
+     var context = curObject.getContext();
+     if (typeof colorA == 'undefined')
+         return context.strokeStyle;
+     else {
+         var curColor = context.strokeStyle;
+         var guments = "rgba({0}, {1}, {2}, {3})".format(GetRGB("r", curColor), GetRGB("g", curColor), GetRGB("b", curColor), colorA / 255);
+         context.strokeStyle = guments;
+     }
+
+ };
+ var m_imagePaint = new Image();
+ function PaintImage(page, object, newID) {
+  
+     if ((typeof newID != 'undefined') || (newID != null)) {
+         newID = newID.toString();
+         newID = newID.replace(/[*:?<>"|\/]/ig, '');
+         m_imagePaint.onload = function () {
+         };
+         m_imagePaint.onerror = function () {
+             this.src = folder_Resource + "\\" + newID + ".JPG";
+             this.onerror = function () {
+                 this.src = folder_Resource + "\\" + newID + ".GIF";
+                 this.onerror = function () {
+                     Message("Không tim thấy id rsc: " + newID)
+                     return;
+                 };
+             };
+         };
+         m_imagePaint.src = folder_Resource + "\\" + newID + ".PNG";
+     }
+ }
+ function PaintImageS(page, object, rscPaint, count, index) {
+ }
+ function PaintPattern(page, object,style,iColorStart,iColorEnd) {
+ }
+ function PaintType(page, object, type) {
+     var curObject = FindShape(page, object);
+     if (curObject == null) return;
+     if (typeof type == 'undefined')
+         return curObject.paintType();
+     else curObject.paintType(type);
+ }
+ function PaintWidth(page, object, width) {
+     var curObject = FindShape(page, object);
+     if (curObject == null) return;
+     var context = curObject.getContext();
+     context.lineJoin = "round";
+     context.lineCap = "round";
+     context.lineWidth = width;
+ }
+ function PauseAudio(b_pause) { 
+   if (m_soundPlaying)
+   {
+       if (m_soundPlaying.paused == false) m_soundPlaying.pause();  
+          else m_soundPlaying.play();          
+   }
+  
+}
+function Play(page, object, waversc) {
+      if ((typeof waversc != 'undefined') || (waversc != null))
+    PlaySound(waversc);
+  }
+
+
+function PlayAction() {
+}
+function PauseVN() { }
+function PauseVideo(pageName,objName) { }
+
+function PlayFromTo(rsc_sound, n_from, n_to) {
+    if (m_soundPlaying==null) {
+        m_soundPlaying = new buzz.sound(folder_Resource + "/" + rsc_sound);
+        }
+    m_soundPlaying.currentTime = n_from;
+    m_soundPlaying.play();
+}
+function PlaySound(rsc_sound, m_brepeat, b_file) {
+    m_soundPlaying = null;
+    if (b_file != "") {
+        m_soundPlaying = new buzz.sound(b_file);
+    }
+    if (m_soundPlaying == null) {
+        m_soundPlaying = new buzz.sound(folder_Resource + "/" + rsc_sound);
+         }
+    m_soundPlaying.load = true;
+    m_soundPlaying.play();
+}
+function PlayWave(pageName, objName, waversc) {
+
+       m_soundPlaying.stop();// ngung file đang phát
+  //  m_soundPlaying.
+    m_soundPlaying = new buzz.sound(folder_Resource + "/" + waversc);
+    m_soundPlaying.play();
+}
+function PrevPage() {
+    if (g_iCurrentPage <= 0)
+        return;
+    var layers = stage.children;
+    curentPage.hide();
+    curentPage.draw();
+    g_iCurrentPage = g_iCurrentPage - 1;
+    curentPage = layers[g_iCurrentPage];
+    var config = curentPage.getInitConfig();
+    if (config.callback)
+        eval(config.callback);
+    curentPage.show();
+    curentPage.draw();
+
+};
+function Print(object) {
+    var configData = {
+        callback: function (dataUrl) {
+            window.open(dataUrl.src);
+        },
+        mimeType: 'image/jpeg',
+        quality: 0.5
+    };
+    curentPage.toImage(configData);
+}
+function PrintHTML(pageName, object) {
+    var configData = {
+        callback: function (dataUrl) {
+            window.open(dataUrl.src);
+        },
+        mimeType: 'image/jpeg',
+        quality: 0.5
+    };
+    curentPage.toImage(configData);
+}
+function Random(u){
+    return Math.floor(Math.random() * u);
+}
+function RecordSound(id, file) {
+}
+function PosInObj(mousePos, obj) {
+    var mousex = mousePos.x / m_dZoomScale;
+    var mousey = mousePos.y / m_dZoomScale;
+    if (mousex > obj.getX() && mousex < (obj.getX() + obj.getWidth()) && mousey > obj.getY() && mousey < (obj.getY() + obj.getHeight()))
+    return true;
+    else return false;
+}
+function RectInRect(page, object, objectBound) {
+    var curObject = FindShape(page, object); ;
+    if (object == null) return false;
+    var object2 = FindShape(page, objectBound); 
+    if (object2 == null) return false;
+    var mousePos = stage.getMousePosition();
+    var a = curObject;
+    var o = object2;
+
+    if (PosInObj(mousePos, curObject) && PosInObj(mousePos, object2)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+function RotateObj(pageName, objName, rotate, delay, step) {
+    var curObject = FindShape(pageName, objName);
+    if (curObject != null) {
+        //curObject.rotate(rotate);
+        var xf = curObject.getWidth() / 2;
+        var yf = curObject.getHeight() / 2;
+        var ofset= curObject.getOffset();
+        if (ofset.x == 0 && ofset.y == 0) {
+            curObject.move(xf, yf);
+            curObject.setOffset(xf, yf);
+        }
+        curObject.setRotationDeg(rotate);
+        curentPage.draw();
+    }
+}
+function Rotating(pageName, objName, trans, state) {
+    var curObject = FindShape(pageName, objName);
+    if (curObject != null) {
+        curObject.setOpacity(trans/255);
+        curentPage.draw();
+    }
+}
+function SetSelWord(pageName, objName) { 
+}
+function Save(){
+}
+function writeConsole(content) {
+    top.consoleRef = window.open('', 'myconsole',
+  'width=640,height=480'
+   + ',menubar=0'
+   + ',toolbar=1'
+   + ',status=0'
+   + ',scrollbars=1'
+   + ',resizable=1')
+    top.consoleRef.document.writeln(
+  '<html><head><title>Lac Viet</title></head>'
+   + '<body bgcolor=white onLoad="self.focus()">'
+   + '<img alt="" src="'+content+'" />'
+   + '</body></html>'
+ )
+    top.consoleRef.document.close()
+}
+
+function SaveID(pageName,objName,newID){
+    var curObject = FindShape(pageName, objName);
+ /*   var configData = {
+        callback: function (dataUrl) {
+            window.open(dataUrl);
+        },
+        x: curObject.getX(),
+        y: curObject.getY(),
+        width: curObject.getWidth(),
+        height: curObject.getHeight(),
+        mimeType: 'image/jpeg',
+        quality: 0.5
+    };
+    stage.toDataURL(configData);
+    */
+    x_obj = parseInt(curObject.getX() * m_dZoomScale);
+    y_obj = parseInt(curObject.getY() * m_dZoomScale);
+    width = parseInt(curObject.getWidth() * m_dZoomScale);
+    height = parseInt(curObject.getHeight() * m_dZoomScale);
+  
+    var canvas = document.createElement('canvas');
+    canvas.id = 'canvas';
+    canvas.width = width;
+    canvas.height = height;
+    var context = canvas.getContext('2d');
+
+    var context1 = curObject.getContext();
+    imageData = context1.getImageData(x_obj, y_obj, width, height);
+    context.putImageData(imageData, 0, 0, 0, 0, width, height);
+    var dataURL = canvas.toDataURL();
+    var m_image = new Image();
+    m_image.onload = function () {
+        var comnfigFill = {
+            image: m_image,
+            offset: [0, 0],
+            repeat: "stress"
+        }
+        curObject.setFill(comnfigFill);
+    }
+    m_image.src = dataURL;
+    writeConsole(dataURL);
+}
+
+function SavePage2File(pageName, objName, FileName) {
+    var configData = {
+        callback: function (dataUrl) {
+            //window.open(dataUrl.src);
+            writeConsole(dataUrl.src);
+        },
+        mimeType: 'image/jpeg',
+        quality: 0.5
+    };
+    curentPage.toImage(configData);
+}
+function ScaleObj(pageName, objName,valueScale){
+    var curObject = FindShape(pageName, objName);
+    if(curObject!=null)
+        curObject.setScale(valueScale,valueScale);
+}
+function Scaling(pageName,objName,trans){
+    var curObject = FindShape(pageName, objName);
+     if(curObject!=null){
+        curObject.setOpacity(trans/255);
+     }
+}
+function SelectText(pageName,objName,Start,End,Red,Green,Blue){
+}
+function SentScript(m_script){
+}
+function ResumeVN() { }
+function ResumeEN() { }
+function SentScriptTo(m_script,ip,port){
+}
+function SetBorder(pageName, object, color, width, styte) {
+    var curObject = FindShape(pageName, object);
+    if (curObject != null) {
+        if ((typeof color === 'undefined'))
+            return curObject.getStrokeWidth();
+        curObject.setStroke(color);
+        curObject.setStrokeWidth(width);
+        //curObject.setLineCap(styte);
+        curentPage.draw();
+    }
+}
+function GetBorderWidth(pageName, object) {
+    var curObject = FindShape(pageName, object);
+    if (curObject != null) {
+            return curObject.getStrokeWidth();
+    }
+}
+
+function SetColor(pageName, objName, red, green, blue, newID) {
+    var curObject = FindShape(pageName, objName);
+    if(curObject==null) return;
+    if ((typeof newID != 'undefined') || (newID != null)) {
+                newID = newID.replace(/[*:?<>"|\/]/ig, '');
+                 var m_image = new Image();
+                 m_image.onload = function () {
+                     var comnfigFill = {
+                         image: m_image,
+                         offset: [0, 0],
+                         repeat: "stress"
+                     }
+                     curObject.setFill(comnfigFill);
+                     stage.draw();
+                 };
+                 m_image.onerror = function () {
+                     this.src = folder_Resource + "\\" + newID + ".JPG";
+                     this.onerror = function () {
+                         this.src = folder_Resource + "\\" + newID + ".GIF";
+                         this.onerror = function () {
+                             this.src = folder_Resource + "\\" + newID + ".BMP";
+                             this.onerror = function () {
+                                 Message("Object "+ curObject.getName()+ " không tim thấy id rsc: " + newID)
+                                 return;
+                             }
+                         };
+                     };
+                 };
+                 m_image.src = folder_Resource + "\\" + newID + ".PNG";
+              
+             }
+        else if (red == "-1" && blue == "-1" && green == "-1") {
+            var config = curObject.getInitConfig();
+            curObject.setFill(config.fill);
+        }
+         else if (red != null && blue != null && green != null) {
+             var color = 'rgba(' + red + ',' + green + ',' + blue + ',1)';
+              curObject.setFill(color.toString());
+         }
+       
+     }
+     function SetColorEx(pageName, objName, color, id, styte, stytegradiant) {
+         var curObject = FindShape(pageName, objName);
+         if (curObject == null) return;
+         var comnfigFill = {};
+         if (id != null) {
+             id = id.toString().replace(/[*:?<>"|\/]/ig, ''); // Valist File name
+             var m_image = new Image();
+             m_image.onload = function () {
+                 var comnfigFill = {
+                     image: m_image,
+                     offset: [0, 0],
+                     repeat: "stress"
+                 }
+                 curObject.setFill(comnfigFill);
+                 curentPage.draw();
+             };
+             m_image.onerror = function () {
+                 this.src = folder_Resource + "\\" + id + ".JPG";
+                 this.onerror = function () {
+                     this.src = folder_Resource + "\\" + id + ".GIF";
+                     this.onerror = function () {
+                         this.src = folder_Resource + "\\" + id + ".BMP";
+                         this.onerror = function () {
+                             Message("Không tim thấy id rsc: " + id)
+                             return;
+                         }
+                     };
+                 };
+             };
+             m_image.src = folder_Resource + "\\" + id + ".PNG";
+           }
+         else if (color != null) {
+            // var m_color = getColorValues("#" +Number(color).toString(16));
+             if (color == "-1")
+                 curObject.setFill('rgba(0, 0, 0, 0)');
+             else
+                 curObject.setFill(color);
+         }
+        }
+function GetTableValue(rsc_sql, tableName, rowid, field, tofile) {
+            //"const rsc_sql,const tableName, const rowid, const field,[const tofile])",
+            //quang
+        }
+function SetColorPaint(pageName, objName) {//quang
+}
+function SetColorText(pageName, objName, Start, End, Red, Green, Blue, valida, a) {//quang
+}
+var myVarTimerPage = null;
+function SetTimerPage(iTimer) {
+    if (myVarTimerPage) clearInterval(myVarTimerPage);
+    if (typeof OnTimer == 'function') {
+    myVarTimerPage= setInterval(function () { OnTimer() }, iTimer)
+    }
+}
+function SetMidiVolume(vol) {
+    m_soundPlaying.setVolume(vol);
+}
+function SetCursor(page, object, text) {
+    var curObject = FindShape(page, object);
+    if (curObject == null) return;
+    curObject.on("mouseover", function() {
+        document.body.style.cursor = 'url(' + folder_Resource + '/"' + text + '.ico, auto)'
+    });
+    curObject.on("mouseout", function() {
+        document.body.style.cursor = "default";
+    });
+    FindPage(page).draw();
+    /*
+    default,
+    crosshair,
+    e-resize,
+    help,
+    move,
+    n-resize,
+    ne-resize,
+    nw-resize
+    pointer
+    progress
+    s-resize
+    se-resize
+    sw-resize
+    text
+    w-resize
+    wait
+    url //'url("http://sstatic.net/stackoverflow/img/favicon.ico"), auto'
+    */
+}
+function SetDigitEditText(pageName, objName, digit) { 
+//quang
+}
+function SetFileMovie(pageName,objName,file) { 
+//quang
+}
+function SetRsc(pageName, objName, newID) {
+    var flash = document.getElementById(objName);
+    if (flash != null) {
+        var clone = flash.cloneNode(true);
+        clone.setAttribute("src", folder_Resource + "\\" + newID + ".SWF")
+        flash.parentNode.replaceChild(clone, flash);
+        return;
+    }
+    var curObject = FindShape(pageName, objName);
+    if (curObject != null) {
+        if ((typeof newID != 'undefined') || (newID != null)) {
+            newID = newID.toString();     
+            newID = newID.replace(/[*:?<>"|\/]/ig, '');
+            var m_image = new Image();
+            m_image.onload = function () {
+                var comnfigFill = {
+                    image: m_image,
+                    offset: [0, 0],
+                    repeat: "stress"
+                }
+                curObject.setFill(comnfigFill);
+                stage.draw();
+            };
+            m_image.onerror = function () {
+                this.src = folder_Resource + "\\" + newID + ".JPG";
+                this.onerror = function () {
+                    this.src = folder_Resource + "\\" + newID + ".GIF";
+                    this.onerror = function () {
+                        Message("Không tim thấy id rsc: " + newID)
+                        return;
+                    };
+                };
+            };
+            m_image.src = folder_Resource + "\\" + newID + ".PNG";
+        
+        }
+        else {
+            //restort id
+        
+            var config = curObject.getInitConfig();
+            curObject.setFill(config.fill);
+        }
+    }
+}
+
+   function SetText(page, object, m_text) {
+        var curObject = FindShape(page, object);
+        if (curObject != null) {
+            if (m_text!=null)
+            curObject.setText(m_text.toString());
+          
+        }
+    }
+    //default,crosshair,e-resize,help,move,n-resize,ne-resize,nw-resize,pointer,progress,s-resize,se-resize,sw-resize,text,w-resize,wait
+	
+  
+    function SetMoveView(page, object, text) {
+        var curObject = null;
+        if (object == "") {
+            curObject = m_pgObjCaller;
+        }
+        else {
+            curObject = FindShape(page, object);
+        }
+        if (curObject != null) {
+            if (text == 0)
+                curObject.setDraggable(false); //khong move
+            else {
+                curObject.setDraggable(true);
+                if (text == 2) {//move ngang
+                    curObject.setDraggable(true);
+                    function MoveHor(pos) {
+                        return {
+                            x: pos.x,
+                            y: this.getAbsolutePosition().y
+                        }
+                    }
+                    curObject.setDragBoundFunc(MoveHor);
+                }
+                else if (text == 3) { //move doc
+                    curObject.setDraggable(true);
+                    function MoveVer(pos) {
+                        return {
+                            x: this.getAbsolutePosition().x,
+                            y: pos.y
+                        }
+                    }
+                    curObject.setDragBoundFunc(MoveVer);
+                }
+                else { //move trong rect
+                    if (isNaN(text)) {
+                        var ObjectMove = FindShape(page, text);
+                        if (ObjectMove == null) return null;
+                        function MoveInRect(pos) {
+
+                            var newX = pos.x < ObjectMove.getX() * m_dZoomScale ? ObjectMove.getX() * m_dZoomScale : pos.x;
+                            var newY = pos.y < ObjectMove.getY() * m_dZoomScale ? ObjectMove.getY() * m_dZoomScale : pos.y;
+
+                            newX = pos.x + this.getWidth() * m_dZoomScale > (ObjectMove.getX() + ObjectMove.getWidth()) * m_dZoomScale ? (ObjectMove.getX() + ObjectMove.getWidth() - this.getWidth()) * m_dZoomScale : newX;
+                            newY = pos.y + this.getHeight() * m_dZoomScale > (ObjectMove.getY() + ObjectMove.getHeight()) * m_dZoomScale ? (ObjectMove.getY() + ObjectMove.getHeight() - this.getHeight()) * m_dZoomScale : newY;
+                            return {
+                                x: newX,
+                                y: newY
+                            };
+                        }
+                        curObject.setDragBoundFunc(MoveInRect);
+                    }
+                }
+            }
+        }
+        
+    }
+    function SetRectMove(page, object, objMove, stytemove) {
+        //setDragBoundFunc
+        var curObject = FindShape(page, object);
+        var ObjectMove = FindShape(page, objMove);
+        if (curObject == null) return null;
+        if (ObjectMove == null) return null;
+        function MoveInRect(pos) {
+         
+             var newX = pos.x < ObjectMove.getX() * m_dZoomScale ? ObjectMove.getX() * m_dZoomScale : pos.x;
+             var newY = pos.y < ObjectMove.getY() * m_dZoomScale ? ObjectMove.getY() * m_dZoomScale : pos.y;
+
+             newX = pos.x + this.getWidth() * m_dZoomScale > (ObjectMove.getX() + ObjectMove.getWidth()) * m_dZoomScale ? (ObjectMove.getX() + ObjectMove.getWidth() - this.getWidth()) * m_dZoomScale : newX;
+             newY = pos.y + this.getHeight() * m_dZoomScale > (ObjectMove.getY() + ObjectMove.getHeight()) * m_dZoomScale ? (ObjectMove.getY() + ObjectMove.getHeight() - this.getHeight()) * m_dZoomScale : newY;
+            return {
+                x: newX,
+                y: newY
+            };
+        }
+        curObject.setDragBoundFunc(MoveInRect);
+    }
+    
+    function SpeakEN(page, object, text) {
+       /*if (text != undefined)
+            speak(text);
+        var curObject = null;
+        if (object == "") {
+            curObject = m_pgObjCaller;
+        }
+        else {
+            curObject = FindShape(page, object);
+        }
+        speak(curObject.getText());*/
+        //google Speak
+       
+        var aaaa = new buzz.sound("http://translate.google.com/translate_tts?ie=UTF-8&q=Welcome%20to%20stack%20overflow&tl=en&total=1&idx=0&textlen=23&prev=input");
+        aaaa.play();
+
+    }
+     function Stop(pageName, objName, waversc) {
+     }
+     function SpeakVN(pageName, objName, string, nostopsound,english) {
+     }
+     function SetSpeaker(m_bspeaker) {
+     }		
+
+    function animateMoveTo(lastTime, myRectangle, animProp, x_to, y_to, Vx ,Vy ) {
+        if (animProp.animate) {
+            // update
+            var date = new Date();
+            var time = date.getTime();
+            var timeDiff = time - lastTime;
+            var linearDistEachFrameX = timeDiff * Vx;
+            var linearDistEachFrameY = timeDiff * Vy;
+            //     if (linearDistEachFrameX == 0) linearDistEachFrameX = 1;
+            //    if (linearDistEachFrameY == 0) linearDistEachFrameY = 1;
+            var currentX = myRectangle.getX();
+            var currentY = myRectangle.getY();
+
+            animProp.countTime = animProp.countTime + timeDiff;
+            if (animProp.countTime >= animProp.sumTime) {
+                currentX = x_to;
+                currentY = y_to;
+
+            }
+
+            if (currentX != x_to || currentY != y_to) {
+                var newX, newY;
+                if (currentX < x_to) {
+                    newX = currentX + linearDistEachFrameX;
+                    if (newX > x_to) newX = x_to;
+                }
+                else if (currentX > x_to) {
+                    newX = currentX - linearDistEachFrameX;
+                    if (newX < x_to) newX = x_to
+                }
+                if (currentY < y_to) {
+                    newY = currentY + linearDistEachFrameY;
+                    if (newY > y_to) newY = y_to
+                }
+                else if (currentY > y_to) {
+                    newY = currentY - linearDistEachFrameY;
+                    if (newY < y_to) newY = y_to
+                }
+                myRectangle.setX(newX);
+                myRectangle.setY(newY);
+            }
+            else {
+                animProp.animate = false;
+                myRectangle.setX(x_to);
+                myRectangle.setY(y_to);
+            }
+            lastTime = time;
+            curentPage.draw();
+            requestAnimFrame(function() {
+                animateMoveTo(lastTime, myRectangle, animProp, x_to, y_to, Vx, Vy);
+            });
+        }
+        else {
+            EvenStopMove(myRectangle);//exit
+        }
+    }
+
+    function MoveObject(object, x, y, timer) {
+        if (timer == null) {
+            object.setPosition(x, y);
+            curentPage.draw();
+        }
+        else {
+            var animProp = {
+                animate: true,
+                countTime: 0,
+                sumTime: timer
+            };
+            var date = new Date();
+            var time = date.getTime();
+            if (object.getX() == x) x++;
+            if (object.getY() == y) y++;
+            var vx = Math.abs(object.getX() - x) / timer; //van toc x
+            var vy = Math.abs(object.getY() - y) / timer; //van toc y
+            animateMoveTo(time, object, animProp, x, y, vx, vy);
+        }
+    }
+
+    function SetMute(idSound) {
+        m_soundPlaying.mute();
+    }
+    function StopSound() {
+        m_soundPlaying.stop();
+    }
+    function SetVisible(page, object, text) {
+        var curObject = null;
+        if (object == "") {
+            curObject = m_pgObjCaller;
+        }
+        else {
+            curObject = FindShape(page, object);
+        }
+        if (curObject == null) return;
+            curObject.setVisible(text);
+            curentPage.draw();
+
+        }
+        function hexToRgb(hex) {
+            // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+           /*hex= hex.toUpperCase();
+            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+            */
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16),
+                toString: function () {
+                    var arr = [];
+                    arr.push(this.r);
+                    arr.push(this.g);
+                    arr.push(this.b);
+                    arr.push(1);
+                    return "rgba(" + arr.join(",") + ")";
+                }
+            } : null;
+        }
+
+        function SetFontColor(page, object, color, styte) {
+            if (typeof color == 'undefined') return;
+            if (typeof object == 'undefined') return;
+            
+            var curObject = FindShape(page, object);
+            if (curObject == null) return;
+            if (color == "-1") {
+                var config = curObject.getInitConfig();
+                curObject.setTextFill(config.textFill);
+                return;
+            }
+            if (!isNaN(color))
+                color = parseInt(color);
+         
+            var hex = color.toString(16);
+            hex = "FF0000".substr(0, 6 - hex.length) + hex;
+            var colorResurt = hexToRgb(hex).toString();
+            curObject.setTextFill(colorResurt);
+            
+        }
+         function SetFontSize(page, object, size , valid) {
+               var curObject = FindShape(page, object);
+            if (curObject == null) return;
+                curObject.setFontSize(parseInt(size)*80/100);
+            if (typeof valid != 'undefined') 
+             InvalidateObj("","");
+        }
+        function SetPaint(page, object, b_Paint) {
+           
+            var curObject = FindShape(page, object);
+            if (curObject == null) return;
+            if (typeof b_Paint == 'undefined')
+                return curObject.getPaint();
+           else curObject.setPaint(b_Paint);
+            
+        }
+          function SetFontStyle(page, object, style , valid) {
+               var curObject = FindShape(page, object);
+               if (curObject == null) return;
+               style = style.toUpperCase();
+		        var  k='normal';
+		        if(style=="R"||style=="")
+			        k='normal';
+		        else if(style=="B")
+			        k='bold';
+		        else if(style=="I")
+			        k='italic';
+		        else if(style=="BI")
+			        k="Bold Italic";
+		        else if(style=="U")
+			        k="Underline";
+		        else if(style=="S")
+			        k="Strikeout";
+		        else k="normal;"
+		        curObject.setFontStyle(k);
+	            if (typeof valid != 'undefined') 
+                     InvalidateObj("","");       
+         }
+       	
+    function SetShowObject(page, object, text) {
+        var curObject = null;
+        if (object == "") {
+            curObject = m_pgObjCaller;
+        }
+        else {
+            curObject = FindShape(page, object);
+        }
+        if (curObject == null) return;
+        if (text == 1 || text == true) {
+            curObject.show();
+            curentPage.draw();
+        }
+        else {
+            curObject.hide();
+            curentPage.draw();
+        }
+    }
+    var myArray = new Array();
+    function SetVar(key, value) {
+        myArray[key] = value;
+    }
+    function SetRect(page, object, left, top, width, height, inval) {
+        var curObject = FindShape(page, object);
+        if (curObject == null) return;
+        curObject.setX(left);
+        curObject.setY(top);
+        curObject.setWidth(width);
+        curObject.setHeight(height);
+        if (typeof inval != "undefined")
+            curentPage.draw();
+    }
+    function SetScriptPage(pageName, script,  ivent){
+    }
+      function PlaySound(idsound) {
+          var snd = new buzz.sound(folder_Resource + "/" + idsound);
+          snd.play(); 
+          m_soundPlaying=snd;
+      }
+      function UTF8Upper(str) {
+          return str.toUpperCase();
+      }
+      function UTF8Lower(str) {
+          return str.toLowerCase();
+      }
+       function toLowerCase(str) {
+          return str.toLowerCase();
+      }
+      function toUpperCase(str) {
+          return str.toUpperCase();
+      }
+
+
+      function getColorValues(color) {
+          var values = { red: null, green: null, blue: null, alpha: 1 };
+        if (typeof color == 'string') {
+            /* hex */
+            if (color.indexOf('#') === 0) {
+                color = color.substr(1)
+                if (color.length == 3)
+                    values = {
+                        red: parseInt(color[0] + color[0], 16) || 0,
+                        green: parseInt(color[1] + color[1], 16)||0,
+                        blue: parseInt(color[2] + color[2], 16)||0,
+                        alpha: 1
+                    }
+                else
+                    values = {
+                        red: parseInt(color.substr(0, 2), 16)||0,
+                        green: parseInt(color.substr(2, 2), 16)||0,
+                        blue: parseInt(color.substr(4, 2), 16)||0,
+                        alpha: 1
+                    }
+                /* rgb */
+            } else if (color.indexOf('rgb(') === 0) {
+                var pars = color.indexOf(',');
+                values = {
+                    red: parseInt(color.substr(4, pars)),
+                    green: parseInt(color.substr(pars + 1, color.indexOf(',', pars))),
+                    blue: parseInt(color.substr(color.indexOf(',', pars + 1) + 1, color.indexOf(')'))),
+                    alpha: 1
+                }
+                /* rgba */
+            } else if (color.indexOf('rgba(') === 0) {
+                var pars = color.indexOf(','),
+				repars = color.indexOf(',', pars + 1);
+                values = {
+                    red: parseInt(color.substr(5, pars)),
+                    green: parseInt(color.substr(pars + 1, repars)),
+                    blue: parseInt(color.substr(color.indexOf(',', pars + 1) + 1, color.indexOf(',', repars))),
+                    alpha: parseFloat(color.substr(color.indexOf(',', repars + 1) + 1, color.indexOf(')')))
+                }
+                /* verbous */
+            } else {
+              /*  var stdCol = { acqua: '#0ff', teal: '#008080', blue: '#00f', navy: '#000080',
+                    yellow: '#ff0', olive: '#808000', lime: '#0f0', green: '#008000',
+                    fuchsia: '#f0f', purple: '#800080', red: '#f00', maroon: '#800000',
+                    white: '#fff', gray: '#808080', silver: '#c0c0c0', black: '#000'
+                };*/
+                if (stdCol[color] != undefined)
+                    values = getColorValues(stdCol[color]);
+            }
+        }
+        values = "rgba(" + values.red + "," + values.green + "," + values.blue + "," + values.alpha + ")";
+        return values;
+    }
+    function ShowColor(page, object) {
+        var curObject = FindShape(page, object);
+        if (curObject == null) return;
+    }
+    function ShowFont(page, object) {
+        var curObject = FindShape(page, object);
+        if (curObject == null) return;
+    }
+    function SetFlash() { 
+
+    }
+    function StopAction() {}
+    function StopRecord(id, file) { }
+    function Transparent(page, object, trans, state) {
+        var curObject = FindShape(page, object);
+        if (curObject == null) return;
+        if (typeof trans != 'undefined') {
+            curObject.setOpacity(1);
+        }
+        else curObject.setOpacity(trans/255);
+
+      }
+    function UTF8ToVietNam(string){ return string; }
+    function SetFocusObj(objName) {
+        var curObject = FindShape("", objName);
+        m_pgObjCaller = curObject;
+     }
+     function abs(d) {
+         return Math.abs(d);
+     }
+     function pow(dx, dy) {
+        return Math.pow(dx, dy);
+    }
+    //Math
+    String.prototype.replaceAll = function (strTarget, strSubString ) {
+        var strText = this;
+        var intIndexOfMatch = strText.indexOf(strTarget);
+
+        while (intIndexOfMatch != -1) {
+            strText = strText.replace(strTarget, strSubString)
+            intIndexOfMatch = strText.indexOf(strTarget);
+        }
+
+        return (strText);
+    }
+    function replaceStr(myString, oldpath, newpath) {
+
+        return myString.toString().replaceAll(oldpath , newpath);
+     }
+    //
+    function rightStr(str, n) {
+        var output;
+        if (n <= 0)
+            return "";
+        else if (n > String(str).length)
+            output = str;
+        else {
+            var iLen = String(str).length;
+            output= String(str).substring(iLen, iLen - n);
+        }
+        if (output == "") return output;
+         if (!isNaN(output))
+            return parseInt(output);
+        else return output;
+    }
+    function leftStr(str, n) {
+        var re = "";
+        if (n <= 0)
+            return re;
+        else if (n > String(str).length)
+            re= str;
+        else {
+            var iLen = String(str).length;
+            re= String(str).substring(0, n);
+        }
+        if (re == "") return re;
+        if (!isNaN(re))
+            return parseInt(re);
+        else return re;
+    }
+    function formatNumber(profits, count) {
+        return profits.toFixed(count);
+    }
+    function min(a, b) {
+        return Math.min(a, b);
+    }
+    function max(a, b) {
+        return Math.max(a, b);
+    }
+    function ceil(a_nu) {
+        return Math.ceil(a_nu);
+    }
+    function wordCountStr(str) {
+        str = str.replace(/(^\s*)|(\s*$)/gi, "");
+        str = str.replace(/[ ]{2,}/gi, " ");
+        str = str.replace(/\n /, "\n");
+        str = str.split(' ');
+        return str.length;
+    }
+
+    function wordsStr(str, start, count) {
+        var result = str.split(/[, ]+/);
+        if (result.length < count) count = result.length;
+        var index = start-1;
+        var value = "";
+        for (var k = 0; k < count; k++) {
+            value = value + result[index]+" ";
+            index = index + 1;
+        }
+        value= value.trim();
+        if (!isNaN(value))
+            return parseInt(re);
+        else return value;
+    }
+    function indexOf(stringstr, pattern, i_start, ignoreCase) {
+        if (typeof ignoreCase != 'undefined' && ignoreCase>0)
+            return stringstr.toLowerCase().indexOf(pattern.toLowerCase(), i_start);
+        else return stringstr.indexOf(pattern, i_start);
+    }
+    function subString(object, pos, count, pad) {
+        var re = object.substr(pos, count);
+        if (re == "") return re;
+        if (!isNaN(re))
+            return parseInt(re);
+        else return re;
+    }
+    function length(object) {
+        return object.length;
+    }
+    function setTimeoutFunction(code, millisec) {
+        setTimeout(code, millisec);
+    }
+   

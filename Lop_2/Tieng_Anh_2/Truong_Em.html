@@ -1,0 +1,297 @@
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Truong_Em</title>
+<script type="text/javascript" src="js/kinetic-v4.0.5.js">object</script>
+<script type="text/javascript" src="js/buzz.js">sound</script>
+<script type="text/javascript" src="js/paintlib.js">paint</script>
+<script type="text/javascript" src="http://code.responsivevoice.org/responsivevoice.js">Text to speak</script>
+<script type="text/javascript" src="Truong_Em/ID_TEXT.js">ResourceIDText</script>
+<script type="text/javascript" src="js/LacVietJScript.js">JScrip</script>
+<script type="text/javascript">
+var a_kq=["b","c","c","a"];
+var a_tl=[0,0,0,0];
+function InitBaiHoc(){
+	for(var i=0;i<4;i++)
+		{
+		SetShowObject("Trang_1","check_"+i,0);
+		SetCursor("Trang_1","a_"+i,"pointer");
+		SetCursor("Trang_1","b_"+i,"pointer");
+		SetCursor("Trang_1","c_"+i,"pointer");
+		SetFontColor("Trang_1","a_"+i,"#ffffff");
+		SetFontColor("Trang_1","b_"+i,"#ffffff");
+		SetFontColor("Trang_1","c_"+i,"#ffffff");
+		SetText("Trang_1","check_"+i,"");
+		a_tl[i]=0;
+		}
+SetShowObject("Trang_1","begin",1);
+SetShowObject("Trang_1","m_diem",0);
+SetShowObject("Trang_1","lam_lai",0);
+InvalidateObj("Trang_1","");
+}
+
+function ChonTL(){
+	var name= GetName("Trang_1");
+	var t=  GetTop("Trang_1",name);
+	var l=  GetLeft("Trang_1",name);
+	var cau = rightStr(name,1);
+	a_tl[cau]= leftStr(name,1);
+	SetText("Trang_1","check_"+cau,a_tl[cau]);
+	MoveObjectTo("Trang_1","check_"+cau,l-3,t+3);
+	SetShowObject("Trang_1","check_"+cau,1);
+	InvalidateObj("Trang_1","");
+}
+function CheckKq(){
+ var diem=0;
+ for(var i=0;i<4;i++){
+	if(a_kq[i] != a_tl[i]){
+		SetFontColor("Trang_1",a_kq[i]+"_"+i,"#00ff00");
+		SetText("Trang_1","check_"+i,"x");
+	}
+	else diem=diem+2.5;
+}
+	SetText("Trang_1","m_diem",diem);
+	SetShowObject("Trang_1","begin",0);
+	SetShowObject("Trang_1","m_diem",1);
+	SetShowObject("Trang_1","lam_lai",1);
+	InvalidateObj("Trang_1","");
+}
+
+
+
+folder_Resource ='Truong_Em'; 
+styteView = 'Ver';
+
+function Trang_2()
+{
+LineHeight("Trang_2","quang2",2);
+  return;
+}
+
+function Trang_1()
+{
+InitBaiHoc();
+  return;
+}
+
+ 
+  window.onload = function() {
+ var canvas = document.createElement('canvas');
+if (!canvas.getContext) {
+alert("Trinh duyet khong ho tro");
+return;
+} 
+ document.getElementById("Doc").textContent = ""; 
+ stage = new Kinetic.Stage({
+ container: "Doc", 
+ width: 640,
+ height: 1440 
+ });
+
+ var Trang_2 = new Kinetic.Layer({name: 'Trang_2',callback:'Trang_2()',x:0,y:0});
+var Trang_2_Backrounnd = new Kinetic.Text(InitText('Trang_2_Backrounnd',0,0,640,480,'Background','rgba(0, 64, 64, 1.00)','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(0, 64, 64, 0)','0','0','0','','0','0','0','0',0,0,''));
+Trang_2.add(Trang_2_Backrounnd);
+var quang2 = new Kinetic.Text(InitText('quang2',27,126,588,278,"Hổ và Voi thi tài. Chúng giao hẹn ai thua phải nộp mạng cho kẻ kia ăn thịt. Voi rầu rit vì bị thua. Khỉ thương Voi, bằng nghĩ cách cứu bạn.\r\nTới ngày hẹn, Khỉ ngồi trên lưng Voi đến nhà Hổ. Vừa tới cổng, Khỉ cầm roi quất lia lịa vào lưng Voi, quát lớn:\r\n- Hổ đâu? chỉ cho ta !\r\nVoi thưa:\r\n- Dạ, xin ngài đợi thêm chút nữa !\r\nKhỉ càn quát to hơn:\r\n- Nhanh lên ta đói rồi. Ta muốn ăn tươi nuốt sống nó ngay !\r\nNghe vậy Hổ sợ quá trốn biệt.\r\n				(Truyện cổ dân tộc KHMER)",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(quang2);
+var quang1 = new Kinetic.Text(InitText('quang1',140,90,350,29,"Chú Khỉ mưu trí.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 0, 1.00)','rgba(255, 255, 255, 1.00)','',22,'Arial','Bold','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(quang1);
+var Drawtext_1 = new Kinetic.Text(InitText('Draw text_1',511,432,111,34,"Nghe Đọc",'rgba(192, 192, 192, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Drawtext_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+PlaySound("ID_SOUND1");
+  return;
+}
+ );
+Trang_2.add(Drawtext_1);
+var DrawText_1 = new Kinetic.Text(InitText('DrawText_1',124,6,423,34,"B. KIỂM TRA ĐỌC\r\n",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Arial','Bold','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(DrawText_1);
+var DrawText_2 = new Kinetic.Text(InitText('DrawText_2',22,29,423,34,"B. KIỂM TRA ĐỌC\r\n",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Bold','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(DrawText_2);
+var Drawtext_2 = new Kinetic.Text(InitText('Draw text_2',31,60,289,26,"I. ĐỌC ĐÚNG MẪU CHUYỆN SAU:",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(204, 255, 255, 1.00)','rgba(204, 255, 255, 1.00)','',16,'Arial','Bold','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_2.add(Drawtext_2);
+stage.add(Trang_2);
+
+ var Trang_1 = new Kinetic.Layer({name: 'Trang_1',callback:'Trang_1()',x:0,y:480});
+var Trang_1_Backrounnd = new Kinetic.Text(InitText('Trang_1_Backrounnd',0,0,640,480,'Background','rgba(0, 64, 64, 1.00)','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(0, 64, 64, 0)','0','0','0','','0','0','0','0',0,0,''));
+Trang_1.add(Trang_1_Backrounnd);
+var Cau_hoi_0 = new Kinetic.Text(InitText('Cau_hoi_0',42,61,473,27,"1. Khi so tài Voi và Hổ hẹn điều gì?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 254, 153, 1.00)','rgba(255, 254, 153, 1.00)','',16,'Arial','Bold Italic','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(Cau_hoi_0);
+var a_0 = new Kinetic.Text(InitText('a_0',77,88,429,22,"a. Ai thắng sẽ được là chúa tể.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_0);
+var b_0 = new Kinetic.Text(InitText('b_0',77,111,429,22,"b. Ai thua phải nộp mạng.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_0);
+var c_0 = new Kinetic.Text(InitText('c_0',77,132,429,22,"c. Ai thua cuộc sẽ được ăn thịt.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_0);
+var Cau_hoi_1 = new Kinetic.Text(InitText('Cau_hoi_1',49,150,574,27,"2. Tới ngày hẹn, Khỉ và Voi làm gì?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 254, 153, 1.00)','rgba(255, 254, 153, 1.00)','',16,'Arial','Bold Italic','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(Cau_hoi_1);
+var a_1 = new Kinetic.Text(InitText('a_1',77,175,429,22,"a. Đến nhà Hổ đua tài.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_1);
+var b_1 = new Kinetic.Text(InitText('b_1',76,197,429,22,"b. Đến nhà Hổ để cùng ăn thị rừng.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_1);
+var c_1 = new Kinetic.Text(InitText('c_1',77,218,429,22,"c. Đến nhà Hổ để thực hiện mưu kế.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_1);
+var Cau_hoi_2 = new Kinetic.Text(InitText('Cau_hoi_2',46,240,592,39,"3. Khỉ làm gì khi tới cổng nhà Hổ?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 254, 153, 1.00)','rgba(255, 254, 153, 1.00)','',16,'Arial','Bold Italic','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(Cau_hoi_2);
+var a_2 = new Kinetic.Text(InitText('a_2',77,274,429,22,"a. Khỉ quát Voi.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_2);
+var b_2 = new Kinetic.Text(InitText('b_2',77,296,429,22,"b. Khỉ làm Voi sợ hãi.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_2);
+var c_2 = new Kinetic.Text(InitText('c_2',77,317,557,22,"c. Khỉ giải đò quát Voi, ép buộc Voi.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_2);
+var Cau_hoi_3 = new Kinetic.Text(InitText('Cau_hoi_3',50,342,586,27,"4.Tại sao Hổ trốn biệt?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 254, 153, 1.00)','rgba(255, 254, 153, 1.00)','',16,'Arial','Bold Italic','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(Cau_hoi_3);
+var a_3 = new Kinetic.Text(InitText('a_3',77,374,429,22,"a. Vì nó mắc mưu của khỉ.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+a_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(a_3);
+var b_3 = new Kinetic.Text(InitText('b_3',77,396,479,22,"b.Vì nó nhận ra tội lỗi.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+b_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(b_3);
+var c_3 = new Kinetic.Text(InitText('c_3',77,417,429,22,"c. Vì nó rất sợ khỉ.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+c_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ChonTL();
+  return;
+}
+ );
+Trang_1.add(c_3);
+var check_0 = new Kinetic.Text(InitText('check_0',74,88,18,18,"c",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 85, 1.00)','rgba(0, 85, 85, 1.00)','',14,'Arial','Bold','center','middle',8,'0.00','33','75',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_0);
+var check_1 = new Kinetic.Text(InitText('check_1',74,199,18,18,"b",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 85, 1.00)','rgba(0, 85, 85, 1.00)','',14,'Arial','Bold','center','middle',0,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_1);
+var check_2 = new Kinetic.Text(InitText('check_2',77,319,18,18,"b",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 85, 1.00)','rgba(0, 85, 85, 1.00)','',14,'Arial','Bold','center','middle',2,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_2);
+var check_3 = new Kinetic.Text(InitText('check_3',78,378,18,18,"a",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 85, 85, 1.00)','rgba(0, 85, 85, 1.00)','',14,'Arial','Bold','center','middle',1,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(check_3);
+var m_diem = new Kinetic.Text(InitText('m_diem',507,47,115,114,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',72,'Arial','','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(m_diem);
+var lam_lai = new Kinetic.Text(InitText('lam_lai',512,440,119,32,"Làm Lại",'rgba(0, 64, 64, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',20,'Arial','Normal','center','middle',0,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(0, 179, 179, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+lam_lai.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+InitBaiHoc();
+  return;
+}
+ );
+Trang_1.add(lam_lai);
+var quang3 = new Kinetic.Text(InitText('quang3',27,5,606,52,"II. KHOANH TRÒN CHỮ CÁI TRƯỚC Ý TRẢ LỜI ĐÚNG CHO TỪNG CÂU HỎI SAU:\r\n",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(192, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Bold','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Trang_1.add(quang3);
+var begin = new Kinetic.Text(InitText('begin',512,440,119,32,"Nộp Bài",'rgba(0, 64, 64, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',20,'Arial','Normal','center','middle',0,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(0, 179, 179, 1.00)','4','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+begin.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+CheckKq();
+  return;
+}
+ );
+Trang_1.add(begin);
+stage.add(Trang_1);
+
+ var Page_1 = new Kinetic.Layer({name: 'Page_1',x:0,y:960});
+var Page1_Backrounnd = new Kinetic.Text(InitText('Page1_Backrounnd',0,0,640,480,'Background','rgba(0, 64, 64, 1.00)','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(0, 64, 64, 0)','0','0','0','','0','0','0','0',0,0,''));
+Page_1.add(Page1_Backrounnd);
+var Drawtext_1 = new Kinetic.Text(InitText('Draw text_1',46,40,453,28,"1. Chép đúng chính tả đoạn văn sau:",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(204, 255, 255, 1.00)','rgba(204, 255, 255, 1.00)','',16,'Arial','Bold','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(Drawtext_1);
+var Drawtext_2 = new Kinetic.Text(InitText('Draw text_2',27,11,249,25,"2. KIỂM TRA VIẾT",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Bold','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(Drawtext_2);
+var Drawtext_3 = new Kinetic.Text(InitText('Draw text_3',30,72,588,128,"Tiếng chim sít âm âm giữa đồng lúa xanh um như tiếng trẻ con nghịch nói trong chum nước. Chú cuốc đánh hơi thấy mùa hè không còn xa nữa đã bắt đầu hắng  giọng.\r\n						 				(Theo VŨ TÚ NAM)",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(Drawtext_3);
+var Drawtext_4 = new Kinetic.Text(InitText('Draw text_4',52,160,418,36,"2. Điền vào chỗ trống: l hay n ?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(204, 255, 255, 1.00)','rgba(204, 255, 255, 1.00)','',16,'Arial','Bold','left','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(Drawtext_4);
+var Drawtext_5 = new Kinetic.Text(InitText('Draw text_5',68,228,335,182,"Áo ...âu và áo tím.\r\n...úc thụt vào nhô ra\r\n...àng cua trong bờ cỏ\r\nMỗi con xây một nhà.\r\nTưởng mình ...à hiệp sĩ\r\nXách gươm đi dọc đồng.\r\n\r\n		(Theo NGÔ VĂN PHÚ)",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','top',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(Drawtext_5);
+var Drawtext_6 = new Kinetic.Text(InitText('Draw text_6',109,197,137,27,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Bold','center','middle',0,'0.00','30','30',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(Drawtext_6);
+var Drawtext_7 = new Kinetic.Text(InitText('Draw text_7',90,221,30,28,"l",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(Drawtext_7);
+var DrawText_1 = new Kinetic.Text(InitText('DrawText_1',56,242,30,28,"l",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(DrawText_1);
+var DrawText_2 = new Kinetic.Text(InitText('DrawText_2',56,261,30,28,"l",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(DrawText_2);
+var DrawText_3 = new Kinetic.Text(InitText('DrawText_3',161,297,30,28,"l",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','30','30',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)'));
+Page_1.add(DrawText_3);
+stage.add(Page_1);
+InitLacVietScript();
+};
+</script>
+</head>
+<body style="text-align: center">
+<div id="Doc" style="vertical-align: middle; text-align: center; width: 100%; height: 100%; font-size: xx-large;">Loading...</div>
+</body>
+</html>

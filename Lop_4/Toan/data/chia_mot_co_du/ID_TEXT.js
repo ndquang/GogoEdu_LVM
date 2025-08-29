@@ -1,0 +1,17 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='What is the measure of this angle? Choose the best estimate.';
+hashIDText['ID_TEXT2']='';
+hashIDText['ID_TEXT3']='135°';
+hashIDText['ID_TEXT4']='90 : 8 = ';
+hashIDText['ID_TEXT5']='99';
+hashIDText['ID_TEXT6']='OK';
+hashIDText['ID_TEXT7']='Số đo của góc này là bao nhiêu? Chọn ước tính tốt nhất.';
+hashIDText['ID_TEXT8']='Chia một số cho số có một chữ số có dư';
+hashIDText['ID_TEXT9']='good job';
+hashIDText['ID_TEXT10']='x';
+hashIDText['ID_TEXT11']='x';
+hashIDText['ID_TEXT12']='=';
+hashIDText['ID_TEXT13']='99';
+hashIDText['ID_TEXT14']='dư';
+hashIDText['ID_TEXT15']='Nếu không có số dư thì bạn điền dư 0 hoặc không điền';

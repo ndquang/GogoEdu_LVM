@@ -1,0 +1,279 @@
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>sentence-types</title>
+<script type="text/javascript" src="js/kinetic-v5.1.0.js">object</script>
+<script type="text/javascript" src="js/buzz.js">sound</script>
+<script type="text/javascript" src="js/paintlib-v5.1.0.js">paint</script>
+<script type="text/javascript" src="http://code.responsivevoice.org/responsivevoice.js">Text to speak</script>
+<script type="text/javascript" src="https://googledrive.com/host/0B7xXjXVUsGWdLVhGekNINl9OWXM/sentence-types/ID_TEXT.js">ResourceIDText</script>
+<script type="text/javascript" src="js/LacVietJScript-v5.1.0.js">JScrip</script>
+<script type="text/javascript">
+var m_answer="";
+var m_result="";
+function ClickTL(){
+if(m_answer == GetText("",""))
+	return;
+m_answer= GetText("","");
+SetColor("","e2","#ffffff");
+SetColor("","e3","#ffffff");
+SetColor("","e4","#ffffff");
+SetColor("","","#D2F7FF");
+SetShowObject("", "submit", 1);
+Speak(m_answer,"EN");
+InvalidateObj("","");
+}
+function  HideObj()
+{
+for (var i = 2; i < 5; i++) {
+SetShowObject("", "e" + i, 0);
+SetShowObject("", "v" + i, 0);
+}
+SetShowObject("", "v0", 0);
+SetShowObject("", "v1", 0);
+SetShowObject("", "mess", 0);
+SetShowObject("", "submit", 0);
+InvalidateObj("","");
+}
+var g=["Super!","Correct!","That's Right","Great!","Wonderful!","Well done!","Fantastic!","Exact!"];
+var h=["",""];
+var index=0;
+function InitMang(){
+h[0]="Are you yawning because you're tired or because you're bored?|interrogative*|imperative";
+h[1]="Roxanne is completely soaked!|interrogative|exclamatory*";
+h[2]="Have you ever been in the attic?|exclamatory|interrogative*";
+h[3]="Did you knit that jumper yourself?|interrogative*|declarative";
+h[4]="Please take the bins out.|imperative*|exclamatory";
+h[5]="Why are Nathan and Isla arguing?|declarative|interrogative*";
+h[6]="This cool breeze feels great on such a hot day.|declarative*|exclamatory";
+h[7]="This sauce is so spicy that it made me cry!|interrogative|exclamatory*";
+h[8]="Have you ever typed on a typewriter?|interrogative*|exclamatory";
+h[9]="How well does Timothy play the guitar?|interrogative*|imperative";
+h[10]="I can't believe how rude he was!|exclamatory*|interrogative";
+h[11]="Would you like bacon with your eggs?|interrogative*|imperative";
+h[12]="What made Helga so upset?|imperative|interrogative*";
+h[13]="Follow me in single file.|exclamatory|imperative*";
+h[14]="Jack is the best cook I know!|declarative|exclamatory*";
+h[15]="Not all monkeys live in the jungle.|imperative|declarative*|interrogative";
+h[16]="Gabriella put a bandage on my cut.|declarative*|exclamatory";
+h[17]="What made Rosie so upset?|declarative|interrogative*";
+h[18]="No one lives at the base of the volcano.|declarative*|interrogative";
+h[19]="The boys picked apples in the orchard.|declarative*|interrogative";
+h[20]="Would you like bacon with your eggs?|exclamatory|interrogative*";
+h[21]="Will you be here again next Wednesday?|interrogative*|declarative";
+h[22]="Please let me know how I can be of service.|exclamatory|imperative*";
+h[23]="Ava is reading a magazine about skateboarding.|declarative*|exclamatory";
+h[24]="Stop twisting the rope like that.|imperative*|exclamatory";
+h[25]="I write for the school newspaper.|declarative*|exclamatory";
+h[26]="This sauce is so spicy that it made me cry!|exclamatory*|declarative";
+h[27]="Please take the dirty towels outside.|imperative*|exclamatory";
+h[28]="Who took the wheelbarrow out of the shed?|declarative|interrogative*";
+h[29]="Have you ever been in the attic?|interrogative*|imperative|exclamatory";
+h[30]="Please take the bins out.|interrogative|imperative*|declarative";
+h[31]="Clap your hands and sing along.|imperative*|interrogative|declarative";
+h[32]="The shower is broken for the second time this week!|exclamatory*|imperative|declarative";
+h[33]="Not all monkeys live in the jungle.|declarative*|exclamatory|imperative";
+h[34]="Please stand up when you hear your name.|exclamatory|imperative*|interrogative";
+h[35]="Please don't be upset with me.|declarative|interrogative|imperative*";
+h[36]="What are you most thankful for?|interrogative*|imperative|exclamatory";
+h[37]="That's his fourth goal in the match!|imperative|exclamatory*|declarative";
+h[38]="Cows sometimes graze in this pasture.|declarative*|imperative|exclamatory";
+h[39]="Don't slip on the wet bathroom floor!|declarative|interrogative|imperative*";
+h[40]="Did you knit that jumper yourself?|exclamatory|interrogative*|declarative";
+h[41]="She has a huge collection of marbles.|interrogative|declarative*|imperative";
+h[42]="Does Helen have any hobbies?|interrogative*|exclamatory|imperative";
+h[43]="Keep your eyes on the road!|exclamatory|imperative*|declarative";
+h[44]="That was the longest yawn I've ever seen!|declarative|exclamatory*|interrogative";
+h[45]="Please cut up the watermelon.|declarative|interrogative|imperative*";
+h[46]="That's the best bakery in town!|exclamatory*|interrogative|imperative";
+h[47]="That's the loudest siren I've ever heard!|exclamatory*|imperative|declarative";
+h[48]="Jane is completely soaked!|exclamatory*|declarative|interrogative";
+h[49]="Have you ever typed on a typewriter?|interrogative*|declarative|exclamatory";
+h[50]="At the museum, we saw statues from China.|interrogative|declarative*|exclamatory";
+h[51]="Wow, that was a loud sneeze!|declarative|exclamatory*|imperative";
+h[52]="Be careful with that paintbrush!|imperative*|declarative|interrogative";
+h[53]="Joel usually eats porridge for breakfast.|imperative|declarative*|exclamatory";
+h[54]="Rosie gave me flowers for no reason.|interrogative|declarative*|imperative";
+h[55]="Watch where you swing that cricket bat!|imperative*|declarative|interrogative";
+h[56]="For his report, Toby needs information about zebras.|exclamatory|declarative*|interrogative";
+h[57]="Eric usually eats porridge for breakfast.|interrogative|declarative*|imperative";
+h[58]="That's the best bakery in town!|exclamatory*|interrogative";
+h[59]="This cool breeze feels great on such a hot day.|exclamatory|declarative*";
+h[60]="That was the longest yawn I've ever seen!|declarative|exclamatory*";
+h[61]="The boys picked apples in the orchard.|imperative|exclamatory|declarative*";
+}
+
+function  NextQue()
+{
+	if(index>60)index= Random(61);
+	m_answer="";
+  var ca = h[index].split("|");
+    var tam = "";
+	for (i = 0; i <  ca.length; i++) {
+	    var xx = i + 1;
+	    tam = ca[i];
+	if(i>0 && ca[i].indexOf("*")!=-1){
+	    tam = ca[i].replace("*", '');
+		m_result = tam;
+	}
+	SetText("", "e" + xx, tam);
+	SetShowObject("", "e" + xx, 1);
+	SetColor("","e" + xx,"#ffffff");
+	}
+	i++;
+	index++;	
+	SetShowObject("", "e" + i, 0);
+	SetShowObject("", "mess", 0);
+	SetShowObject("", "submit", 0);
+	SetShowObject("","help",0);
+	SetShowObject("","correct",0);
+	SetShowObject("","you_answered",0);
+	SetShowObject("","gotit",0);
+	Speak(ca[0],"EN");
+	InvalidateObj("","");
+}
+function Supmit()
+{ 
+	var ab="";
+	if(m_result == m_answer){
+	SetFontColor("","mess","#D2F7FF");
+	ab = g[Random(8)];
+	SetText("","mess",ab);
+	SetShowObject("","mess",1);
+	Delay("NextQue()",3000);
+	}
+	else {
+		SetFontColor("","mess","#ff0000");
+		SetText("","mess","Sorry, incorrect...");
+		SetShowObject("", "mess", 1);
+		ab = "Sorry, incorrect...";
+		SetText("","correct",m_result);
+		SetText("","you_answered",m_answer);
+		SetShowObject("","help",1);
+		SetShowObject("","correct",1);
+		SetShowObject("", "you_answered", 1);
+
+		SetShowObject("", "gotit", 1);
+	}
+	Speak(ab,"EN");
+	SetShowObject("", "submit", 0);
+	InvalidateObj("","");
+}
+folder_Resource ='sentence-types';
+
+function Page_1()
+{
+InitMang();
+HideObj();
+NextQue();
+  return;
+}
+ 
+  window.onload = function() {
+ var canvas = document.createElement('canvas');
+if (!canvas.getContext) {
+alert("Trinh duyet khong ho tro");
+return;
+} 
+ document.getElementById("Doc").textContent = ""; 
+ stage = new Kinetic.Stage({
+ container: "Doc", 
+ width: 650,
+ height: 300 
+ });
+
+ var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
+var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,650,300,'','rgba(255, 255, 255, 1.00)','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(255, 255, 255, 0)','0','0','0','','0','0','0','0',0,0,'');
+Page_1.add(Page_1_Backrounnd);
+var e0 = CreText('e0',25,27,243,29,"What kind of sentence is this?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(70, 140, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+e0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+Speak(GetText("",""),"EN");
+  return;
+}
+ );
+Page_1.add(e0);
+var e1 = CreText('e1',36,55,557,27,"Are you yawning because you're tired or because you're bored?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 128, 192, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+e1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+Speak(GetText("",""),"EN");
+  return;
+}
+ );
+Page_1.add(e1);
+var e2 = CreText('e2',42,111,139,27,"interrogative",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(0, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+e2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickTL();
+  return;
+}
+ );
+Page_1.add(e2);
+var e3 = CreText('e3',201,111,139,27,"imperative",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(0, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+e3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickTL();
+  return;
+}
+ );
+Page_1.add(e3);
+var e4 = CreText('e4',361,111,139,27,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','center','middle',0,'0.00','0','0',2,'rgba(0, 255, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(e4);
+var v0 = CreText('v0',250,28,243,25,"Câu này thuộc loại câu gì?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(40, 40, 40, 1.00)','rgba(40, 40, 40, 1.00)','',16,'Arial','Italic','left','middle',0,'0.00','0','0',0,'rgba(40, 40, 40, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(v0);
+var v1 = CreText('v1',38,76,557,27,"Bạn đang ngáp vì bạn đang mệt mỏi hoặc bởi vì bạn đang chán?",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(40, 40, 40, 1.00)','rgba(40, 40, 40, 1.00)','',16,'Arial','Italic','left','middle',0,'0.00','0','0',0,'rgba(40, 40, 40, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(v1);
+var v2 = CreText('v2',71,148,147,31,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(40, 40, 40, 1.00)','rgba(40, 40, 40, 1.00)','',14,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(221, 255, 221, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(v2);
+var v3 = CreText('v3',237,148,147,31,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(40, 40, 40, 1.00)','rgba(40, 40, 40, 1.00)','',14,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(221, 255, 221, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(v3);
+var v4 = CreText('v4',404,147,147,31,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(40, 40, 40, 1.00)','rgba(40, 40, 40, 1.00)','',14,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(221, 255, 221, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(v4);
+var dich = CreText('dich',611,24,32,32,"",'rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','ID_IMAGE1.PNG',16,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 1.00)','2','2','rgba(0, 0, 0, 0)','0','0','4','0',0,0, 'rgba(0, 0, 0, 0)',0,1.50);
+dich.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+NextQue();
+  return;
+}
+ );
+Page_1.add(dich);
+var submit = CreText('submit',53,171,102,27,"Submit",'rgba(98, 196, 0, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Arial','Normal','center','middle',3,'0.00','10','0',2,'rgba(0, 255, 0, 255)','rgba(98, 196, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+submit.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+Supmit();
+  return;
+}
+ );
+Page_1.add(submit);
+var mess = CreText('mess',170,162,380,43,"Good",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 147, 0, 1.00)','rgba(0, 147, 0, 1.00)','',36,'Arial','Bold','left','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(176, 255, 176, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(mess);
+var gotit = CreText('gotit',511,247,102,33,"Got it",'rgba(98, 196, 0, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',14,'Arial','Normal','center','middle',3,'0.00','10','0',2,'rgba(0, 255, 0, 255)','rgba(98, 196, 0, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+gotit.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+NextQue();
+  return;
+}
+ );
+Page_1.add(gotit);
+var help = CreText('help',61,217,181,58,"The correct answer is:\r\nYou answered:\r\n",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(70, 140, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,2.00);
+Page_1.add(help);
+var correct = CreText('correct',237,217,145,27,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(correct);
+var you_answered = CreText('you_answered',184,241,143,30,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(you_answered);
+stage.add(Page_1);
+InitLacVietScript();
+};
+</script>
+</head>
+<body style="text-align: center">
+<div id="Doc" style="vertical-align: middle; text-align: center; width: 100%; height: 100%; font-size: xx-large;">Loading...</div>
+</body>
+</html>

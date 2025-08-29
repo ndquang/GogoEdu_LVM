@@ -1,0 +1,11 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='aaas';
+hashIDText['ID_TEXT2']='aaas';
+hashIDText['ID_TEXT3']='aaas';
+hashIDText['ID_TEXT4']='aaas';
+hashIDText['ID_TEXT5']='aaas';
+hashIDText['ID_TEXT6']='aaas';
+hashIDText['ID_TEXT7']='aaas';
+hashIDText['ID_TEXT8']='aaas';
+hashIDText['ID_TEXT9']='Quang';

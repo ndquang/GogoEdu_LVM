@@ -1,0 +1,15 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='What kind of sentence is this?';
+hashIDText['ID_TEXT2']='Are you yawning because you're tired or because you're bored?';
+hashIDText['ID_TEXT3']='Câu này thuộc loại câu gì?';
+hashIDText['ID_TEXT4']='Bạn đang ngáp vì bạn đang mệt mỏi hoặc bởi vì bạn đang chán?';
+hashIDText['ID_TEXT5']='Sentence types';
+hashIDText['ID_TEXT6']='';
+hashIDText['ID_TEXT7']='Submit';
+hashIDText['ID_TEXT8']='interrogative';
+hashIDText['ID_TEXT9']='imperative';
+hashIDText['ID_TEXT10']='Good';
+hashIDText['ID_TEXT11']='Got it';
+hashIDText['ID_TEXT12']='The correct answer is:\r\nYou answered:';
+hashIDText['ID_TEXT13']='';

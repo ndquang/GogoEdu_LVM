@@ -1,0 +1,10 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='Lật 2 hình giống nhau';
+hashIDText['ID_TEXT2']='    Bắt Đầu';
+hashIDText['ID_TEXT3']='000';
+hashIDText['ID_TEXT4']='    Bắt Đầu';
+hashIDText['ID_TEXT5']='TIME';
+hashIDText['ID_TEXT6']='    Bắt Đầu';
+hashIDText['ID_TEXT7']='TIME';
+hashIDText['ID_TEXT8']='';

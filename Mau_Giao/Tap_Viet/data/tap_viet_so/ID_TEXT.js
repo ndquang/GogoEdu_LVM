@@ -1,0 +1,15 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT']='0';
+hashIDText['ID_TEXT1']='1';
+hashIDText['ID_TEXT2']='2';
+hashIDText['ID_TEXT3']='3';
+hashIDText['ID_TEXT4']='4';
+hashIDText['ID_TEXT5']='5';
+hashIDText['ID_TEXT6']='6';
+hashIDText['ID_TEXT7']='7';
+hashIDText['ID_TEXT8']='8';
+hashIDText['ID_TEXT9']='9';
+hashIDText['ID_TEXT10']='           \r\n\r\n          Trường    :\r\n          Lớp         :\r\n          Họ và tên :';
+hashIDText['ID_TEXT11']='https://gamechocon.com';
+hashIDText['ID_TEXT12']='Tập viết số';

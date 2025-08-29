@@ -1,0 +1,418 @@
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>u4_When_your_birthday</title>
+<script type="text/javascript" src="js/kinetic-v5.1.0.js">object</script>
+<script type="text/javascript" src="js/buzz.js">sound</script>
+<script type="text/javascript" src="js/paintlib-v5.1.0.js">paint</script>
+<script type="text/javascript" src="http://code.responsivevoice.org/responsivevoice.js">Text to speak</script>
+<script type="text/javascript" src="https://googledrive.com/host/0B7xXjXVUsGWdLVhGekNINl9OWXM/u4_When_your_birthday/ID_TEXT.js">ResourceIDText</script>
+<script type="text/javascript" src="js/LacVietJScript-v5.1.0.js">JScrip</script>
+<script type="text/javascript">
+var size=26;
+var a_w=["January","February","March","April","May","June","July","August","September","October","November","December","birthday","first","second","third","fourth","fifth","sixth","seventh","eighth","ninth","tenth","twentieth","twenty-first","thirtieth"];
+var a_vn=["tháng một","tháng hai","tháng ba","tháng tư","tháng năm","tháng sáu","tháng bảy","tháng tám","tháng chín","tháng mười", "tháng 11","tháng 12","sinh nhật","thứ nhất","thứ nhì","thứ 3","thứ 4","thứ 5","thứ 6","thứ 7","thứ 8","thứ 9","thứ 10","thứ 20","thứ 21","thứ 30"];
+var index=0;
+var len=0;
+var dem=0;
+function setCharAt( str,  index,  chr) {
+    if(index > length(str)-1) return str;
+	return subString(str,0,index)+chr + subString(str,index+1);
+}
+function DocTieuDe(){
+Speak(GetText("","unit")+". "+GetText("","title"),"EN");
+}
+function Tron( xxx)
+{
+	len = length(xxx);
+	for(var j=0;j<10;j++){
+	      var x= Random(len);
+      	var y= Random(len);
+		while (x==y)
+		y= Random(len);
+		var tamx= subString(xxx,x,1);
+		var tamy= subString(xxx,y,1);
+		xxx= setCharAt(xxx,x,tamy);
+		xxx= setCharAt(xxx,y,tamx);
+	}
+	return xxx;
+}
+function CreateW( idx)
+{	
+	index=idx;
+	SetText("","v",a_vn[index]);
+	//SetRsc("","anh",a_w[index]);
+	SetText("","w","");
+	SpeakEN("","", a_w[index]);
+	var text= toLowerCase(a_w[index]);
+	text= Tron(text);
+	len= length(text);
+	for(var i=0;i<len;i++){
+	    var char= subString(text,i,1);
+	    SetText("","l_"+i,char);
+	    SetShowObject("","l_"+i,1);
+	    MoveObjectTo("","l_"+i,-1,-1,50,5, Random(10));
+	    }
+	for(i=len;i<12;i++)
+		SetShowObject("","l_"+i,0);
+	dem=0;
+      SetFontColor("","hits","#000000");
+	SetText("","hits","");
+      Speak( a_vn[index],"VN");
+	InvalidateObj("","");
+}
+function  NewGame()
+{
+	var x= index+1;
+      if(x>=size)
+		x= Random(size);
+	CreateW(x);
+}
+function  EndCallback(){
+ Speak( a_vn[index],"VN");
+ Delay("NewGame()",5000);
+}
+function EndGame()
+{
+if(GetText("","w")== toLowerCase(a_w[index]))
+			{
+			Speak(a_w[index],"EN","{ pitch: 1, rate: 0.8,onend: EndCallback}");
+			SetText("","w",a_w[index]);
+			SetFontColor("","hits","#00aa00");
+			SetText("","hits","Đúng.");
+			}
+		else {
+			PlaySound("ID_WRONG");
+			SetFontColor("","hits","#ff0000");
+			SetText("","hits","Sai.");
+			Delay("CreateW(index)",1000);
+			}
+InvalidateObj("","");
+}
+function Check()
+{
+	var leter= GetText("","");
+	var tt = GetText("","w")+ leter;
+	SetText("","w",tt);
+	SetShowObject("","",0);
+		if(dem==len){
+			Delay("EndGame()",1000);
+		 }
+}
+
+function HideHelp()
+{
+  SetText("","hits","");
+  InvalidateObj("","");
+}
+function ShowHelp()
+{
+SpeakEN("","", a_w[index]);
+   SetText("","hits", toLowerCase(a_w[index]));
+   InvalidateObj("","");
+}
+function  ClickLeter(){
+	dem=dem+1;
+	MoveObjectTo("","", GetLeft("","w")+ GetWidth("","w")/2, GetTop("","w"),50,5,0,"Check()");
+}
+
+
+
+folder_Resource ='u4_When_your_birthday';
+
+function Page_1()
+{
+ DocTieuDe();
+index=-1;
+  for(var i=0;i<12;i++)
+	SetCursor("","l_"+i,"pointer");
+NewGame();
+     
+  return;
+}
+ 
+  window.onload = function() {
+ var canvas = document.createElement('canvas');
+if (!canvas.getContext) {
+alert("Trinh duyet khong ho tro");
+return;
+} 
+ document.getElementById("Doc").textContent = ""; 
+ stage = new Kinetic.Stage({
+ container: "Doc", 
+ width: 800,
+ height: 450 
+ });
+
+ var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
+var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,800,450,'','rgba(210, 180, 140, 1.00)','','','','ID_IMAGE2.JPG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(210, 180, 140, 0)','2','2','0','','0','0','0','0',0,0,'');
+Page_1.add(Page_1_Backrounnd);
+var w = CreText('w',178,145,447,67,"Hello",'rgba(255, 255, 255, 0.39)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',11,'0.00','10','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(w);
+var v = CreText('v',178,263,447,77,"1000",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Normal','center','middle',3,'0.00','10','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+v.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+Speak(GetText("",""),"VN");
+  return;
+}
+ );
+Page_1.add(v);
+var l_0 = CreText('l_0',37,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_0.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_0);
+var l_1 = CreText('l_1',100,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_1.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_1);
+var l_2 = CreText('l_2',163,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_2.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_2);
+var l_3 = CreText('l_3',226,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_3.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_3);
+var l_4 = CreText('l_4',289,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_4.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_4);
+var l_5 = CreText('l_5',352,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_5.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_5.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_5);
+var l_6 = CreText('l_6',415,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_6.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_6.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_6);
+var l_7 = CreText('l_7',478,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_7.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_7.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_7);
+var l_8 = CreText('l_8',541,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_8.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_8.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_8);
+var l_9 = CreText('l_9',604,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_9.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_9.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_9);
+var l_10 = CreText('l_10',667,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_10.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_10.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_10);
+var l_11 = CreText('l_11',733,376,46,46,"A",'rgba(255, 255, 255, 0.59)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+l_11.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+ClickLeter();
+  return;
+}
+ );
+l_11.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+SpeakEN("","");
+  return;
+}
+ );
+Page_1.add(l_11);
+var help = CreText('help',649,134,67,67,"help",'rgba(255, 255, 255, 0.39)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',24,'Arial','Normal','center','middle',2,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+help.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+
+  HideHelp();
+  return;
+}
+ );
+help.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+  
+ ShowHelp();
+  return;
+}
+ );
+Page_1.add(help);
+var tao = CreText('tao',649,63,67,67,"new",'rgba(255, 255, 255, 0.39)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',24,'Arial','Normal','center','middle',2,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+tao.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+  NewGame();
+  return;
+}
+ );
+Page_1.add(tao);
+var Text_1 = CreText('Text_1',649,207,67,67,"↓",'rgba(255, 255, 255, 0.39)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(0, 0, 0, 1.00)','',26,'Arial','Bold','center','middle',2,'0.00','0','0',1,'rgba(255, 255, 255, 255)','rgba(255, 255, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Text_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+  CreateW(index);
+  return;
+}
+ );
+Text_1.on('mousedown touchstart',function(evt)
+{
+m_pgObjCaller = this;
+  
+ ShowHelp();
+  return;
+}
+ );
+Page_1.add(Text_1);
+var title = CreText('title',3,1,763,51,"When's your birthday?",'rgba(0, 128, 192, 0.59)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',28,'Arial','Bold','center','middle',12,'0.00','0','1',1,'rgba(255, 255, 255, 255)','rgba(0, 128, 192, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+title.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocTieuDe();
+  return;
+}
+ );
+Page_1.add(title);
+var unit = CreText('unit',1,1,134,51,"Unit 4",'rgba(0, 128, 255, 0.78)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','rgba(255, 255, 255, 1.00)','',26,'Arial','Normal','center','middle',12,'0.00','0','1',1,'rgba(255, 255, 255, 255)','rgba(0, 128, 255, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(unit);
+var hits = CreText('hits',178,214,447,47,"",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',26,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(192, 192, 192, 0.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)',0,1.50);
+Page_1.add(hits);
+stage.add(Page_1);
+InitLacVietScript();
+};
+</script>
+</head>
+<body style="text-align: center">
+<div id="Doc" style="vertical-align: middle; text-align: center; width: 100%; height: 100%; font-size: xx-large;">Loading...</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='';
+hashIDText['ID_TEXT2']='Bé hãy tìm hai hình liên quan liên tiếp';
+hashIDText['ID_TEXT3']='- Nhắp chuột vào các ô để lật xem hình bên trong. \r\n\r\n- Bé hãy tìm hai hình liên quan liên tiếp.\r\n\r\n- Vào trang tiếp theo bằng cách nhắp chuột vào nút tiếp theo. ';
+hashIDText['ID_TEXT4']='- Nhắp chuột vào các ô để lật xem hình bên trong, bé hãy tìm hai hình liên quan liên tiếp.\r\n\r\n- Vào trang tiếp theo bằng cách nhắp chuột vào nút tiếp theo. ';
+hashIDText['ID_TEXT5']='- Nhắp chuột vào các ô để lật xem hình bên trong, bé hãy tìm hai hình liên quan liên tiếp.\r\n\r\n- Vào trang tiếp theo bằng cách nhắp chuột vào nút mũi tên sang phải.\r\n\r\n- Nhắp chuột vào nút mũi tên sang trái để về trang trước. ';
+hashIDText['ID_TEXT6']='- Nhắp chuột vào các ô để lật xem hình bên trong, bé hãy tìm hai hình liên quan liên tiếp.\r\n\r\n- Vào trang tiếp theo bằng cách nhắp chuột vào nút mũi tên sang phải.\r\n\r\n- Nhắp chuột vào nút mũi tên sang trái để về trang chính của chủ đề. ';
+hashIDText['ID_TEXT7']='- Nhắp chuột vào các ô để lật xem hình bên trong, bé hãy tìm hai hình liên quan liên tiếp.\r\n\r\n- Vào trang tiếp theo bằng cách nhắp chuột vào nút mũi tên sang phải.\r\n\r\n- Nhắp chuột vào nút mũi tên sang trái để về trang trước. ';
+hashIDText['ID_TEXT8']='- Nhắp chuột vào các ô để lật xem hình bên trong và tìm hai hình liên quan liên tiếp nhau.\r\n\r\n- Vào trang tiếp theo bằng cách nhắp chuột vào nút mũi tên sang phải.\r\n\r\n- Nhắp chuột vào nút mũi tên sang trái để về trang trước. ';

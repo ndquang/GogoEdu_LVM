@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-uoc_tinh_so_do_goc",
+      "appliesTo": "uoc_tinh_so_do_goc.html",
+      "type": "launch"
+    }
+  ]
+}

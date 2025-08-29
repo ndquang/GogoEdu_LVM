@@ -1,0 +1,1 @@
+﻿var hashIDText = new Array();

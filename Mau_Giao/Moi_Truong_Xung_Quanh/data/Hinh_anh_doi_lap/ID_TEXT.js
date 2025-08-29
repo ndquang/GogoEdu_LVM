@@ -1,0 +1,12 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT']='Những hình ảnh cho thấy sự đối lập. Ghép từ phù hợp cho bức ảnh.';
+hashIDText['ID_TEXT1']='black';
+hashIDText['ID_TEXT2']='black';
+hashIDText['ID_TEXT3']='OK';
+hashIDText['ID_TEXT4']='Tiếng Việt';
+hashIDText['ID_TEXT5']='Đúng';
+hashIDText['ID_TEXT6']='1';
+hashIDText['ID_TEXT7']='';
+hashIDText['ID_TEXT8']='';
+hashIDText['ID_TEXT9']='Chọn ngôn ngữ';

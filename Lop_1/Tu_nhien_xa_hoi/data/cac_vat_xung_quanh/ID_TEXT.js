@@ -1,0 +1,12 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='Bài 3: Nhận biết các vật xung quanh.';
+hashIDText['ID_TEXT2']='Bài 3: Nối hình vẽ ở cột 1 với cột 2 sao cho phù hợp';
+hashIDText['ID_TEXT3']='Làm lại';
+hashIDText['ID_TEXT4']='Điểm';
+hashIDText['ID_TEXT5']='10 điểm';
+hashIDText['ID_TEXT6']='';
+hashIDText['ID_TEXT7']='Cột 1                                                    Cột 2';
+hashIDText['ID_TEXT8']='        Cột 1                                                    Cột 2';
+hashIDText['ID_TEXT9']='        Cột 1                                                               Cột 2';
+hashIDText['ID_TEXT10']='        Cột 1                                                                   Cột 2';

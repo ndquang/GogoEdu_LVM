@@ -1,0 +1,12 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT']='Hình phía dưới màu gì?';
+hashIDText['ID_TEXT1']='Hình phía dưới màu gì?';
+hashIDText['ID_TEXT2']='OK';
+hashIDText['ID_TEXT3']='VN';
+hashIDText['ID_TEXT4']='Đúng';
+hashIDText['ID_TEXT5']='black';
+hashIDText['ID_TEXT6']='white';
+hashIDText['ID_TEXT7']='1';
+hashIDText['ID_TEXT8']='1';
+hashIDText['ID_TEXT9']='1';

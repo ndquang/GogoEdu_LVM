@@ -1,0 +1,11 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='What is the measure of this angle? Choose the best estimate.';
+hashIDText['ID_TEXT2']='60°';
+hashIDText['ID_TEXT3']='135°';
+hashIDText['ID_TEXT4']='90°';
+hashIDText['ID_TEXT5']='30°';
+hashIDText['ID_TEXT6']='OK';
+hashIDText['ID_TEXT7']='Số đo của góc này là bao nhiêu? Chọn ước tính tốt nhất.';
+hashIDText['ID_TEXT8']='Số đo của góc này là bao nhiêu? Chọn ước tính tốt nhất.';
+hashIDText['ID_TEXT9']='good job';

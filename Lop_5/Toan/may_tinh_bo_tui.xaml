@@ -1,0 +1,319 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="may_tinh_bo_tui" Width="800" Height="450">
+<Grid x:Name="Page_1" Background="#FFFFFFFF">
+<Grid x:Name="msg" Margin="14,237,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Fill="rgba(0,0,0,0)" Width="422" Height="76" StrokeThickness="129871444" Stroke="#FF000000"/>
+<TextBlock Text="good job" FontFamily="Arial" FontSize="22" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="cau_hoi" Margin="9,45,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Fill="rgba(0,0,0,0)" Width="452" Height="30"/>
+<TextBlock Text="Sử dụng máy tính bỏ túi để tính:" FontFamily="Arial" FontSize="20" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="title" Margin="1,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Fill="#FF004080" Width="638" Height="41"/>
+<TextBlock Text="Máy tính bỏ túi(Calculator)" FontFamily="Arial" FontSize="20" FontWeight="Bold" FontStyle="Normal" Foreground="#FFFFFFFF" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="check" Margin="145,217,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Fill="#FF004080" Width="116" Height="39" StrokeThickness="129881236" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10"/>
+<TextBlock Text="Submit" FontFamily="Arial" FontSize="20" FontWeight="Bold" FontStyle="Normal" Foreground="#FFFFFFFF" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="score" Margin="371,255,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Fill="#FFFFAD5B" Width="39" Height="39" StrokeThickness="129872668" Stroke="#FF000000"/>
+<TextBlock Text="2" FontFamily="Arial" FontSize="24" FontWeight="Bold" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+</Grid>
+<Grid x:Name="in_0" Margin="275,79,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Fill="#FFDDEEFF" Width="119" Height="28" StrokeThickness="129864100" Stroke="#FF0080FF"/>
+<TextBlock Text="" FontFamily="Arial" FontSize="20" FontWeight="Normal" FontStyle="Normal" Foreground="#FF282828" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+</Grid>
+<Grid x:Name="so_0" Margin="32,79,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Fill="rgba(0,0,0,0)" Width="234" Height="28"/>
+<TextBlock Text="4" FontFamily="Arial" FontSize="20" FontWeight="Normal" FontStyle="Normal" Foreground="#FF0000FF" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="bg_key" Margin="444,51,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Fill="#FF0080C0" Width="184" Height="260" StrokeThickness="129856756" Stroke="#FF00FFFF" RadiusX="10" RadiusY="10"/>
+<TextBlock Text="0" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="_0" Margin="486,279,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129865324" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="0" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="clear_all" Margin="452,279,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129866548" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="CE" FontFamily="Arial" FontSize="14" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="_1" Margin="486,245,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129883684" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="1" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="_2" Margin="520,245,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129854308" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="2" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="_3" Margin="554,245,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129882460" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="3" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="_4" Margin="486,213,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129878788" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="4" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="_5" Margin="520,213,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129867772" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="5" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="_6" Margin="554,213,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129853084" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="6" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="_9" Margin="554,181,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129873892" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="9" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="_8" Margin="520,181,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129880012" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="8" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="_7" Margin="486,181,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129877564" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="7" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="dau_lon" Margin="590,279,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129860428" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="+" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="dau_bang" Margin="590,245,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129875116" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="-" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="dau_be" Margin="590,213,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129868996" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="x" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="Text_5" Margin="590,181,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129855532" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="÷" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="Text_2" Margin="554,279,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129857980" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="=" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="Text_3" Margin="452,245,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129859204" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text=" √" FontFamily="Arial" FontSize="16" FontWeight="Bold" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+</Grid>
+<Grid x:Name="Text_4" Margin="520,279,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="129870220" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="." FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="Text_1" Margin="452,213,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="130252124" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="%" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="Text_6" Margin="452,181,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="25" StrokeThickness="130257020" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="±" FontFamily="Arial" FontSize="16" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="Text_7" Margin="553,152,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="21" StrokeThickness="130242332" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="M-" FontFamily="Arial" FontSize="8" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="Text_8" Margin="519,152,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="21" StrokeThickness="130264364" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="M+" FontFamily="Arial" FontSize="8" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="Text_9" Margin="485,152,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="21" StrokeThickness="130247228" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="R-CM" FontFamily="Arial" FontSize="8" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="Text_10" Margin="589,152,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="21" StrokeThickness="130265588" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="OFF" FontFamily="Arial" FontSize="8" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="Text_11" Margin="451,152,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Width="29" Height="21" StrokeThickness="130253348" Stroke="#FF7F7F7F" RadiusX="10" RadiusY="10">
+<Rectangle.Fill>
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+<GradientStop Color="#FFFFFFFF"/>
+<GradientStop Color="#FFEEEEEE" Offset="1"/>
+</LinearGradientBrush>
+</Rectangle.Fill>
+</Rectangle>
+<TextBlock Text="ON/C" FontFamily="Arial" FontSize="8" FontWeight="Normal" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+</Grid>
+<Grid x:Name="screen" Margin="453,66,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Fill="#FFC0C0C0" Width="163" Height="74" StrokeThickness="130272932" Stroke="#FFFFFFFF" RadiusX="10" RadiusY="10"/>
+<TextBlock Text="0123456789" FontFamily="Arial" FontSize="24" FontWeight="Bold" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+</Grid>
+<Grid x:Name="pheptoan" Margin="457,66,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+<Rectangle Margin="0,0,0,0" Fill="rgba(0,0,0,0)" Width="153" Height="20"/>
+<TextBlock Text="CASIO" FontFamily="Arial" FontSize="8" FontWeight="Bold" FontStyle="Normal" Foreground="#FF000000" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+</Grid>
+</Grid>
+</UserControl>

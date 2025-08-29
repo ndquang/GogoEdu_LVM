@@ -1,0 +1,102 @@
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ta_mua_xuan</title>
+<script type="text/javascript" src="js/kinetic-v5.1.0.js">object</script>
+<script type="text/javascript" src="js/buzz.js">sound</script>
+<script type="text/javascript" src="js/paintlib-v5.1.0.js">paint</script>
+<script type="text/javascript" src="http://code.responsivevoice.org/responsivevoice.js">Text to speak</script>
+<script type="text/javascript" src="https://googledrive.com/host/0B7xXjXVUsGWdLVhGekNINl9OWXM/ta_mua_xuan/ID_TEXT.js">ResourceIDText</script>
+<script type="text/javascript" src="js/LacVietJScript-v5.1.0.js">JScrip</script>
+<script type="text/javascript">
+var doan_van="";
+var cau_van="";
+var Startdot= 0;
+var Enddot= 0;
+var myString="";
+function KhoiTao(){
+	myString= GetText("","Text_1");
+	Startdot= 0;
+ 	Enddot= 0;
+}
+function  OnStartSpeak(){
+	//Message("stare");
+}
+function  OnEndSpeak(){
+     if(Enddot==-1){
+     Message("end");
+     return;
+	}
+     Startdot=Enddot+1;
+function      Delay("DocViet()",10000);
+}
+
+var DocViet(){
+Enddot= indexOf(myString,".",Startdot);
+if(Enddot==-1)
+ cau_van=myString;
+ else
+ cau_van= subString(myString,Startdot, Enddot-Startdot);
+ Speak(cau_van,"VN","{pitch: 1,rate: 0.8, volume: 1,onstart: OnStartSpeak, onend: OnEndSpeak}");
+
+}
+
+
+
+folder_Resource ='ta_mua_xuan';
+
+function Page_1()
+{
+LineHeight("","Text_1",2);
+InvalidateObj("","");
+KhoiTao();
+  return;
+}
+ 
+  window.onload = function() {
+ var canvas = document.createElement('canvas');
+if (!canvas.getContext) {
+alert("Trinh duyet khong ho tro");
+return;
+} 
+ document.getElementById("Doc").textContent = ""; 
+ stage = new Kinetic.Stage({
+ container: "Doc", 
+ width: 800,
+ height: 450 
+ });
+
+ var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
+var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,800,450,'','rgba(255, 255, 255, 1.00)','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'rgba(255, 255, 255, 0)','0','0','0','','0','0','0','0',0,0,'');
+Page_1.add(Page_1_Backrounnd);
+var Text_1 = CreText('Text_1',90,100,612,187,"Mỗi năm có bốn mùa Xuân, Hạ, Thu, Đông. Nhưng e thích nhất là mùa xuân. Mùa xuân bắt đầu từ tháng giêng đến tháng ba.Thời tiết rất ấm áp. Mặt trời chiếu những tia nắng dịu dàng làm cho cây cối đâm chồi nảy lộc. Mùa xuân có bao nhiêu là hoa đẹp như hoa huệ, hoa hồng, hoa đào, hoa mai. Mùa xuân cũng có rất nhiều loại quả. Ngày tết mùa xuân quê em được bố mẹ ông bà lì xì. Em rất thích mùa xuân.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',18,'Arial','Normal','left','top',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)');
+Page_1.add(Text_1);
+var Text_2 = CreText('Text_2',107,28,501,55,"Viết một đoạn văn ngắn để tả về mùa xuân.\r\n",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 255, 1.00)','rgba(255, 255, 255, 1.00)','',22,'Arial','Bold','center','middle',0,'0.00','0','0',0,'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)');
+Page_1.add(Text_2);
+var Text_3 = CreText('Text_3',107,358,184,36,"Nghe viết chính tả",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','0','0',1,'rgba(0, 0, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)');
+Text_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DocViet();
+  return;
+}
+ );
+Page_1.add(Text_3);
+var Text_4 = CreText('Text_4',106,319,184,36,"Nghe đọc.",'rgba(0, 0, 0, 0)','rgba(255, 255, 255, 1.00)','rgba(0, 0, 0, 1.00)','rgba(255, 255, 255, 1.00)','',16,'Arial','Normal','left','middle',0,'0.00','0','0',1,'rgba(0, 0, 255, 255)','rgba(255, 255, 255, 1.00)','0','0','rgba(0, 0, 0, 0)','0','0','4','0',0,0,'rgba(0, 0, 0, 0)');
+Text_4.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+SpeakVN("","",GetText("","Text_1"));
+  return;
+}
+ );
+Page_1.add(Text_4);
+stage.add(Page_1);
+InitLacVietScript();
+};
+</script>
+</head>
+<body style="text-align: center">
+<div id="Doc" style="vertical-align: middle; text-align: center; width: 100%; height: 100%; font-size: xx-large;">Loading...</div>
+</body>
+</html>

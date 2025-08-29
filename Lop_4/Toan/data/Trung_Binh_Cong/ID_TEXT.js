@@ -1,0 +1,9 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT_DATA']='Trung bình cộng của các số: % là bao nhiêu?\r\nMột Ôtô: giờ thứ nhất chạy được %km, giờ thứ hai chạy được %km, giờ thứ ba chạy được %km, Hỏi trung bình mỗi giờ ôtô đó chạy được bao nhiêu ki-lô-mét?\r\nTrung bình cộng của % số là %. Tổng của % số đó là:\r\nTrung bình cộng của 2 số là % biết một trong hai số đó là % tìm số còn lại?\r\nTrung bình cộng của các số tự nhiên liên tiếp từ % đến % là bao nhiêu?';
+hashIDText['ID_TEXT1']='1/4  ngày bằng bao nhiêu giờ';
+hashIDText['ID_TEXT2']='OK';
+hashIDText['ID_TEXT3']='good job';
+hashIDText['ID_TEXT4']='44';
+hashIDText['ID_TEXT5']='Kết quả';
+hashIDText['ID_TEXT6']='»';
