@@ -1,7 +1,7 @@
 ﻿var hashIDText = new Array();
 hashIDText['TEXT']='';
-hashIDText['ID_TEXT1']='     UNIT            LOCAL COMMUNITY';
-hashIDText['ID_TEXT2']='1';
+hashIDText['ID_TEXT1']='Local Community';
+hashIDText['ID_TEXT2']='Unit 1';
 hashIDText['ID_TEXT3']='✍️  Từ vựng – Flashcards';
 hashIDText['ID_TEXT4']='ENGLISG';
 hashIDText['ID_TEXT5']='🎧';
@@ -11,3 +11,4 @@ hashIDText['ID_TEXT8']='Xem lại';
 hashIDText['ID_TEXT9']='Các từ đã học:';
 hashIDText['ID_TEXT10']='';
 hashIDText['ID_TEXT11']='';
+hashIDText['ID_TEXT12']='';

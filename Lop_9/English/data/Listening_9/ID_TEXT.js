@@ -1,0 +1,16 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='Local Community';
+hashIDText['ID_TEXT2']='Unit 1';
+hashIDText['ID_TEXT3']='Gap-fill (Nghe và điền từ còn thiếu)';
+hashIDText['ID_TEXT4']='';
+hashIDText['ID_TEXT5']='🎧';
+hashIDText['ID_TEXT6']='Check Answers';
+hashIDText['ID_TEXT7']='Chưa nhớ';
+hashIDText['ID_TEXT8']='Xem lại';
+hashIDText['ID_TEXT9']='Các từ đã học:';
+hashIDText['ID_TEXT10']='';
+hashIDText['ID_TEXT11']='Mi: By the way, we moved to a new house in a ______ last month.';
+hashIDText['ID_TEXT12']='';
+hashIDText['ID_TEXT13']='1.';
+hashIDText['ID_TEXT14']='🎧';
