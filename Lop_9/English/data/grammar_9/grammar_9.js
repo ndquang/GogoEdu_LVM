@@ -1,4 +1,4 @@
-﻿folder_Resource ='/data/grammar_9';
+﻿folder_Resource ='data/grammar_9';
 var currentObject = {};
 var index = 0;
 var studentAnswers = []; // mỗi phần tử { index, selected, correct }
@@ -188,10 +188,10 @@ return;
  height: 800 
  });
 
- var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
+var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
 var cau_hoi = CreText('cau_hoi',56,111,584,47,"Mi: By the way, we moved to a new house in a ______ last month.",'#ffffff','#ffffff','#000000','#ffffff','',16,'Arial','Normal','left','top',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var header = CreText('header',115,2,526,49,"Local Community",'#00b000','#ffffff','#ffffff','#ffffff','',28,'Arial','Bold','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#00b000','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var group = CreText('group',35,60,603,46,"Choose A,B,C or D to complete each sentence.",'rgba(0,0,0,0)','#ffffff','#009300','#ffffff','',18,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var group = CreText('group',1,60,637,46,"Choose A,B,C or D to complete each sentence.",'rgba(0,0,0,0)','#ffffff','#009300','#ffffff','',16,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var bt_Check = CreText('bt_Check',65,359,151,34,"Check Answers",'#009300','#ffffff','#ffffff','#ffffff','',16,'Arial','Bold','center','middle',3,'0.00','5','0',1,'#282828','#32cd32','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 bt_Check.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
@@ -259,7 +259,7 @@ isCheck = false;
 UpdateScreen();
 }
  );
-var msg = CreText('msg',50,414,563,375,"",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',12,'Arial Narrow','Normal','left','top',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.70);
+var msg = CreText('msg',50,414,563,375,"",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',12,'Arial Unicode MS','Normal','left','top',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.70);
 var Text_1 = CreText('Text_1',4,4,85,50,"Unit",'rgba(0,0,0,0)','#ffffff','#009700','#ffffff','',24,'Arial Black','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#000000','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var unit = CreText('unit',89,2,50,50,"1",'#009300','#ffffff','#ffffff','#ffffff','',26,'Arial Black','Bold','center','middle',2,'0.00','0','0',3,'#ffffff','#009300','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var id = CreText('id',9,111,44,51,"1.",'rgba(0,0,0,0)','#ffffff','#009300','#ffffff','',16,'Arial','Bold','right','top',0,'0.00','0','0',0,'rgba(0,0,0,0)','#009300','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);

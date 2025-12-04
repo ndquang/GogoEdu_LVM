@@ -57,3 +57,5 @@ hashIDText['ID_TEXT54']='CHẤM ĐIỂM';
 hashIDText['ID_TEXT55']='LÀM LẠI';
 hashIDText['ID_TEXT56']='10 điểm';
 hashIDText['ID_TEXT57']='ĐIỂM';
+hashIDText['ID_TEXT58']='iên';
+hashIDText['ID_TEXT59']='iêng';

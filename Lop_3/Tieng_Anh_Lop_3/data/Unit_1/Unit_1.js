@@ -1,4 +1,4 @@
-﻿folder_Resource ='data/Unit_1';
+﻿folder_Resource ='/data/Unit_1';
 var g_midiVol=32767;
 var Play=0 ;
 var b_showgroup=0;

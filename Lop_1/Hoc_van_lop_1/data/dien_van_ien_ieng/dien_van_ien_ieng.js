@@ -181,7 +181,7 @@ return;
  var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
 var Page1_Backrounnd = CreText('Page1_Backrounnd',0,0,640,480,'','#ffffff','','','','ID_IMAGE2.JPG',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'#000000','2','2','0','','0','0','0','0',0,0,'');
 var title = CreText('title',17,10,313,38,"1. Điền vần iên hay vần iêng:",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',20,'Arial','Normal','left','middle',0,'0.00','30','30',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var obj_0 = CreText('obj_0',89,108,186,39,"",'#f5f5f5','#ffffff','#0000ff','#ffffff','',20,'Arial','Normal','center','middle',0,'0.00','30','30',1,'#7f7f7f','#f5f5f5','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var obj_0 = CreText('obj_0',89,108,186,39,"",'#f5f5f5','#ffffff','#0000ff','#ffffff','',20,'Arial','Normal','center','middle',0,'0.00','0','0',1,'#7f7f7f','#f5f5f5','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 obj_0.on('mouseover touchmove dragmove',function(evt)
 {
 m_pgObjCaller = this;
@@ -338,7 +338,7 @@ HideTip();
   return;
 }
  );
-var cham_diem = CreText('cham_diem',254,397,141,35,"CHẤM ĐIỂM",'#80ff00','#ffffff','#000000','#000000','',16,'Arial','Bold','center','middle',3,'0.00','5','0',1,'#7f7f7f','#baff75','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var cham_diem = CreText('cham_diem',254,398,141,35,"CHẤM ĐIỂM",'#80ff00','#ffffff','#000000','#000000','',16,'Arial','Bold','center','middle',3,'0.00','5','0',1,'#7f7f7f','#baff75','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 cham_diem.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -373,7 +373,7 @@ else{
   return;
 }
  );
-var lam_lai = CreText('lam_lai',255,397,141,35,"LÀM LẠI",'#80ff00','#ffffff','#000000','#000000','',16,'Arial','Bold','center','middle',3,'0.00','5','0',1,'#7f7f7f','#baff75','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var lam_lai = CreText('lam_lai',254,398,141,35,"LÀM LẠI",'#80ff00','#ffffff','#000000','#000000','',16,'Arial','Bold','center','middle',3,'0.00','5','0',1,'#7f7f7f','#baff75','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 lam_lai.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -413,7 +413,23 @@ else{
   return;
 }
  );
-Page_1.add(Page1_Backrounnd,title,obj_0,obj_1,obj_2,obj_3,obj_4,obj_5,obj_6,obj_7,obj_8,obj_9,cham_diem,lam_lai,m_diem,toolTip);
+var obj_x = CreText('obj_x',230,53,65,34,"iên",'#ffffe0','#ffffff','#0000ff','#ffffff','',20,'Arial','Normal','center','middle',0,'0.00','0','0',1,'#7f7f7f','#ffffe0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+obj_x.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DropDown();
+  return;
+}
+ );
+var obj_s = CreText('obj_s',320,52,60,34,"iêng",'#ffffe0','#ffffff','#0000ff','#ffffff','',20,'Arial','Normal','center','middle',0,'0.00','0','0',1,'#7f7f7f','#ffffe0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+obj_s.on('mouseup touchend dragend',function(evt)/*---dragend---*/
+{
+m_pgObjCaller = this;
+DropDown();
+  return;
+}
+ );
+Page_1.add(Page1_Backrounnd,title,obj_0,obj_1,obj_2,obj_3,obj_4,obj_5,obj_6,obj_7,obj_8,obj_9,cham_diem,lam_lai,m_diem,toolTip,obj_x,obj_s);
 stage.add(Page_1);
 InitLacVietScript();
 };

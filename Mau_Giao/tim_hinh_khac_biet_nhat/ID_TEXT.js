@@ -1,0 +1,14 @@
+﻿var hashIDText = new Array();
+hashIDText['FLASH']='';
+hashIDText['ID_TEXT1']='';
+hashIDText['ID_TEXT2']='';
+hashIDText['ID_TEXT3']='Tiếp';
+hashIDText['ID_TEXT4']='';
+hashIDText['ID_TEXT5']='Tìm cái khác biệt nhất';
+hashIDText['ID_TEXT6']='Tìm hình khác biệt nhất';
+hashIDText['ID_TEXT7']='   Tiếp';
+hashIDText['ID_TEXT8']='   \r\n       Tiếp';
+hashIDText['ID_TEXT9']='         Tiếp';
+hashIDText['ID_TEXT10']='     Tiếp';
+hashIDText['ID_TEXT11']='1';
+hashIDText['ID_TEXT12']='BẠN ĐÃ HOÀN THÀNH BÀI HỌC';
