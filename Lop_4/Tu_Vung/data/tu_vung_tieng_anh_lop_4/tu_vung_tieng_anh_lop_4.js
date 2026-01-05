@@ -1,7 +1,4 @@
-﻿folder_Resource ='data/tu_vung_tieng_anh_lop_4';
-var size=19;
-var a_w=["today","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday","zoo","football","play","watch","listen","music","swimming","piano","grandparents","guitar","weekend"];
-var a_vn=["hôm nay","thứ hai","thứ ba","thứ tư","thứ năm","thứ sáu","thứ bảy","chủ nhật","sở thú","đá bamh", "xem","nghe","nhạc","bơi lội","đàn piano","ông bà","đàn ghi ta", "cuối tuần"];
+﻿folder_Resource ='/data/tu_vung_tieng_anh_lop_4';
 var index=0;
 var len=0;
 var dem=0;
@@ -62,7 +59,7 @@ function  NewGame()
 }
 function  EndCallback(){
  Speak( a_vn[index],"VN");
- Delay("NewGame()",5000);
+ Delay("NewGame()",3000);
 }
 function EndGame()
 {
@@ -110,16 +107,17 @@ function  ClickLeter(){
 	dem=dem+1;
 	MoveObjectTo("","", GetLeft("","w")+ GetWidth("","w")/2, GetTop("","w"),50,5,0,"Check()");
 }
-function Page_1()
+async function Page_1()
 {
-//var s_title = $("#idTitle").clone().children().remove().end().text();
+const el = document.getElementById("idTitle");
+const s_title = el.childNodes[0]?.textContent.trim() || "";
 SetText("","title", s_title);
  DocTieuDe();
 index=-1;
   for(var i=0;i<12;i++)
 	SetCursor("","l_"+i,"pointer");
 NewGame();
- diem = GetVer();
+ diem = await GetVer();
   return;
 }
  

@@ -6,7 +6,7 @@ var learned = [];
 function getRandomUnlearnedVocab() {
   var unlearned = VOCABS.filter(item => !learned.includes(item.en));
   if (unlearned.length === 0) {
-	  SetText("","msg","👍 tất cả đã học");
+	  SetText("","msg","👍 Good job!.");
       return null;
   }
   var randomIndex = Math.floor(Math.random() * unlearned.length);
@@ -88,7 +88,7 @@ function OpenRever()
 		SetShowObject("","strEnglish",0);
 		SetShowObject("","strVietNamese",0);
 		SetShowObject("","sound",0);
-		SetShowObject("","msg",0);
+		SetShowObject("","msg",1);
 	}
 	Reverse("gr_card");
 }	
