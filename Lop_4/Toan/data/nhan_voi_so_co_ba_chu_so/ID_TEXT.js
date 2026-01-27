@@ -66,3 +66,4 @@ hashIDText['ID_TEXT62']='123';
 hashIDText['ID_TEXT63']='+';
 hashIDText['ID_TEXT64']='';
 hashIDText['ID_TEXT65']='123';
+hashIDText['ID_TEXT66']='good job';

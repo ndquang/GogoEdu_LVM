@@ -1,24 +1,36 @@
-﻿folder_Resource ='data/tim_hai_so_khi_biet_tong_va_hieu_co_loi_van';
+﻿folder_Resource ='/data/tim_hai_so_khi_biet_tong_va_hieu_co_loi_van';
 var lstQuestion = ["",""];
 var cntQst = 0;
-var _score = 0;
+var idQst = 0;
+var _Diem = 0;
+var _cDung = 0;
+var _cSai = 0;
 var _textSpeak="";
 var _trueColor = "#00cc00";
 var _falseColor = "#ff0000";
 var _normalColor = "#0066ff";
+
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	
+	if (typeof _score != "undefined" && _note !== null && _note !== "" && _note !== 0)
+	{
+		_Diem = _score;
+		let arrNote= _note.split("|");
+		_cDung = arrNote[0];
+		_cSai = arrNote[1];
+	}
+	SetText("","cau_dung",_cDung);
+    SetText("","cau_sai",_cSai);
+    SetText("","diem",_Diem);
+	SetShowObject("","msg",0);
+	CreateQuestion();
+	InvalidateObj("","");
+}
+
 function  InitScore()
 {	
-	_score =GetVer();
-	for(var i= 1; i<=_score;i++){
-	SetColorEx("","score"+i,_trueColor);
-	SetText("","score"+i,i);
-	}
-	for(i= _score+1; i<=cntQst ;i++){
-	SetColorEx("","score"+i,"#dddddd");
-	SetText("","score"+i,i);
-	}
-	SetShowObject("","msg",0);
-	InvalidateObj("","");	
+	GetVer("callBackGetVer");
 }
 
 var soTong, soHieu;
@@ -29,7 +41,7 @@ var aAnswer2 = ["","","","",""];
 var _bTestAndCreat = false;
 function  ChamDiem()
 {
-	if(_score==cntQst){
+	if(idQst==cntQst){
 		SetText( "", "msg", "Bạn đã hoàn thành bài học này.");	
 		SetShowObject("","msg",1);
 		return;
@@ -58,36 +70,41 @@ function  ChamDiem()
 									
 	if(_check == true)
 		{	
-			SetFontColor("","msg",_trueColor);		
-			_score++;
-			SetText( "", "msg", "Bạn làm tốt lắm.\r\n" + _score + " Điểm");	
-			SetColorEx("","score"+_score,_trueColor);			
-			PlaySound("sound_good");
-			UpdateScore( _score);
+			 _cDung++;
+      	  SetFontColor("", "msg", _trueColor);
+    	    SetText("", "msg", "   Ðúng");
+        	PlaySound("sound_good");
 		}
 		else {//sai
-			SetFontColor("","msg",_falseColor);
-			PlaySound("sound_not");
-			SetText("","msg","Không chính xác");			
+			 SetFontColor("", "msg", _falseColor);
+        PlaySound("sound_bad");
+        SetText("", "msg", "❌ Sai");
+            _cSai++;		
 							
-		 }	
+		 }
+	 _Diem = _cDung - _cSai;
+    SetText("","cau_dung",_cDung);
+    SetText("","cau_sai",_cSai);
+    SetText("","diem",_Diem);
+    UpdateScore(_Diem,_cDung+"|"+_cSai);
 	_bTestAndCreat  = true;
 	SetText("","btSubmit","Câu tiếp »");	
 	SetShowObject("","btSubmit",1);	
 	SetShowObject("","msg",1);
+	idQst ++;
 	InvalidateObj("","");
 
 }
 
 function  CreateQuestion()
 {
-	if(_score==cntQst){
+	if(idQst ==cntQst){
 		SetText( "", "msg", "Bạn đã hoàn thành bài học này.");	
 		SetShowObject("","msg",1);
 		return;
 	}
-	var _allStrQuestion = lstQuestion[_score];
-        var res = "";//_allStrQuestion.split("|");
+	var _allStrQuestion = lstQuestion[idQst];
+        var res = _allStrQuestion.split("|");
         var _index = res[0];
        var _cauhoi = res[1];
        soTong=  StringtoNumber(res[4]);
@@ -143,11 +160,10 @@ function  CreateQuestion()
 }
 function Page_1()
 {
-// var s_content = $("#idContent").text().trim();
-//lstQuestion = s_content.match(/[^\r\n]+/g);
+var s_content = GetTextFromID("ID_QUETIONS") ;
+lstQuestion = s_content.match(/[^\r\n]+/g);
 cntQst = Length(lstQuestion );
 InitScore();
-CreateQuestion();
   return;
 }
  
@@ -166,7 +182,7 @@ return;
 
  var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
 var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,600,600,'','#ffffff','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'#ffffff','0','0','0','','0','0','0','0',0,0,'');
-var _cauhoi = CreText('_cauhoi',20,4,570,109,"Tổng của hai số là %. Hiệu của hai số là %. Tìm hai số đó?",'rgba(0,0,0,0)','#ffffff','#0080ff','#ffffff','',20,'Arial','Normal','left','middle',0,'0.00','0','0',1,'rgba(0,0,0,0)','#b3e7ff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var _cauhoi = CreText('_cauhoi',0,1,601,106,"Tổng của hai số là %. Hiệu của hai số là %. Tìm hai số đó?",'#0080c0','#ffffff','#ffffff','#ffffff','',20,'Arial','Normal','left','middle',0,'0.00','0','0',1,'rgba(0,0,0,0)','#0080c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 _cauhoi.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -174,16 +190,9 @@ Speak( GetText("",""),"VN");
   return;
 }
  );
-var score1 = CreText('score1',120,553,22,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score2 = CreText('score2',157,553,22,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score3 = CreText('score3',194,553,22,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score4 = CreText('score4',231,553,22,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score5 = CreText('score5',268,553,22,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score6 = CreText('score6',305,553,22,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score7 = CreText('score7',342,553,22,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score8 = CreText('score8',379,553,22,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score9 = CreText('score9',416,553,22,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score10 = CreText('score10',457,553,22,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var cau_dung = CreText('cau_dung',451,88,34,35,"",'#ffffff','#c0c0c0','#009300','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#32cd32','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var cau_sai = CreText('cau_sai',500,88,34,35,"",'#ffffff','#c0c0c0','#ff0000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#ff0000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var diem = CreText('diem',549,88,34,35,"",'#ffffff','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var btSubmit = CreText('btSubmit',199,479,168,50,"Kết quả",'#0080c0','#ffffff','#ffffff','#ffffff','',24,'Arial','Normal','center','middle',3,'0.00','5','0',1,'#7f7f7f','#0080c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 btSubmit.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
@@ -220,7 +229,7 @@ SetShowObject("","",0);
   return;
 }
  );
-Page_1.add(Page_1_Backrounnd,_cauhoi,score1,score2,score3,score4,score5,score6,score7,score8,score9,score10,btSubmit,Text_1,c_1,c_2,c_3,c_4,i_1,i_2,i_3,i_4,c_0,i_0,Text_3,dv_0,dv_1,dv_2,dv_3,dv_4,msg);
+Page_1.add(Page_1_Backrounnd,_cauhoi,cau_dung,cau_sai,diem,btSubmit,Text_1,c_1,c_2,c_3,c_4,i_1,i_2,i_3,i_4,c_0,i_0,Text_3,dv_0,dv_1,dv_2,dv_3,dv_4,msg);
 stage.add(Page_1);
 InitLacVietScript();
 };

@@ -2,6 +2,7 @@
 var keyOldValue="";
 var keyNewValue="";
 var objectShowKey="";
+var _diem =0;
 var name_keyboard="Group_1";
 function   GetKeyBoNumber(){
 	keyNewValue = "_"+ GetText("",objectShowKey) + GetText("","");
@@ -90,7 +91,7 @@ function  ChonMax()
 }
 function  CheckKQ()
 {
-	var _diem =0;
+	_diem = 0;
 	var b = true;
 	for(var i=0;i<5;i++)
 	{
@@ -116,7 +117,6 @@ function  CheckKQ()
 
 	if(b==true)
 		{
-			SetText("","t_mess","https://gamechocon.com");
 			SetColor("","m_diem","#99ff33");
 			Speak("Đúng","VN");
 		}
@@ -127,9 +127,16 @@ function  CheckKQ()
 		SetText("","m_diem", _diem + " Điểm");
 		SetShowObject("","msg",1);
 }
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	_diem = _score
+	CreateGame();
+	InvalidateObj("","");
+}
+
 function Page_1()
 {
-CreateGame();
+GetVer("callBackGetVer ");
 SetMoveView("","msg",1);
   return;
 }
@@ -392,7 +399,7 @@ GetKeyBoNumber();
 }
  );
 var m_diem = CreText('m_diem',219,225,308,146,"Sai.",'rgba(163,255,70,1.11)','#ffffff','#000000','#ffffff','',36,'Arial','Normal','center','middle',0,'0.00','0','0',1,'#7f7f7f','rgba(163,255,70,1.11)','0','0','#ffffff','0','0','4','1',0,0,'rgba(0,0,0,0)',0,1.50);
-var t_mess = CreText('t_mess',219,225,308,26,"https://gamechocon.com",'rgba(192,192,192,1.11)','#ffffff','#000000','#ffffff','',14,'Arial','Bold','left','middle',0,'0.00','0','0',1,'#666666','rgba(223,223,223,1.11)','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var t_mess = CreText('t_mess',219,225,308,26,"https://gogoedu.vn",'rgba(192,192,192,1.11)','#ffffff','#000000','#ffffff','',14,'Arial','Bold','left','middle',0,'0.00','0','0',1,'#666666','rgba(223,223,223,1.11)','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var bt_lam_lai = CreText('bt_lam_lai',331,331,96,30,"Tiếp",'#c0c0c0','#ffffff','#000000','#ffffff','',20,'Arial','Bold','center','middle',3,'0.00','5','0',1,'#000000','#e5e5e5','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 bt_lam_lai.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {

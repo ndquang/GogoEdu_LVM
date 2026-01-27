@@ -1,19 +1,29 @@
-﻿folder_Resource ='data/phep_cong_va_phep_tru';
+﻿folder_Resource ='/data/phep_cong_va_phep_tru';
 var name_keyboard="Group_1";
 var keyOldValue="";
 var keyNewValue="";
 var objectShowKey="";
 var dir = "ltr";//rtl
-/*
+
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	_score = _score;
+	SetText("","score1",_score);	
+	_cSubmit =0;
+	SetShowObject("","msg",0);	
+	CreateQuestion();
+	InvalidateObj("","");
+}
+
 function GetString(pageName, objName) {
      var curObject = FindShape(pageName, objName);
      if (curObject === null || typeof curObject === undefined) 	return null;
      return curObject.getText();
-    }*/
+    }
 function    GetKeyBoNumber(){
-/*	if(dir =="rtl")
+	if(dir =="rtl")
 	keyNewValue =  GetString("","") + GetString("",objectShowKey);
-	else keyNewValue =   GetString("",objectShowKey)+ GetString("","");*/
+	else keyNewValue =   GetString("",objectShowKey)+ GetString("","");
 	SetText("",objectShowKey,keyNewValue);
 	SetShowObject("","btSubmit",1);
 	InvalidateObj("",objectShowKey);
@@ -49,17 +59,12 @@ function  InitScore()
 	SetColorEx("","score"+i,"#dddddd");
 	SetText("","score"+i,"");
 	}
-	_score =GetVer();
-	SetText("","score1",_score);	
-	_cSubmit =0;
-	SetShowObject("","msg",0);	
-	InvalidateObj("","");
+	GetVer("callBackGetVer");
 }
-
 function  CreateQuestion()
 {	   
-	    _a = Random(999999-1000)+1000;
-                   _b = Random(999999-1000)+1000;
+	   _a = Random(999999-1000)+1000;
+       _b = Random(999999-1000)+1000;
 	   var _d = Random(2);
 	   if( _d == 0) {
 		  SetText("","_d", "+");
@@ -104,6 +109,11 @@ function  CreateQuestion()
 
 function  ChamDiem()
 {	
+	if(_bTestAndCreat)
+	{
+		 CreateQuestion();
+		return;
+	}
 	var _check = true;
 	if(GetText("","_d")==0){ //phép cộng
 	
@@ -184,10 +194,11 @@ function  ChamDiem()
 			SetText("","score"+_cSubmit ,"");
 			_cSubmit --;
 		 }	
-	UpdateScore( _score);
+	
 		if(_cSubmit== 0 || _score<0){
-		InitScore();
-	}
+		_score = 0;
+		_cSubmit = 0;
+	} else UpdateScore( _score);
 	_bTestAndCreat  = true;
 	SetText("","btSubmit","Câu tiếp...");	
 	SetShowObject("","btSubmit",1);	
@@ -200,7 +211,6 @@ function Page_1()
 SetShowObject("","Group_1",0);
 SetShowObject("","btSubmit",0);	
 InitScore();
-CreateQuestion();
   return;
 }
  
@@ -218,9 +228,10 @@ return;
  });
 
  var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
-var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,560,400,'','#ffffff','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'#ffffff','0','0','0','','0','0','0','0',0,0,'');
+var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,560,400,'','#f8f8f8','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'#f8f8f8','0','0','0','','0','0','0','0',0,0,'');
+var gach = CreText('gach',374,140,138,39,"",'rgba(0,0,0,0)','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','1',2,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var Text_1 = CreText('Text_1',2,2,558,50,"Tính rồi thử lại",'#0080c0','#ffffff','#ffffff','#ffffff','',28,'Arial','Bold','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#0080c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var _c = CreText('_c',47,178,138,42,"44",'#ffffff','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','1',1,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var _c = CreText('_c',47,186,138,42,"44",'#ffffff','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#c0c0c0','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 _c.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -250,8 +261,8 @@ ChamDiem();
 }
  );
 var _a = CreText('_a',47,93,138,39,"38726",'rgba(0,0,0,0)','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','0',0,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var _b = CreText('_b',47,136,138,39,"40954",'rgba(0,0,0,0)','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','1',1,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var _a1 = CreText('_a1',374,93,138,39,"999999",'#ffffff','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#7f7f7f','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var _b = CreText('_b',47,140,138,39,"40954",'rgba(0,0,0,0)','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','1',2,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var _a1 = CreText('_a1',374,93,138,39,"999999",'#ffffff','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#c0c0c0','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 _a1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -259,7 +270,7 @@ ShowKeyNum();
   return;
 }
  );
-var _b1 = CreText('_b1',374,136,138,39,"40954",'#ffffff','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#7f7f7f','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var _b1 = CreText('_b1',374,136,138,39,"40954",'#ffffff','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#c0c0c0','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 _b1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -267,7 +278,7 @@ ShowKeyNum();
   return;
 }
  );
-var _c1 = CreText('_c1',374,178,138,42,"44",'#ffffff','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','1',1,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var _c1 = CreText('_c1',374,186,138,42,"44",'#ffffff','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#c0c0c0','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 _c1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -275,9 +286,9 @@ ShowKeyNum("rtl");
   return;
 }
  );
-var Text_5 = CreText('Text_5',214,91,125,29,"Thử lại:",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',28,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var Text_5 = CreText('Text_5',205,120,136,29,"Thử lại →",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',20,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var _d = CreText('_d',14,113,35,39,"+",'rgba(0,0,0,0)','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var _d1 = CreText('_d1',344,113,35,39,"-",'rgba(0,0,0,0)','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var _d1 = CreText('_d1',341,113,35,39,"-",'rgba(0,0,0,0)','#ffffff','#0080ff','#ffffff','',36,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var msg = CreText('msg',29,297,496,88,"good job",'#ffffff','#ffffff','#000000','#ffffff','',28,'Arial','Bold Italic','center','middle',11,'0.00','10','0',1,'#7f7f7f','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 msg.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
@@ -408,7 +419,7 @@ GetKeyBoNumber();
  );
 var Group_1 = new Kinetic.Group({name:'Group_1',x:0,y:0,width:89,height:112});
 Group_1.add(clear_one,clear_all,ok,_0,huy,_9,_8,_7,_6,_5,_4,_3,_2,_1);
-Page_1.add(Page_1_Backrounnd,Text_1,_c,score1,score2,score3,score4,score5,score6,score7,score8,score9,score10,btSubmit,_a,_b,_a1,_b1,_c1,Text_5,_d,_d1,msg,clear_one,clear_all,ok,_0,huy,_9,_8,_7,_6,_5,_4,_3,_2,_1,Group_1);
+Page_1.add(Page_1_Backrounnd,gach,Text_1,_c,score1,score2,score3,score4,score5,score6,score7,score8,score9,score10,btSubmit,_a,_b,_a1,_b1,_c1,Text_5,_d,_d1,msg,Group_1);
 stage.add(Page_1);
 InitLacVietScript();
 };

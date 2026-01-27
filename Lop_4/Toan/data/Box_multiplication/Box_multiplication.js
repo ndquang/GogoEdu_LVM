@@ -1,62 +1,14 @@
 ﻿folder_Resource ='/data/Box_multiplication';
 var kq = "";
-var _score = 0;
-var _cSubmit = 0;
-function  InitScore()
-{
-	for(var i= 1; i<=10;i++){
-	SetColorEx("","score"+i,"#dddddd");
-	SetText("","score"+i,"");
-	}
-	_score =GetVer();
-	SetText("","score1",_score);
-	SetShowObject("","msg",0);
-	InvalidateObj("","");
-	SetDigitEditText("","kq1","number");
-	SetDigitEditText("","kq2","number");
-	SetDigitEditText("","kq3","number");
+var _trueColor = "#ffffff";
+var _falseColor = "#ff0000";
+var _normalColor = "#0066ff";
+var _bTestAndCreat = false;
+var _Diem = 0;
+var _cDung = 0;
+var _cSai = 0;
 
-	_cSubmit =0;
-}
-var autoCreateTimeout ="";
-function  ChamDiem()
-{
-	SetShowObject("","btSubmit",0);	
-	AllowEditText("","kq1",0);
-	AllowEditText("","kq2",0);
-	AllowEditText("","kq3",0);
-	var kq1 = GetText("","box0") +  GetText("","box1") ;
-	var kq2 = GetText("","box2") +  GetText("","box3") ;
-
-	if((GetText("","kq1") == kq1) && ( GetText("","kq2") == kq2) && (GetText("","kq3")==kq) ){
-		_cSubmit ++;
-		SetFontColor("","msg","#009933");		
-		_score++;
-		SetText( "", "msg", "Bạn làm tốt lắm.\r\n" + _score + " Điểm");	
-		SetColorEx("","score"+_cSubmit,"#009933");
-		SetText("","score"+_cSubmit,_score);
-		PlaySound("sound_good");
- 		autoCreateTimeout  = Delay("CreateQuestion()",3500);
-		}
-	else{
-		SetFontColor("","msg","#ff3300");
-		PlaySound("sound_not");
-		SetText("","msg","Xin lỗi, không chính xác: "+kq);
-		_score--;	
-		SetColorEx("","score"+_cSubmit ,"#dddddd");
-		SetText("","score"+_cSubmit ,"");
-		_cSubmit --;
-		 autoCreateTimeout  = Delay("CreateQuestion()",5000);
-	}
-	UpdateScore( _score);
-		if(_cSubmit== 0 || _score<0){
-		InitScore();
-	}
-	SetShowObject("","msg",1);
-	InvalidateObj("","");
-}
-var  _cauhoi ="";
-function CreateQuestion()
+function  CreateQuestion()
 {
 	var so1 = Random(90) +10;
 	var so2 = Random(90)+10;	
@@ -76,20 +28,98 @@ function CreateQuestion()
 	SetText("","kq2","");
 	SetText("","kq1","");
 	SetText("","kq3","");
-
-	SetShowObject("","btSubmit",1);	
-	AllowEditText("","kq1",1);
-	AllowEditText("","kq2",1);
-	AllowEditText("","kq3",1);
+	SetText("","btSubmit","OK");	
 	SetShowObject("","msg",0);	
-	clearTimeout(autoCreateTimeout);
     InvalidateObj("","");
+	_bTestAndCreat= false;
 }
+
+function  ChamDiem()
+{
+
+	if(_bTestAndCreat)
+	{
+		CreateQuestion();
+		return;
+	}
+
+	var kq1 = GetText("","box0") +  GetText("","box1") ;
+	var kq2 = GetText("","box2") +  GetText("","box3") ;
+	
+	var tl = GetText("","kq3");
+	if(tl=="")
+	{
+		SetText("", "msg", "Bạn chưa nhập câu trả lời.");
+		SetShowObject("","msg",1);
+		InvalidateObj("","");
+		return;
+	}
+
+	if((GetText("","kq1") == kq1) && ( GetText("","kq2") == kq2) && (tl==kq) ){
+		_cDung++;
+        SetFontColor("", "msg", _trueColor);
+        SetText("", "msg", "✔  Đúng");
+        PlaySound("sound_good");
+		}
+	else{
+		SetFontColor("","msg","#ff3300");
+	 SetFontColor("", "msg", _falseColor);
+      PlaySound("sound_bad");
+      SetText("", "msg", "❌ Sai → " + kq);
+      _cSai++;
+	}
+	 _Diem = _cDung - _cSai;
+    SetText("","cau_dung",_cDung);
+    SetText("","cau_sai",_cSai);
+    SetText("","diem",_Diem);
+    UpdateScore(_Diem,_cDung+"|"+_cSai);
+	_bTestAndCreat= true;
+	SetText("","btSubmit","Next");	
+	SetShowObject("","msg",1);
+	InvalidateObj("","");
+}
+
+
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	if (_note != "undefined" &&  typeof _score != "undefined" && _note !== null && _note !== "" && _note !== 0)
+	{
+		_Diem = _score
+		let arrNote= _note.split("|");
+		_cDung = arrNote[0];
+		_cSai = arrNote[1];
+	}
+	SetText("","cau_dung",_cDung);
+    	SetText("","cau_sai",_cSai);
+   	SetText("","diem",_Diem);
+	SetShowObject("","msg",0);
+	CreateQuestion();
+	InvalidateObj("","");
+}
+
+function Page_1_OnKeyDown()
+{
+
+var key = GetKeyDown("","");
+	if(key == "\r")
+	{
+		if (textarea) {
+			 SetText("","kq3",textarea.value);	 
+		}
+		ChamDiem();
+	}
+}
+
+
 function Page_1()
 {
-SetDigitEditText("","_kq","number");
-InitScore();
-CreateQuestion();
+SetDigitEditText("","kq1","number");
+SetDigitEditText("","kq2","number");
+SetDigitEditText("","kq3","number");
+AllowEditText("","kq1",1);
+AllowEditText("","kq2",1);
+AllowEditText("","kq3",1);
+GetVer("callBackGetVer");
   return;
 }
  
@@ -111,18 +141,8 @@ var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,600,420,'','#ffffff','',
 var ch1 = CreText('ch1',196,39,81,50,"58",'rgba(0,0,0,0)','#ffffff','#0080c0','#000000','',28,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#0080c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var Text_12 = CreText('Text_12',60,93,496,275,"Tính tổng theo hàng, rồi cộng các tổng này lại",'#ffffff','#ffffff','#00008b','#ffffff','',20,'Arial','Normal','center','top',0,'0.00','0','0',1,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',10,1.50);
 var Text_10 = CreText('Text_10',329,274,152,4,"",'rgba(0,0,0,0)','#ffffff','#000000','#000000','',24,'Arial','Normal','center','middle',0,'0.00','1','0',1,'#000000','#e6e6fa','0','0','rgba(0,0,0,0)','0','0','4','1',0,0,'rgba(0,0,0,0)',0,1.50);
-var kq1 = CreText('kq1',330,178,149,31,"44",'#ffffff','#ffffff','#000000','#000000','',24,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#666666','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score1 = CreText('score1',119,380,25,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score2 = CreText('score2',156,380,25,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score3 = CreText('score3',193,380,25,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score4 = CreText('score4',230,380,25,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score5 = CreText('score5',267,380,25,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score6 = CreText('score6',304,380,25,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score7 = CreText('score7',341,380,25,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score8 = CreText('score8',378,380,25,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score9 = CreText('score9',415,380,25,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score10 = CreText('score10',456,380,25,26,"",'#c0c0c0','#c0c0c0','#ffffff','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','#c0c0c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var btSubmit = CreText('btSubmit',259,328,131,36,"Đồng ý",'#80ff00','#ffffff','#000000','#ffffff','',24,'Arial','Italic','center','middle',3,'0.00','5','0',1,'#7f7f7f','#80ff00','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var kq1 = CreText('kq1',330,178,149,31,"",'#ffffff','#ffffff','#000000','#000000','',24,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#666666','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var btSubmit = CreText('btSubmit',259,328,131,36,"Đồng ý",'#ffffff','#ffffff','#000000','#ffffff','',20,'Arial','Normal','center','middle',3,'0.00','5','0',1,'#7f7f7f','#e4e4e4','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 btSubmit.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -137,21 +157,25 @@ var box0 = CreText('box0',208,170,54,53,"600",'rgba(0,0,0,0)','#ffffff','#000000
 var box1 = CreText('box1',261,170,54,53,"600",'rgba(0,0,0,0)','#ffffff','#000000','#000000','',24,'Arial','Normal','center','middle',0,'0.00','0','0',1,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var box2 = CreText('box2',208,223,54,53,"600",'rgba(0,0,0,0)','#ffffff','#000000','#000000','',24,'Arial','Normal','center','middle',0,'0.00','0','0',1,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var box3 = CreText('box3',261,223,54,53,"600",'rgba(0,0,0,0)','#ffffff','#000000','#000000','',24,'Arial','Normal','center','middle',0,'0.00','0','0',1,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var kq2 = CreText('kq2',386,232,93,31,"44",'#ffffff','#ffffff','#000000','#000000','',24,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#666666','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var kq3 = CreText('kq3',330,287,149,31,"44",'#ffffff','#ffffff','#000000','#000000','',24,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#666666','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var kq2 = CreText('kq2',386,232,93,31,"",'#ffffff','#ffffff','#000000','#000000','',24,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#666666','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var kq3 = CreText('kq3',330,287,149,31,"",'#ffffff','#ffffff','#000000','#000000','',24,'Arial','Normal','right','middle',0,'0.00','0','0',1,'#666666','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var Text_11 = CreText('Text_11',340,222,25,24,"+",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',24,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var msg = CreText('msg',101,178,420,88,"good job",'#ffffff','#ffffff','#000000','#ffffff','',28,'Arial','Bold Italic','center','middle',11,'0.00','10','0',1,'#7f7f7f','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 msg.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
-CreateQuestion();
+SetShowObject("","",0);
+InvalidateObj("","");
   return;
 }
  );
 var ch2 = CreText('ch2',289,39,81,50,"62",'rgba(0,0,0,0)','#ffffff','#ff6820','#000000','',28,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#0080c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var Text_3 = CreText('Text_3',242,39,81,50,"x",'rgba(0,0,0,0)','#ffffff','#000000','#000000','',28,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#0080c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var Text_4 = CreText('Text_4',351,39,81,50,"= ?",'rgba(0,0,0,0)','#ffffff','#000000','#000000','',28,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#0080c0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-Page_1.add(Page_1_Backrounnd,ch1,Text_12,Text_10,kq1,score1,score2,score3,score4,score5,score6,score7,score8,score9,score10,btSubmit,Text_1,so1,so2,box0,box1,box2,box3,kq2,kq3,Text_11,msg,ch2,Text_3,Text_4);
+var cau_dung = CreText('cau_dung',255,380,30,30,"",'#ffffff','#c0c0c0','#009300','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#009300','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var cau_sai = CreText('cau_sai',298,379,30,30,"",'#ffffff','#c0c0c0','#ff0000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#ff0000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var diem = CreText('diem',340,381,30,30,"",'#ffffff','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+Page_1.add(Page_1_Backrounnd,ch1,Text_12,Text_10,kq1,btSubmit,Text_1,so1,so2,box0,box1,box2,box3,kq2,kq3,Text_11,msg,ch2,Text_3,Text_4,cau_dung,cau_sai,diem);
 stage.add(Page_1);
 InitLacVietScript();
 };

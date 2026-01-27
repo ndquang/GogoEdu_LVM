@@ -1,5 +1,5 @@
-﻿folder_Resource ='data/bd_so_cay_khoi_lop_4';
-var objResult= {a:1,b:2,c:1};
+﻿folder_Resource ='/data/bd_so_cay_khoi_lop_4';
+var objResult= {a:1,b:1,c:2};
 var objAnswer= {a:"",b:"",c:""};
 function GetResult()
 {
@@ -7,7 +7,7 @@ function GetResult()
        for ( x in objResult) {  
                if(objResult[x]==objAnswer[x])
 	{
-          mr = mr +1;
+                      mr = mr +1;
 	}
 	SetFontColor("",x+"_"+objResult[x],"#00FF00");
     }     
@@ -64,9 +64,9 @@ return;
 
  var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
 var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,640,600,'','#ffffff','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'#ffffff','0','0','0','','0','0','0','0',0,0,'');
-var Text_3 = CreText('Text_3',28,376,631,176,"Dựa vào biểu đồ bạn hãy viết chữ hoặc số thích hợp vào chỗ trống\r\n    a) Lớp trồng được nhiều cây nhất là:\r\n	\r\n    b) Số cây lớp 5A trồng nhiều hơn lớp 4A là:\r\n\r\n    c) Số cây cả khối lớp Bốn và khối lớp Năm trồng được là:",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','top',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',10,2.00);
-var Image_1 = CreText('Image_1',64,41,410,335,'','rgba(0,0,0,0)','','','','ID_IMAGE6.PNG',0,'','','','',0,'0.00','0','0',0,'rgba(0,0,0,0)','','2','2','','0','0','4','0',0,0, '#808080');
-var a_0 = CreText('a_0',89,430,71,16,"○  A. 4A",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','rgba(128,255,0,0.67)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var Text_3 = CreText('Text_3',28,376,631,176,"Dựa vào biểu đồ bạn hãy chọn câu trả lời đúng\r\n    a) Số ngày mưa trong tháng 7 nhiều hơn tháng 9 là:\r\n	\r\n    b) Số ngày có mưa trong cả 3 tháng là:\r\n\r\n    c) Trung bình mỗi tháng có số ngày mưa là:",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','top',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',10,2.00);
+var Image_1 = CreText('Image_1',64,41,410,335,'','rgba(0,0,0,0)','','','','ID_IMAGE1.PNG',0,'','','','',0,'0.00','0','0',0,'rgba(0,0,0,0)','','2','2','','0','0','4','0',0,0, '#808080');
+var a_0 = CreText('a_0',89,442,101,16,"○  A. 5 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','rgba(128,255,0,0.67)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 a_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -87,7 +87,7 @@ SetShowObject("","msg",0);
  );
 var msg = new Kinetic.Group({name:'msg',x:0,y:0,width:297,height:148});
 msg.add(thong_bao,Text_4,Text_5);
-var b_0 = CreText('b_0',89,475,71,16,"○ A. 2 cây",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var b_0 = CreText('b_0',89,487,71,16,"○ A. 92 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 b_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -95,7 +95,7 @@ chooseAnswer();
   return;
 }
  );
-var a_1 = CreText('a_1',215,430,71,16,"○ B. 5A",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffff80','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var a_1 = CreText('a_1',215,442,96,16,"○ B. 15 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffff80','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 a_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -103,7 +103,7 @@ chooseAnswer();
   return;
 }
  );
-var a_2 = CreText('a_2',341,430,71,16,"○ C. 5B",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var a_2 = CreText('a_2',341,442,86,16,"○ C. 1 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 a_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -111,7 +111,7 @@ chooseAnswer();
   return;
 }
  );
-var b_1 = CreText('b_1',215,475,94,16,"○ B. 5 cây",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var b_1 = CreText('b_1',215,487,94,16,"○ B. 36 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 b_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -119,7 +119,7 @@ chooseAnswer();
   return;
 }
  );
-var a_3 = CreText('a_3',467,430,71,16,"○ D. 4B",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var a_3 = CreText('a_3',467,442,97,16,"○ D. 8 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 a_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -127,7 +127,7 @@ chooseAnswer();
   return;
 }
  );
-var b_3 = CreText('b_3',467,475,94,16,"○ D .17 cây",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var b_3 = CreText('b_3',467,487,94,16,"○ D .17 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 b_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -135,8 +135,8 @@ chooseAnswer();
   return;
 }
  );
-var Text_1 = CreText('Text_1',3,4,623,44,"BIỂU ĐỒ SỐ CÂY KHỐI LỚP BỐN VÀ KHỐI LỚP NĂM ĐÃ TRỒNG ĐƯỢC",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',16,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var b_2 = CreText('b_2',341,475,94,16,"○ C .10 cây",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var Text_1 = CreText('Text_1',3,4,623,44,"SỐ NGÀY MƯA TRONG 3 THÁNG NĂM 2004",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',16,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var b_2 = CreText('b_2',341,487,94,16,"○ C .12 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 b_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -144,7 +144,7 @@ chooseAnswer();
   return;
 }
  );
-var c_0 = CreText('c_0',89,520,94,16,"○ A. 63 cây",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var c_0 = CreText('c_0',89,532,94,16,"○ A. 4 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 c_0.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -152,7 +152,7 @@ chooseAnswer();
   return;
 }
  );
-var c_1 = CreText('c_1',215,520,94,16,"○ B. 171 cây",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var c_1 = CreText('c_1',215,532,94,16,"○ B. 15 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 c_1.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -160,7 +160,7 @@ chooseAnswer();
   return;
 }
  );
-var c_3 = CreText('c_3',467,520,94,16,"○ D .45 cây",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var c_3 = CreText('c_3',467,532,94,16,"○ D .9 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 c_3.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -168,7 +168,7 @@ chooseAnswer();
   return;
 }
  );
-var c_2 = CreText('c_2',341,520,94,16,"○ C .108 cây",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
+var c_2 = CreText('c_2',341,532,94,16,"○ C .12 ngày",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',3,'0.00','5','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.80);
 c_2.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
@@ -187,7 +187,7 @@ UpdateScore(_point);
   return;
 }
  );
-Page_1.add(Page_1_Backrounnd,Text_3,Image_1,a_0,msg,b_0,a_1,a_2,b_1,a_3,b_3,Text_1,b_2,c_0,c_1,c_3,c_2,Text_2);
+Page_1.add(Page_1_Backrounnd,Text_3,Image_1,a_0,thong_bao,Text_4,Text_5,msg,b_0,a_1,a_2,b_1,a_3,b_3,Text_1,b_2,c_0,c_1,c_3,c_2,Text_2);
 stage.add(Page_1);
 InitLacVietScript();
 };

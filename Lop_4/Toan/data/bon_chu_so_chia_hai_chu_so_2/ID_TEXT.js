@@ -74,3 +74,4 @@ hashIDText['ID_TEXT70']='Điền số đúng vào dấu '?'';
 hashIDText['ID_TEXT71']='23';
 hashIDText['ID_TEXT72']='23';
 hashIDText['ID_TEXT73']='23';
+hashIDText['ID_TEXT74']='Kiểm tra';

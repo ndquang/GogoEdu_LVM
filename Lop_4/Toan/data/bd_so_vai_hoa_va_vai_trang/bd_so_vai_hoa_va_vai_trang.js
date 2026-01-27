@@ -8,10 +8,10 @@ function GetResult() {
     }
     return JSON.stringify(strAllObjectJson);
 }
-
-function Page_1() {
-    SetMoveView("", "msg", 1);
-    var myJSON = LoadLesson();
+window.callBackLoadLesson = function callBackLoadLesson(lsData)
+{
+	 SetMoveView("", "msg", 1);
+    var myJSON = lsData;
     var allowEdit = true;
     var shMsg = true;
     if (myJSON != "") {
@@ -41,6 +41,9 @@ function Page_1() {
     SetShowObject("", "msg", shMsg);
     InvalidateObj("", "");
     return;
+}
+function Page_1() {
+   LoadLesson("callBackLoadLesson");
 }
 
 window.onload = function () {

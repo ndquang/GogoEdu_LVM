@@ -1,4 +1,4 @@
-﻿folder_Resource ='data/Tim_X';
+﻿folder_Resource ='/data/Tim_X';
 var keyOldValue="";
 var keyNewValue="";
 var objectShowKey="";
@@ -79,7 +79,6 @@ function  CreateGame()
 	SetText("","kq"+i,"");
 	SetFontColor("","kq"+i,"#0000ff");
 	}
-	GetVer();
 	InvalidateObj("","");
 }
 
@@ -104,7 +103,6 @@ function  CheckKQ()
 	}
 		if(b==true)
 		{
-			SetText("","t_mess","https://gamechocon.com");
 			_diem =10;
 			SetText("","m_diem","Bạn làm tốt lắm. "+_diem + " điểm");
 			SetColor("","m_diem","#99ff33");
@@ -118,9 +116,15 @@ function  CheckKQ()
 		SetShowObject("","msg",1);
 		InvalidateObj("","");
 }
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	_diem = _score
+	CreateGame();
+	InvalidateObj("","");
+}
 function Page_1()
 {
-CreateGame();
+GetVer("callBackGetVer");
 SetMoveView("","msg",1);
   return;
 }
@@ -407,10 +411,10 @@ CreateGame();
   return;
 }
  );
-var t_mess = CreText('t_mess',197,160,308,26,"https://gamechocon.com",'rgba(192,192,192,1.11)','#ffffff','#000000','#ffffff','',14,'Arial','Bold','left','middle',0,'0.00','0','0',1,'#666666','rgba(223,223,223,1.11)','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var t_mess = CreText('t_mess',197,160,308,26,"https://gogoedu.vn",'rgba(192,192,192,1.11)','#ffffff','#000000','#ffffff','',14,'Arial','Bold','left','middle',0,'0.00','0','0',1,'#666666','rgba(223,223,223,1.11)','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var msg = new Kinetic.Group({name:'msg',x:0,y:0,width:314,height:150});
 msg.add(m_diem,bt_lam_lai,t_mess);
-Page_1.add(Page_1_Backrounnd,kq4,kq6,u_1,Text_1,a,kq0,d,check,kq1,kq2,kq3,Text_16,c,bg_key,_0,clear_one,clear_all,_1,_2,_3,_4,_5,_6,_9,_8,_7,dau_lon,dau_bang,dau_be,ok,huy,Text_5,b,kq5,kq7,Text_2,Text_3,Text_4,Group_1,m_diem,bt_lam_lai,t_mess,msg);
+Page_1.add(Page_1_Backrounnd,kq4,kq6,u_1,Text_1,a,kq0,d,check,kq1,kq2,kq3,Text_16,c,b,kq5,kq7,Group_1,msg);
 stage.add(Page_1);
 InitLacVietScript();
 };

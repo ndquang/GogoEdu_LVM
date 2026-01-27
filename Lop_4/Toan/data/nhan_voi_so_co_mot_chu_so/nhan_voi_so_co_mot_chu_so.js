@@ -1,4 +1,4 @@
-﻿folder_Resource ='data/nhan_voi_so_co_mot_chu_so';
+﻿folder_Resource ='/data/nhan_voi_so_co_mot_chu_so';
 var keyOldValue="";
 var keyNewValue="";
 var objectShowKey="";
@@ -11,11 +11,22 @@ function GetString(pageName, objName) {
      if (curObject === null || typeof curObject === undefined) 	return null;
      return curObject.getText();
     }
-function    GetKeyBoNumber(){
-	keyNewValue =  GetString("","") + GetString("",objectShowKey);	
+function GetKeyBoNumber(){
+	keyNewValue =  GetString("","") + GetString("",objectShowKey);
 	SetText("",objectShowKey,keyNewValue);
 	SetShowObject("","check",1);
 	InvalidateObj("",objectShowKey);
+}
+
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	if (typeof _score != "undefined")
+	{
+		 _diem = _score;
+	}
+	SetShowObject("","msg",0);
+	CreateGame();
+	InvalidateObj("","");
 }
 
 function   ShowKeyNum( namekey)
@@ -34,14 +45,12 @@ objectShowKey= GetName("");
 }
 function  CreateGame()
 {
-	
 	SetShowObject("","check",0);
 	var so0 = Random(90000)+100000;
 	var so1 = Random(9)+1;
 	SetText("","so0",so0);
 	SetText("","so1",so1);
 	SetText("","so2","");
-	_diem = GetVer();
 	SetShowObject("","Group_1",0);
 	SetShowObject("","msg",0);
 	SetFontColor("","so2","#0000FF");
@@ -70,8 +79,7 @@ function  CheckKQ()
 }
 function Page_1()
 {
-CreateGame();
-SetMoveView("","msg",1);
+GetVer("callBackGetVer");
   return;
 }
  
@@ -248,7 +256,7 @@ CreateGame();
   return;
 }
  );
-var Text_2 = CreText('Text_2',127,73,254,24,"https://gamechocon.com",'#c0c0c0','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',0,'0.00','0','0',1,'#000000','#e5e5e5','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var Text_2 = CreText('Text_2',127,73,254,24,"https://gogoedu.vn",'#c0c0c0','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',0,'0.00','0','0',1,'#000000','#e5e5e5','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var msg = new Kinetic.Group({name:'msg',x:0,y:0,width:258,height:146});
 msg.add(m_diem,Text_2,bt_lam_lai);
 var Group_1 = new Kinetic.Group({name:'Group_1',x:0,y:0,width:89,height:112});

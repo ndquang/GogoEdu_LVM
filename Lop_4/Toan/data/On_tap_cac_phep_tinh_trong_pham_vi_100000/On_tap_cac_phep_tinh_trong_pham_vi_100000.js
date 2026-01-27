@@ -8,6 +8,12 @@ var a_phep=["+","-","x",":"];
 var m_limit= 100000;
 var phep="";
 var _diem =0;
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	_diem = _score
+	CreateGame();
+	InvalidateObj("","");
+}
 function GetString(pageName, objName) {
      var curObject = FindShape(pageName, objName);
      if (curObject === null || typeof curObject === undefined) 	return null;
@@ -114,7 +120,6 @@ function  CreateGame()
 	SetText("","dau",phep);
 	SetShowObject("","g_cong",1);
 	}
-	_diem = GetVer();
 	SetShowObject("","Group_1",0);
 	SetShowObject("","msg",0);
 	SetFontColor("","so2","#0000FF");
@@ -146,7 +151,7 @@ function  CheckKQ()
 }
 function Page_1()
 {
-CreateGame();
+GetVer("callBackGetVer");
 SetMoveView("","msg",1);
   return;
 }
@@ -161,10 +166,11 @@ return;
  stage = new Kinetic.Stage({
  container: "Doc", 
  width: 550,
- height: 300 
+ height: 450 
  });
 
  var Page_1 = new Kinetic.Layer({name: 'Page_1',callback:'Page_1()'});
+var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,550,450,'','#ffffff','','','','',12,'Times New Roman','','left','center',0,'0.00','0',0,'0',0,'#afeeee','4','0','0','','0','0','0','0',0,0,'');
 var bg_cong = CreText('bg_cong',257,123,98,29,"",'rgba(255,255,255,0.67)','#ffffff','rgba(0,0,0,0)','#ffffff','',36,'Arial','Normal','right','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','rgba(255,255,255,0.67)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 bg_cong.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
@@ -393,12 +399,12 @@ CreateGame();
   return;
 }
  );
-var Text_2 = CreText('Text_2',158,104,254,24,"https://gamechocon.com",'#c0c0c0','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',0,'0.00','0','0',1,'#000000','#e5e5e5','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var Text_2 = CreText('Text_2',158,104,254,24,"https://gogoedu.vn",'#c0c0c0','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',0,'0.00','0','0',1,'#000000','#e5e5e5','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var g_cong = new Kinetic.Group({name:'g_cong',x:0,y:0,width:131,height:101});
 g_cong.add(bg_cong,so0,so1,dau,so2);
 var msg = new Kinetic.Group({name:'msg',x:0,y:0,width:258,height:145});
 msg.add(m_diem,Text_2,bt_lam_lai);
-Page_1.add(title,Text_1,Group_1,check,g_chia,g_cong,msg);
+Page_1.add(Page_1_Backrounnd,title,Text_1,Group_1,check,g_chia,g_cong,msg);
 stage.add(Page_1);
 InitLacVietScript();
 };

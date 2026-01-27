@@ -1,17 +1,17 @@
-﻿folder_Resource ='data/nhan_voi_so_co_so_tan_cung_la_so_khong';
+﻿folder_Resource ='/data/nhan_voi_so_co_so_tan_cung_la_so_khong';
 var keyOldValue="";
 var keyNewValue="";
 var objectShowKey="";
 var name_keyboard="Group_1";
-var m_limit= 100000;
+var m_limit=100000;
 var _diem =0;
 
-var GetString(pageName, objName) {
+function GetString(pageName, objName) {
      var curObject = FindShape(pageName, objName);
      if (curObject === null || typeof curObject === undefined) 	return null;
      return curObject.getText();
     }
-var   GetKeyBoNumber(){
+function GetKeyBoNumber(){
 	keyNewValue =  GetString("","") + GetString("",objectShowKey);
 	SetText("",objectShowKey,keyNewValue);
 	SetShowObject("","check",1);
@@ -49,16 +49,36 @@ function  CreateGame()
 	SetText("","so0",so0);
 	SetText("","so1",so1);
 	SetText("","so2","");
-	_diem = GetVer();
+	
 	SetShowObject("","Group_1",0);
 	SetShowObject("","msg",0);
 	SetFontColor("","so2","#0000FF");
 	InvalidateObj("","");
 }
+
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	
+	if ( typeof _score != "undefined")
+	{
+		_diem = _score
+	}
+	CreateGame();
+}
+
 function  CheckKQ()
 {	
+	SetShowObject("","Group_1",0);
+	var tl = GetText("","so2");
+	if(tl=="")
+	{
+		SetText("", "msg", "Bạn chưa nhập câu trả lời.");
+		SetShowObject("","msg",1);
+		InvalidateObj("","");
+		return;
+	}
 	var kq = GetText("","so0")*GetText("","so1");
-	if(GetText("","so2")==kq)
+	if(tl==kq)
 			{	
 			_diem++;
 			SetText("","m_diem",_diem+" điểm, Đúng");
@@ -78,8 +98,8 @@ function  CheckKQ()
 }
 function Page_1()
 {
-CreateGame();
 SetMoveView("","msg",1);
+GetVer("callBackGetVer");
   return;
 }
  

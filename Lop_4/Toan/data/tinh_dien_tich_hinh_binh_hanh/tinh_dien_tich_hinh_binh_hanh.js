@@ -1,24 +1,13 @@
-﻿folder_Resource ='data/tinh_dien_tich_hinh_binh_hanh';
+﻿folder_Resource ='/data/tinh_dien_tich_hinh_binh_hanh';
 var cntQst = 5;
 var _score = 0;
 var _cSubmit = 0;
 var _textSpeak="";
 var _index = 1;
-var lang = "VN";
+var lang="VN";
  var arrayRes = ["","","",""];
 var _bTestAndCreat = false;
 var arrayKq = [""];
-function  InitScore()
-{	
-	_score =GetVer();	
-	SetShowObject("","msg",0);
-	InvalidateObj("","");
-	SetDigitEditText("","in_0","number");
-	_index = 1;
-	_bTestAndCreat = false;
-	SetText("","score",_score);
-
-}
 
 function  CreateQuestion()
 {
@@ -105,20 +94,31 @@ function  CreateQuestion()
 
        }
                
-       AllowEditText("","in_0",1);
+      
        SetShowObject("","in_0",1);
        SetText("","in_0","");
-       SetFontColor("","in_0","#000000");
-         		_score =GetVer();					
+       SetFontColor("","in_0","#000000");			
 		SetText("","check","Submit");			
 		_bTestAndCreat = false;
-		SetShowObject("","msg",0);	
+		SetShowObject("","msg",0);
+	 AllowEditText("","in_0",1);	
              	InvalidateObj("","");		
 	   
 }
 
 function  ChamDiem()
 {	
+	if(_bTestAndCreat)
+{
+CreateQuestion();
+return;
+}
+if(GetText("","in_0")=="")
+{
+	SetText("", "msg", "🔔  Bạn chưa nhập kết quả.");
+	SetShowObject("","msg",1);
+	return;
+}
 	var kq = true;
 	var lenkq=  Length(arrayKq);
 	for(var i=0;i<lenkq;i++)
@@ -152,10 +152,36 @@ function  ChamDiem()
 	SetShowObject("","msg",1);
 	InvalidateObj("","");
 }
+
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	if ( typeof _score != "undefined")
+	{
+		_score = _score;
+	}
+	SetDigitEditText("","in_0","number");
+	_index = 1;
+	SetShowObject("","msg",0);
+	CreateQuestion();
+}
+
+function Page_1_OnKeyDown()
+{
+
+var key = GetKeyDown("","");
+	if(key == "\r")
+	{
+		if (textarea) {
+			 SetText("","in_0",textarea.value);	 
+		}
+		ChamDiem();
+	}
+  return;
+
+}
 function Page_1()
 {
-InitScore();
-CreateQuestion();
+GetVer("callBackGetVer");
   return;
 }
 
@@ -183,15 +209,12 @@ var check = CreText('check',245,341,128,50,"Submit",'#0080ff','#ffffff','#ffffff
 check.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
-if(_bTestAndCreat)
-CreateQuestion();
-else
 ChamDiem();
   return;
 }
  );
 var index = CreText('index',17,81,89,29,"Bài 1",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',16,'Arial','Bold','left','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score = CreText('score',544,14,47,47,"2",'rgba(0,0,0,0)','#ffffff','#0080ff','#ffffff','',48,'Arial','Bold','center','middle',2,'0.00','0','0',0,'#ffffff','#ffffff','0','0','#ffffff','0','0','4','2',0,0,'rgba(0,0,0,0)',0,1.50);
+var score = CreText('score',537,42,47,47,"2",'#0080ff','#ffffff','rgba(0,0,0,0)','#ffffff','',26,'Arial','Bold','center','middle',2,'0.00','0','0',2,'#ffffff','#0080ff','0','0','#ffffff','0','0','4','2',0,0,'rgba(0,0,0,0)',0,1.50);
 var Text_3 = CreText('Text_3',79,211,198,87,"",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',16,'Arial','Normal','center','middle',6,'0.00','17','0',2,'#0080c0','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var _h = CreText('_h',92,232,87,45,"3cm",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',16,'Arial','Normal','center','top',0,'-90.00','1','0',1,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var _d = CreText('_d',123,304,76,22,"3cm",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',16,'Arial','Normal','center','middle',0,'0.00','10','0',1,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
@@ -207,8 +230,8 @@ var msg = CreText('msg',59,169,513,88,"good job",'rgba(0,128,192,1.02)','#ffffff
 msg.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
-CreateQuestion();
-  return;
+SetShowObject("","msg",0);
+InvalidateObj("","");
 }
  );
 var Text_9 = CreText('Text_9',5,403,590,39,"Ghi chú: Hình vẽ chỉ mang tính minh họa, không đúng với tỉ lệ thực tế.",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',16,'Arial','Italic','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);

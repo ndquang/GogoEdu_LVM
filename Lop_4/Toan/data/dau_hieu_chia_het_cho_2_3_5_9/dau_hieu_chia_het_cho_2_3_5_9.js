@@ -1,10 +1,11 @@
-﻿folder_Resource ='data/dau_hieu_chia_het_cho_2_3_5_9';
+﻿folder_Resource ='/data/dau_hieu_chia_het_cho_2_3_5_9';
 var _trueColor = "#00cc00";
 var _falseColor = "#ff0000";
 var _normalColor = "#0066ff";
 var _bTestAndCreat = false;
-var _score = 0;
-var _cSubmit = 0;
+var _Diem = 0;
+var _cDung = 0;
+var _cSai = 0;
 var adiv =[2,3,5,6,9] ;
 var adivText =["Các số có tận cùng là 0,2,4,6,8 thì chia hết cho 2","Các số có tổng các chữ số chia hết cho 3 thì chia hết cho 3","Các số có tận cùng là không hoặc 5 thì chia hết cho 5","Các số chia hết cho 2 và cho 3 thì số đó chia hết cho 6","Các số có tổng các chữ số chia hết cho 9 thì chia hết cho 9"] ;
 var k  =0;
@@ -64,33 +65,26 @@ SetText("","btSubmit","OK");
 }
 /*----------------------------------*/
 
-function  InitScore()
-{
-	for(var i= 1; i<=10;i++){
-	SetColorEx("","score"+i,"#dddddd");
-	SetText("","score"+i,"");
-	}
-	_score =GetVer();
-	SetText("","score1",_score);	
-	_cSubmit =0;
-	SetShowObject("","msg",0);	
-	InvalidateObj("","");
-}
+
 function   ChamDiem()
 {
+	if(_bTestAndCreat)
+	{
+		CreateQuestion();
+		return;
+	}
+
 	if(Number(tl)%adiv[k]==0)
 	{
-			_cSubmit ++;
-			SetFontColor("","title",_trueColor);		
-			_score++;
+			_cDung++;
+			 _Diem = _cDung - _cSai;
 			SetText( "", "title", "☺ Đúng ☺.");	
-			SetText("","so_dung", _score + " Điểm");
-			SetColorEx("","score"+_cSubmit,_trueColor);
-			SetText("","score"+_cSubmit,_score);
+			SetText("","so_dung", _Diem+ " Điểm");
 			PlaySound("sound_good");
 	}
 	else
 	{
+		_cSai++;
 		SetFontColor("","title",_falseColor);
 		PlaySound("sound_bad");
 		SetText("","title","☻Sai ☻");
@@ -111,20 +105,14 @@ function   ChamDiem()
 		     txt = "chia hết cho 2 và cho 3";
 		if (adiv[k] == 5)
 		     txt = "tận cùng là số " + subString(numbertrue,3,1);		
-
-		SetText("","so_dung","Số đúng là: " + numbertrue +" : "+txt);
-		_score--;	
-		SetColorEx("","score"+_cSubmit ,"#dddddd");
-		SetText("","score"+_cSubmit ,"");
-		_cSubmit --;
-
+		SetText("","so_dung","Số đúng là: " + numbertrue +" : "+txt);	
+		 _Diem = _cDung - _cSai;	
 	}
 	SetText("","help",adivText[k]);	
-
-           UpdateScore( _score);
-		if(_cSubmit== 0 || _score<0 || _cSubmit>10){
-		InitScore();
-	}	
+    	SetText("","cau_dung",_cDung);
+    	SetText("","cau_sai",_cSai);
+    	SetText("","diem",_Diem);
+    	UpdateScore(_Diem,_cDung+"|"+_cSai);	
 	_bTestAndCreat= true;
 	SetText("","btSubmit","Next");	
 	SetShowObject("","msg",1);
@@ -132,11 +120,27 @@ function   ChamDiem()
 
 }
 /*----------------------------------*/
+
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	if (_note != "undefined" &&  typeof _score != "undefined" && _note !== null && _note !== "" && _note !== 0)
+	{
+		_Diem = _score
+		let arrNote= _note.split("|");
+		_cDung = arrNote[0];
+		_cSai = arrNote[1];
+	}
+	SetText("","cau_dung",_cDung);
+    	SetText("","cau_sai",_cSai);
+   	 SetText("","diem",_Diem);
+	SetShowObject("","msg",0);
+	CreateQuestion();
+}
+
 function Page_1()
 {
 SetShowObject("","btSubmit",0);	
-InitScore();
-CreateQuestion();
+GetVer("callBackGetVer");
   return;
 }
 function Page_1_OnTimer()
@@ -203,16 +207,6 @@ ChamDiem();
   return;
 }
  );
-var score1 = CreText('score1',134,45,25,26,"",'rgba(192,192,192,0.89)','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','rgba(192,192,192,0.89)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score2 = CreText('score2',171,45,25,26,"",'rgba(192,192,192,0.89)','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','rgba(192,192,192,0.89)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score3 = CreText('score3',208,45,25,26,"",'rgba(192,192,192,0.89)','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','rgba(192,192,192,0.89)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score4 = CreText('score4',245,45,25,26,"",'rgba(192,192,192,0.89)','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','rgba(192,192,192,0.89)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score5 = CreText('score5',282,45,25,26,"",'rgba(192,192,192,0.89)','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','rgba(192,192,192,0.89)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score6 = CreText('score6',319,45,25,26,"",'rgba(192,192,192,0.89)','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','rgba(192,192,192,0.89)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score7 = CreText('score7',356,45,25,26,"",'rgba(192,192,192,0.89)','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','rgba(192,192,192,0.89)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score8 = CreText('score8',393,45,25,26,"",'rgba(192,192,192,0.89)','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','rgba(192,192,192,0.89)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score9 = CreText('score9',430,45,25,26,"",'rgba(192,192,192,0.89)','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','rgba(192,192,192,0.89)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var score10 = CreText('score10',471,45,25,26,"",'rgba(192,192,192,0.89)','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#c0c0c0','rgba(192,192,192,0.89)','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var title = CreText('title',47,258,581,143,"good job",'#ffffe0','#ffffff','#000000','#ffffff','',28,'Arial','Bold Italic','center','top',11,'0.00','10','0',1,'#7f7f7f','#ffffe0','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',10,1.50);
 title.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
@@ -224,9 +218,12 @@ CreateQuestion();
 var cau_hoi = CreText('cau_hoi',27,84,601,43,"",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',24,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var help = CreText('help',61,298,561,55,"Các số có tận cùng là 0,2,4,6,8 thì chia hết cho 2",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',20,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var so_dung = CreText('so_dung',74,342,528,48,"1234",'rgba(0,0,0,0)','#ffffff','#009300','#ffffff','',20,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var msg = new Kinetic.Group({name:'msg',x:0,y:0,width:585,height:174});
+var cau_dung = CreText('cau_dung',512,42,30,30,"",'#ffffff','#c0c0c0','#009300','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#009300','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var cau_sai = CreText('cau_sai',603,42,30,30,"",'#ffffff','#c0c0c0','#ff0000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#ff0000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var diem = CreText('diem',558,42,30,30,"",'#ffffff','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var msg = new Kinetic.Group({name:'msg',x:0,y:0,width:585,height:147});
 msg.add(title,help,so_dung);
-Page_1.add(Page_1_Backrounnd,abcdef,ch_0,ch_1,ch_2,ch_3,btSubmit,score1,score2,score3,score4,score5,score6,score7,score8,score9,score10,cau_hoi,msg);
+Page_1.add(Page_1_Backrounnd,abcdef,ch_0,ch_1,ch_2,ch_3,btSubmit,cau_hoi,cau_dung,cau_sai,diem,msg);
 stage.add(Page_1);
 InitLacVietScript();
 };

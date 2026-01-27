@@ -14,6 +14,25 @@ var m_soundPlaying = new buzz.sound("/Images/abc");
 var m_EndPos;
 var m_StartPos;
 var imageData = null;
+// Speech Synthesis
+const synth = window.speechSynthesis;
+let voices = [];
+let voiceText = null;
+// Load voices
+function waitVoicesLoaded(callback) {
+    const timer = setInterval(() => {
+        voices = speechSynthesis.getVoices();
+        if (voices.length > 0) {
+            clearInterval(timer);
+            callback(voices);
+        }
+    }, 1000);
+}
+
+waitVoicesLoaded((voices) => {
+    console.log("Voices loaded:", voices);
+});
+
 function getUrlVars() {
     var vars = [], hash;
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -28,13 +47,7 @@ function InitLacVietScript() {
     window.addEventListener("keydown", doKeyDown, true);
     //quang 2019/10/07
     //window.addEventListener("keypress", doKeyPress, true);
-
-    //function disableBackButton() {
-    //    $("#loader").hide();       
-    //    window.history.forward();
-    //}
-    //window.onload = disableBackButton();
-
+    
     //-------tinh scale------------//
     var wclient = document.getElementById("Doc").clientWidth;
     wclient = wclient * 98 / 100;
@@ -79,15 +92,17 @@ function InitLacVietScript() {
         layers[n].draw();
     }
     curentPage.on("mousedown", MouseDown);
-    if (!responsiveVoice.voiceSupport) {
-        alert("không hỗ trợ giọng đọc");
+    if (typeof responsiveVoice === 'undefined' || !responsiveVoice.voiceSupport)
+    {
+        console.error("Lỗi: Thư viện responsiveVoice không khả dụng.");
+        alert("Lỗi: Thư viện responsiveVoice không khả dụng.");
     }
  //Quang add 17/1/2012 for iphone, ipad oringinScaleX = 2 i don't  know
     var context1 = curentPage.getContext();
     var oringinW = context1.canvas.width;
     ZoomScaleMobileDevice = oringinW / stage.width();
-    m_dZoomScale = m_dZoomScale * ZoomScaleMobileDevice;
-
+    m_dZoomScalePaint = m_dZoomScale * ZoomScaleMobileDevice;
+    
 };
 
 
@@ -109,7 +124,8 @@ function MouseDown(evt) {
     m_pointDown.y = evt.y;
 }
 var m_dZoomScale = 1;
-var ZoomScaleMobileDevice =1;
+var ZoomScaleMobileDevice = 1;
+var m_dZoomScalePaint = 1;
 function detectmob() {
     if (navigator.userAgent.match(/Android/i) 
  || navigator.userAgent.match(/webOS/i) 
@@ -449,16 +465,13 @@ function drawEllipse(ctx, x, y, w, h, posX, posY) {
     }
 }
 /// FindShape Đã OK hàm này không có trong 	CActionManager	
-window.requestAnimFrame = (function (callback) { // khoong biet ham nay de lam gi??
-    return window.requestAnimationFrame ||
+window.requestAnimFrame =
+    window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
     window.mozRequestAnimationFrame ||
     window.oRequestAnimationFrame ||
     window.msRequestAnimationFrame ||
-    function (callback) {
-        window.setTimeout(callback, 1000 / 60);
-    };
-})();
+    function (cb) { return window.setTimeout(cb, 1000 / 60); };
 //
 function FindShape(PageName, nameShape) {
     var p_Name = null;
@@ -530,36 +543,6 @@ function FindPage(PageName) {
 //AddRsc dã OK
 /////////////////////////////////////
 function AddRsc(m_id, m_file, m_type) {
-
-        /*    phải cho phép javascript
-        var fso = new ActiveXObject("Scripting.FileSystemObject");
-        if (!fso.FileExists(m_file)) {
-        alert("File Không tồn tại.");
-        return;
-        }
-        var ext = fso.GetExtensionName(m_file);
-        var path = location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1);
-        path = path.replace(/%20/g, ' ');
-        path = path.replace(/\//gi, "\\");
-
-        if (path.indexOf(":") == -1) {// kiem tra da co o dia chưa
-        var d = fso.GetDrive(fso.GetDriveName(m_file));
-        path = d.DriveLetter.toUpperCase() + ":" + path;
-        }
-        else path = path.substring(1);
-        var fileto = "";
-        if (m_type == 'IMAGE_OBJ')
-        path = path + folder_Resource + "\\";            
-        else if(m_type == 'SOUND_OBJ')
-        path = path + folder_Resource + "\\"; 
-             
-        if (!fso.FolderExists(path)) {
-        fso.CreateFolder(path);
-        }
-                 
-        fileto =path +m_id+ '.' + ext;
-        fso.CopyFile(m_file, fileto);  
-        */
 }
 
 function AllowEditText(pageName, objName, bAllow, cursorindex) {
@@ -571,6 +554,7 @@ function AllowEditText(pageName, objName, bAllow, cursorindex) {
         obj.readonly = bAllow;
         if (bAllow == 1) {
             SetCursor(pageName, objName, "text");
+            AllowEditableText(obj);
             obj.on('mouseup touchend dragend', function () {
                 AllowEditableText(this);
             });
@@ -680,42 +664,12 @@ function SetOpacity(pageName, objName, opacity) {
 
 function AnimationPage(pageTo, pageCurent, delay, step, styte) {
     GoToPage(pageTo);
-        // Tam thoi GoToPage
-        /*var p_pageTo = FindPage(pageTo);
-        if (p_pageTo == null)
-            return;
-        switch (styte) {
-            case 1:
-                {
-                    p_pageTo.setX(stage.width()-100);
-                    p_pageTo.setY(0);
-                    p_pageTo.show();
-                    p_pageTo.draw();
-                    break;
-                }
-            case 2:
-                {
-                
-                    break;
-                }
-            default:
-                break;
-        }
-        var delx = stage.width();
-        var dely = stage.height();
-        var delta = Math.sqrt(delx * delx + dely * dely);
-        var timer = (delta / step) * delay;
-        MoveObject(curentPage, -stage.width(), 0, timer);
-        MoveObject(p_pageTo, -stage.width(), 0, 2000);
-        */
-
 }
 // nhung ham chua lam duoc
 ////Ham nay tu dong chay sau khi record cac su kien tren man hinh
 function AutoRunAction(i_timer, stop) {//quang
 }
 function BeginRecordAction() {//quang
-    
 }
 function Brightness(pageName, objName, trans, state) {//quang
 }
@@ -765,14 +719,8 @@ function Connect(nameIP, iPort) {
     // quang
 }
 function CopyFile(FileSrc, FileTo) {
-     /*   var fso = new ActiveXObject("Scripting.FileSystemObject");
-        fso.CopyFile(FileSrc, FileTo);*/
 }
 function CreateFolder(path) {
-     /*   var fso = new ActiveXObject("Scripting.FileSystemObject");
-        if (!fso.FolderExists(path)) {
-            fso.CreateFolder(path);
-        }*/
 }
 function CreateNewPage(pageName) {
     stage.add(new Kinetic.Layer({ name: pageName }));
@@ -793,81 +741,15 @@ function CreateObj(pageName, ObjName, ObjType, FileRsc, left, top, width, height
     }
     else return obj.name();
 }
-// QuangND17 Start add 2017/11/15 
-//var consonant = "ngh|ch|gi|gh|kh|ng|nh|ph|qu|th|tr|b|c|d|đ|g|h|k|l|m|n|p|q|r|s|t|v|x".split("|");
-//var doc_la = "ngờ|chờ|dờ|ngờ|khờ|ngờ|nhờ|phờ|quờ|thờ|trờ|bờ|cờ|dờ|đờ|gờ|hờ|ca|lờ|mờ|nờ|pờ|quờ|rờ|sờ|tờ|vờ|xờ".split("|");
-//function TachDau(strWord) {
-//    huyen = "àầằèềùừỳìòồờ";
-//    sac = "áấắéếúứýíóốớ";
-//    nang = "ạậặẹệụựỵịọộợ";
-//    hoi = "ảẩẳẻểủửỷỉỏổở";
-//    nga = "ãẫẵẽễũữỹĩõỗỡ";
-//    var charx = huyen.split("");
-//    for (i = 0; i < charx.length; i++)
-//        if (strWord.indexOf(charx[i]) >= 0)
-//            return "huyền";
-//    charx = sac.split("");
-//    for (i = 0; i < charx.length; i++)
-//        if (strWord.indexOf(charx[i]) >= 0)
-//            return "sắc";
-//    charx = nang.split("");
-//    for (i = 0; i < charx.length; i++)
-//        if (strWord.indexOf(charx[i]) >= 0)
-//            return "nặng";
-//    charx = hoi.split("");
-//    for (i = 0; i < charx.length; i++)
-//        if (strWord.indexOf(charx[i]) >= 0)
-//            return "hỏi";
-//    charx = nga.split("");
-//    for (i = 0; i < charx.length; i++)
-//        if (strWord.indexOf(charx[i]) >= 0)
-//            return "ngã";
-//    return "";
-//}
-//function SpellWord(word) {
-//    word = word.toLowerCase();
-//    word = word.replace(',', '');
-//    word = word.replace('.', '');
-//    word = word.replace('!', '');
-//    var dau = TachDau(word);
-//    var ko_dau = LoaiBoDau(word);
-//    var nguyenam = "";
-//    for (var j = 0; j < consonant.length; j++)
-//        if (word.indexOf(consonant[j]) == 0) {
-//            nguyenam = consonant[j]
-//            break;
-//        }
-//    var phuam = ko_dau.replace(nguyenam, '');
-//    nguyenam = doc_la[j];
-//    var re = "";
-//    if (dau == "") {
-//        if (phuam.length == 1)
-//            re = phuam + " " + nguyenam + " " + phuam + " " + ko_dau;
-//        else
-//            re = phuam.split("").join(" ") + " " + phuam + " " + nguyenam + " " + phuam + " " + ko_dau;
-//    }
-//    else {
-//        if (phuam.length == 1)
-//            re = phuam + " " + nguyenam + " " + phuam + " " + ko_dau + " " + dau + " " + word;
-//        else
-//            re = phuam.split("").join(" ") + " " + phuam + " " + nguyenam + " " + phuam + " " + ko_dau + " " + dau + " " + word;
-//    }
-//    return re;
-//}
 function DanhVan(tu) {
-        //var a_words = words.split(" ");
-        //var kq = "";
-        //for (var i = 0; i < a_words.length; i++)
-        //    kq = kq + SpellWord(a_words[i]) + ", ";
-        //kq = kq + words;
-        //return re;
 }
 // QuangND17 End add 2017/11/15 
 
 function Delay(code, millisec) {
     if (typeof millisec === 'undefined')
         return;
-    return setTimeout(code, millisec); //update 2021/02/16
+    setTimeout(code, millisec);
+    return;
 }
 function DeleteObj(pageName, objectName) {
     var page = FindPage(pageName);
@@ -881,9 +763,6 @@ function DestroyObjectHwnd(pageName, objName) {//khong can lam Animationgif
 }
 function DivideImage(pageName, objName, x, y, id) {//quang
 }
-function DocChu(tu) {//quang
-    tu.toLowerCase();
-}
 function DrawPageInObject(pageName, objName) {//quang
 }
 function DrawStyte(pageName, objName, iEven) {//quang
@@ -892,67 +771,11 @@ function Enable(pageName, objName, m_enable) {//quang
 }
 function EnableWndDraw(pageName, objName, bEnable) {//quang
 }
-function EndRecordAction() {//quang
-}
 function ExecAsThread(command) {
     return eval(command.toString());
 }
-function ExeDML(rsc_sql, s_query) {//quang
-}
-function ExeQuery(rsc_sql, s_query) {//quang
-}
 function ExitApp(rsc_sql, s_query) {
     window.close();
-}
-function ExportObj(pageName, objName, fileName) { //quang
-}
-function StopVN() {
-
-}
-
-function FileFind(m_Path, strFilter) {
-        /// kết quả đã đúng trã về một list file
-        /* var Fo = new ActiveXObject("Scripting.FileSystemObject");
-         if (Fo.FolderExists(m_Path)) {
-             var FileName = new String();
-             var Extention = new String();
-             var StrOut = new String();
-             FileName = (strFilter.lastIndexOf(".") > -1) ? strFilter.slice(0, strFilter.lastIndexOf(".")) : (strFilter.length > 0) ? strFilter.toLowerCase() : "*"; //Get Searched File Name
-             Extention = (strFilter.lastIndexOf(".") > -1) ? strFilter.slice(strFilter.lastIndexOf(".") + 1).toLowerCase() : "*"; // Get Searched File Extention Name
-
-             var FOo = Fo.GetFolder(m_Path);
-             var FSo = new Enumerator(FOo.Files);
-             for (i = 0; !FSo.atEnd(); FSo.moveNext()) {
-                 if (FileName == "*" || FSo.item().name.slice(0, FSo.item().name.lastIndexOf(".")).toLowerCase().indexOf(FileName) > -1)
-                     if (Extention == "*" || FSo.item().name.slice(FSo.item().name.lastIndexOf(".") + 1).toLowerCase().indexOf(Extention) > -1) {
-                         StrOut += "||"+ FSo.item().name;
-                     i++
-                 }
-             }
-         }*/
-         // lam cho giong ket qua Lac Viêt Disign
-    /*     var Fo = new ActiveXObject("Scripting.FileSystemObject");
-         if (Fo.FolderExists(m_Path)) {
-             var FileName = new String();
-             var Extention = new String();
-             var StrOut = new String();
-             FileName = (strFilter.lastIndexOf(".") > -1) ? strFilter.slice(0, strFilter.lastIndexOf(".")) : (strFilter.length > 0) ? strFilter.toLowerCase() : "*"; //Get Searched File Name
-             Extention = (strFilter.lastIndexOf(".") > -1) ? strFilter.slice(strFilter.lastIndexOf(".") + 1).toLowerCase() : "*"; // Get Searched File Extention Name
-
-             var FOo = Fo.GetFolder(m_Path);
-             var FSo = new Enumerator(FOo.Files);
-             for (i = 0; !FSo.atEnd(); FSo.moveNext()) {
-                 if (FileName == "*" || FSo.item().name.slice(0, FSo.item().name.lastIndexOf(".")).toLowerCase().indexOf(FileName) > -1)
-                     if (Extention == "*" || FSo.item().name.slice(FSo.item().name.lastIndexOf(".") + 1).toLowerCase().indexOf(Extention) > -1) {
-                         //StrOut = FSo.item().name;
-                         StrOut = FSo.item().Path;
-                         break;
-                       
-                 }
-             }
-         }
-         return StrOut;
-         */
 }
 function FillImage(pageName, objName, red, green, blue, x, y) {//quang
     if (typeof x === "undefined" || typeof y === "undefined") {
@@ -1037,8 +860,6 @@ function GetColor(pageName, objName, colorttt) {
         else return fill; //một màu
     }
 }
-function GetCountCall(end) { //quang  khoong biet lam gi
-}
 function GetCountObj(pageName, m_type) {
     var page = FindPage(pageName);
     return page.children.length;
@@ -1063,20 +884,6 @@ function charCodeAt(str, index) {
 }
 function GetFocusObj() {
     return m_pgObjCaller.name();
-}
-function GetFolder(styte) {
- /*   
-             var fso = new ActiveXObject("Scripting.FileSystemObject");
-             var path = window.location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1);
-             path = path.replace(/%20/g, ' ');
-             path = path.replace(/\//gi, "\\");
-             if (path.indexOf(":") == -1) {// kiem tra da co o dia chưa
-                 var d = fso.GetDrive(fso.GetDriveName("C:\\"));
-                 path = d.DriveLetter.toUpperCase() + ":" + path;
-             }
-             else path = path.substring(1);
-             return path; 
-   */ 
 }
 function GetHeight(page, object) {
     var curObject = FindShape(page, object);
@@ -1187,9 +994,6 @@ function GetRGB(rgb, hex) {
 function GetRotateObj(pageName, objName) {
     var curObject = FindShape(pageName, objName);
     return curObject.getRotationDeg();
-}
-function GetRowCount(rsc_sql, tableName) {
-    return 0; //quang
 }
 function GetRsc(pageName, objName) {
     var curObject = FindShape(pageName, objName);
@@ -1365,7 +1169,6 @@ function GoToPage(pageName) {
     }
 }
 function InitRandom(end) {
-
 }
 function InsertPageFromFile(FileName, pos) {
 }
@@ -1407,10 +1210,6 @@ function InvalidateObj(pageName, objName) {
     }
 }
 function IsFileName(fleName) {
-            /* var fso = new ActiveXObject("Scripting.FileSystemObject");
-             if (fso)
-                 return fso.FileExists(fleName);
-                 */
 }
 function IsRsc(id) {
     var re = FileFind(folder_Resource + "\\", id);
@@ -2028,7 +1827,7 @@ function writeConsole(content) {
    + ',scrollbars=1' 
    + ',resizable=1')
     top.consoleRef.document.writeln(
-        '<html><head><title>https://gamechocon.com</title></head>' 
+        '<html><head><title>https://gogoedu.vn</title></head>' 
    + '<body bgcolor=white onLoad="self.focus()">' 
    + '<img alt="" src="' + content + '" />' 
    + '</body></html>'
@@ -2039,10 +1838,10 @@ function writeConsole(content) {
 function SaveID(pageName, objName, newID) {
     var curObject = FindShape(pageName, objName);
     if (curObject == null) return;
-    x_obj = curObject.x() * m_dZoomScale;
-    y_obj = curObject.y() * m_dZoomScale;
-    width = curObject.width() * m_dZoomScale;
-    height = curObject.height() * m_dZoomScale;
+    x_obj = curObject.x() * m_dZoomScalePaint;
+    y_obj = curObject.y() * m_dZoomScalePaint;
+    width = curObject.width() * m_dZoomScalePaint;
+    height = curObject.height() * m_dZoomScalePaint;
     
     var canvas = document.createElement('canvas');
     canvas.id = 'canvas';
@@ -2210,7 +2009,6 @@ function SetColor(pageName, objName, red, green, blue, newID) {
 function SetColorEx(pageName, objName, color, id, styte, stytegradiant) {
     var curObject = FindShape(pageName, objName);
     if (curObject == null) return;
-    var comnfigFill = {};
     if (id != null) {
         id = id.toString().replace(/[*:?<>"|\/]/ig, ''); // Valist File name
         var m_image = new Image();
@@ -2490,58 +2288,61 @@ function SetRectMove(page, object, objMove, stytemove) {
 }
 // QuangND17 Update 2019/11/12        
 function DownLoadFileVoiceToSever(i_Speed, strVoice, txtSpeak, urlSourceFile) {
-    var paraAjax = {};
-    paraAjax.url = "/Home/InsertVoiceVN";
-    paraAjax.type = "POST";
-    paraAjax.data = JSON.stringify({
-        speed: i_Speed,
-        voice: strVoice,
-        textSpeak: txtSpeak,
-        urlFileSVoice: urlSourceFile
-    });
-    paraAjax.datatype = "json";
-    paraAjax.contentType = "application/json";
-    paraAjax.success = function (fileDownLoad) {
-        console.log(fileDownLoad);    
-    };
-    paraAjax.error = function (e) {
-        alert("Download File to Sever Error: " + txtSpeak)
-    };
-    $.ajax(paraAjax);
+
+    // Dữ liệu được gửi dưới dạng Form URL-encoded
+    const requestData = new URLSearchParams();
+    requestData.append('speed', i_Speed);
+    requestData.append('voice', strVoice);
+    requestData.append('textSpeak', txtSpeak);
+    requestData.append('urlFileSVoice', urlSourceFile);
+
+    // 🚀 Sử dụng API fetch thay thế cho $.ajax
+    fetch("/Home/InsertVoiceVN", {
+        method: "POST",
+        // Không cần đặt header "Content-Type" vì URLSearchParams tự định nghĩa
+        // là application/x-www-form-urlencoded
+        body: requestData
+    })
+        .then(response => {
+            // Kiểm tra xem request có thành công không (status 200-299)
+            if (!response.ok) {
+                // Ném lỗi để chuyển sang khối .catch
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            // Phản hồi được mong đợi là JSON (tương đương với dataType: 'json' trong jQuery)
+            return response.json();
+        })
+        .then(fileDownLoad => {
+            // Xử lý thành công (tương đương success: function(fileDownLoad))
+            console.log(fileDownLoad);
+        })
+        .catch(error => {
+            // Xử lý lỗi (tương đương error: function(e))
+            console.error("Download File to Sever Error:", error);
+            alert("Download File to Sever Error: " + txtSpeak);
+        });
 }
 
+
 var audioSpeakVN = new Audio();
+
 function text2SpeakFpt(textSpeakStr, strVoice) {
-    $("#loader").show();
-    $.ajax({
-        url: "https://api.fpt.ai/hmi/tts/v5",
-        headers: {
-            'api-key': 'mxbSJJD3npzdidxJFYtpIE9VmYGMq98f',
-            'speed': '-1',
-            'voice': strVoice
-        },
-        type: 'POST',
-        dataType: 'json',
-        contentType: 'application/json',
-        processData: false,
-        async: false,
-        data: textSpeakStr,
-        success: function (data) {
-            if (audioSpeakVN.paused == false)
-                audioSpeakVN.pause();
-            audioSpeakVN.src = data.async;
-            tryRequest(-1, strVoice , textSpeakStr, data.async);
-        },
-        error: function () {
-            $("#loader").hide();
-            alert("Text to Speak FPT Error: " + textSpeakStr);
-        }
-    });
+    if (typeof responsiveVoice === 'undefined' || !responsiveVoice.voiceSupport)
+        return;
+    const loader = document.getElementById("loader");
+    loader.style.display = "block";
+    if (responsiveVoice.isPlaying()) {
+        responsiveVoice.cancel();
+    }
+    responsiveVoice.speak(textSpeakStr, "Vietnamese Female", { onstart: function () { loader.style.display = "none"; } });
+    loader.style.display = "none";
 }
+
 function tryRequest(i_Speed, strVoice, txtSpeak, applicationurl, option) {
     
     audioSpeakVN.oncanplay = function () {
-        $("#loader").hide();
+        const loader = document.getElementById("loader");
+        loader.style.display = "none"; 
         audioSpeakVN.play();
         if (!audioSpeakVN.src.includes(window.location.hostname)) {            
             DownLoadFileVoiceToSever(i_Speed, strVoice , txtSpeak, audioSpeakVN.src);
@@ -2553,101 +2354,210 @@ function tryRequest(i_Speed, strVoice, txtSpeak, applicationurl, option) {
         if (!audioSpeakVN.src.includes(window.location.hostname)) {
             DownLoadFileVoiceToSever(i_Speed, strVoice , txtSpeak, audioSpeakVN.src);
         }
-        //setTimeout(function () {
-        //    tryRequest(i_Speed, strVoice, txtSpeak, applicationurl, option);
-        //}, 3000);
     };    
 }
 
+// Giả định: 
+// 1. audioSpeakVN là đối tượng thẻ HTML <audio> đã được lấy ra.
+// 2. text2SpeakFpt là một hàm JavaScript đã tồn tại.
 function Speak(text, voice, option) {
-    if (voice == "VN") {
-        var OptionValue = null;
-        var _voice = "banmai"; //default
-        if (typeof option != 'undefined') {
-            var OptionValue = eval('(' + option + ')');
-            if (typeof OptionValue.voice != 'undefined')
-                _voice = OptionValue.voice;
-            audioSpeakVN.onplay = OptionValue.onstart;
-            audioSpeakVN.onended = OptionValue.onend;
-        }      
-        else {
+
+    // Hàm helper để parse option an toàn hơn eval()
+    function parseOptions(optionString) {
+        let obj = {};
+
+        // Nếu là chuỗi dạng { ... }
+        if (typeof optionString === "string")
+        {
+            try {
+                // Chuẩn hóa JSON
+                let json = optionString.trim();
+                // 1) Thêm ngoặc kép cho KEY chưa có "
+                // Match key dạng: {key: , , key:
+                json = json.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:(?=\s*[^\"])/g, '$1"$2":');
+                // 2) Thêm ngoặc kép cho VALUE bị thiếu "
+                // Chỉ match value dạng chữ (A-Z, a-z, _) và kết thúc trước , hoặc }
+                json = json.replace(/:\s*([a-zA-Z_][a-zA-Z0-9_]*)(?=\s*(,|}))/g, ':"$1"');
+                obj = JSON.parse(json);
+            } catch (e) {
+                console.error("Lỗi khi parse chuỗi Option:", e);
+                return {};
+            }
+        }
+        // Nếu đã là object hợp lệ
+        else if (typeof optionString === "object" && optionString !== null) {
+            obj = optionString;
+        } else {
+            return {};
+        }
+
+        // 🔥 Auto-map mọi key bắt đầu bằng "on"
+        Object.keys(obj).forEach(key => {
+            if (key.startsWith("on") && typeof obj[key] === "string") {
+                const fnName = obj[key];
+                if (typeof window[fnName] === "function") {
+                    obj[key] = window[fnName];
+                }
+            }
+        });
+
+        return obj;
+    }
+
+
+    if (voice === "VN") {
+        let options = parseOptions(option);
+        let _voice = "banmai"; // default
+
+        // 1. Cấu hình các sự kiện cho thẻ Audio
+        if (Object.keys(options).length !== 0) {
+            if (options.voice) {
+                _voice = options.voice;
+            }
+            // Gán các hàm callback nếu tồn tại
+            audioSpeakVN.onplay = options.onstart || null;
+            audioSpeakVN.onended = options.onend || null;
+        } else {
+            // Xóa các event handler nếu không có option
             audioSpeakVN.onplay = null;
             audioSpeakVN.onended = null;
         }
-        //
-        $.ajax({
-            url: "/Home/GetVoiceVN",                  
-            type: 'POST',
-            dataType: 'json',
-            contentType: 'application/json',
-            processData: false,
-            async: false,
-            data: JSON.stringify({
-                speed: -1,
-                voice: _voice,
-                textSpeak: text
-            }),
-            success: function (data) {
-                if (data != "") {
-                    if (audioSpeakVN.paused == false)
+
+        // 2. Gọi API để lấy file âm thanh (Thay thế $.ajax bằng fetch)
+        const requestData = new URLSearchParams();
+        requestData.append('speed', '-1');
+        requestData.append('voice', _voice);
+        requestData.append('textSpeak', text);
+
+        fetch("/Home/GetVoiceVN", {
+            method: 'POST',
+            // Lưu ý: Không cần set Content-Type khi dùng URLSearchParams (fetch tự set)
+            body: requestData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text(); // Phản hồi là URL của file âm thanh
+            })
+            .then(audioUrl => {
+                if (audioUrl && audioUrl !== "") {
+
+                    audioUrl = audioUrl.trim().replace(/^"|"$/g, "");
+
+                    if (!audioUrl.startsWith("https")) {
+                        console.error("URL audio không hợp lệ:", audioUrl);
+                        text2SpeakFpt(text, _voice);
+                        return;
+                    }
+                    audioSpeakVN.oncanplay = null;
+                    audioSpeakVN.onerror = null;
+                    if (audioSpeakVN.paused === false) {
                         audioSpeakVN.pause();
-                    audioSpeakVN.src = data;
+                    }
+                    // GÁN SỰ KIỆN TRƯỚC
                     audioSpeakVN.oncanplay = function () {
-                        audioSpeakVN.play();
+                        audioSpeakVN.oncanplay = null;
+                        audioSpeakVN.play().catch(err => {
+                            console.error("Autoplay bị chặn:", err);
+                        });
                     };
-                    audioSpeakVN.onerror = function () {                      
+
+                    audioSpeakVN.onerror = function (e) {
+                        console.error("Audio load failed:", audioUrl, e);
                         text2SpeakFpt(text, _voice);
                     };
+
+                    // SAU ĐÓ MỚI GÁN SRC
+                    audioSpeakVN.src = audioUrl;
+                    audioSpeakVN.load();
+
+                } else {
+                    // Không tìm thấy file trên game (phản hồi rỗng)
+                    text2SpeakFpt(text, _voice);
                 }
-                else {// khoong tim thay file tren game cho con
-                    text2SpeakFpt(text, _voice);                   
-                }
-            },
-            error: function () {
-                console.log("Gamechocon.com Cannot get data Text to Speak");
-            }
-        });
-                 //
+            })
+            .catch(error => {
+                console.error("gogoedu.vn Cannot get data Text to Speak:", error);
+                // Có thể thêm logic xử lý lỗi mạng tại đây nếu cần thiết
+            });
+
     }
-    else { // Speak English
-        speechSynthesis.cancel();
-        var msg = new SpeechSynthesisUtterance();
-        msg.text = text;
-        msg.lang = 'en-US';
-        
-        var voices = window.speechSynthesis.getVoices();
-        if (voice == "EN")
-            msg.voice = voices[5]; // Note: some voices don't support altering params
-        else msg.voice = voices[4];
-        msg.voiceURI = 'native';
-        if (typeof option != 'undefined') {
-            var OptionValue = eval('(' + option + ')');
-            msg.volume = 1; // 0 to 1
-            msg.rate = OptionValue.rate; // 0.1 to 10
-            msg.pitch = OptionValue.pitch; //0 to 2                
-            msg.onend = OptionValue.onend;
-            msg.onstart = OptionValue.onstart;
+
+    else {
+        // ----------------------------------------------------
+        // Trường hợp Tiếng Anh (Sử dụng Web Speech API thuần)
+        // ----------------------------------------------------
+
+        synth.cancel();
+        voiceText = new SpeechSynthesisUtterance(text);
+      
+        // BƯỚC 1: Lọc tất cả voice en-US
+        const enVoices = voices.filter(v => v.lang.startsWith("en"));
+
+        // BƯỚC 2: Phân 2 trường hợp
+        if (voice === "EN") {
+            voiceText.voice = enVoices[0];
+            // EN → ưu tiên Google
+            voiceText.voice = enVoices.find(v =>
+                v.name.toLowerCase().includes("google")
+            );
+
+            // fallback nếu không có Google
+            if (!voiceText.voice && enVoices.length > 0) {
+                voiceText.voice = enVoices[0];
+            }
+        } else {
+            // KHÔNG phải EN → tìm voice theo tên truyền vào
+            voiceText.voice = enVoices.find(v =>
+                v.name.includes(voice)
+            );
+
+            // fallback nếu không tìm thấy
+            if (!voiceText.voice && enVoices.length > 0) {
+                voiceText.voice = enVoices[1];
+            }
         }
-        speechSynthesis.speak(msg);
+
+
+        voiceText.voiceURI = 'native';
+
+        // 1. Xử lý Options (rate, pitch, volume, onend, onstart)
+        if (typeof option !== 'undefined') {
+            const options = parseOptions(option);
+
+            voiceText.volume = 1; // 0 to 1
+            if (options.rate) {
+                voiceText.rate = options.rate; // 0.1 to 10
+            }
+            if (options.pitch) {
+                voiceText.pitch = options.pitch; // 0 to 2
+            }
+
+            voiceText.onend = options.onend || null;
+            voiceText.onstart = options.onstart || null;
+        }
+
+        synth.speak(voiceText);
     }
 }
+
 function SpeakEN(page, object, text) {
-    
-    if (responsiveVoice.isPlaying()) {
-        responsiveVoice.cancel();
-    }
     if (typeof text === 'undefined') {
         var curObject = FindShape(page, object);
-        var text = curObject.getText();
-        responsiveVoice.speak(text.toString(), "US English Female", { pitch: 1, rate: 0.8 });
+        text = curObject.getText();
     }
-    else
-        responsiveVoice.speak(text.toString(), "US English Female", { pitch: 1, rate: 0.8 });
+    Speak(text, "EN");
+  
 }
 function Stop(pageName, objName, waversc) {
     speechSynthesis.cancel();
 }
 function SpeakVN(pageName, objName, text, m_pitch, m_rate, on_start, on_end) {
+
+    if (typeof responsiveVoice === 'undefined' || !responsiveVoice.voiceSupport)
+        return;
+
     if (responsiveVoice.isPlaying()) {
         responsiveVoice.cancel();
     }
@@ -2926,53 +2836,43 @@ function toUpperCase(str) {
     return String(str).toUpperCase();
 }
 function getColorValues(color) {
-    var values = { red: null, green: null, blue: null, alpha: 1 };
-    if (typeof color == 'string') {
-        /* hex */
-        if (color.indexOf('#') === 0) {
-            color = color.substr(1)
-            if (color.length == 3)
-                values = {
-                    red: parseInt(color[0] + color[0], 16) || 0,
-                    green: parseInt(color[1] + color[1], 16) || 0,
-                    blue: parseInt(color[2] + color[2], 16) || 0,
-                    alpha: 1
-                }
-            else
-                values = {
-                    red: parseInt(color.substr(0, 2), 16) || 0,
-                    green: parseInt(color.substr(2, 2), 16) || 0,
-                    blue: parseInt(color.substr(4, 2), 16) || 0,
-                    alpha: 1
-                }
-                     /* rgb */
-        } else if (color.indexOf('rgb(') === 0) {
-            var pars = color.indexOf(',');
-            values = {
-                red: parseInt(color.substr(4, pars)),
-                green: parseInt(color.substr(pars + 1, color.indexOf(',', pars))),
-                blue: parseInt(color.substr(color.indexOf(',', pars + 1) + 1, color.indexOf(')'))),
-                alpha: 1
-            }
-                     /* rgba */
-        } else if (color.indexOf('rgba(') === 0) {
-            pars = color.indexOf(','),
-				repars = color.indexOf(',', pars + 1);
-            values = {
-                red: parseInt(color.substr(5, pars)),
-                green: parseInt(color.substr(pars + 1, repars)),
-                blue: parseInt(color.substr(color.indexOf(',', pars + 1) + 1, color.indexOf(',', repars))),
-                alpha: parseFloat(color.substr(color.indexOf(',', repars + 1) + 1, color.indexOf(')')))
-            }
-                     /* verbous */
-        } else {
-            if (stdCol[color] != undefined)
-                values = getColorValues(stdCol[color]);
+    const values = { red: 0, green: 0, blue: 0, alpha: 1 };
+
+    if (typeof color !== 'string') return `rgba(${values.red},${values.green},${values.blue},${values.alpha})`;
+
+    color = color.trim().toLowerCase();
+
+    // --- HEX (#RGB hoặc #RRGGBB) ---
+    if (color.startsWith('#')) {
+        color = color.slice(1);
+        if (color.length === 3) {
+            values.red = parseInt(color[0] + color[0], 16);
+            values.green = parseInt(color[1] + color[1], 16);
+            values.blue = parseInt(color[2] + color[2], 16);
+        } else if (color.length === 6) {
+            values.red = parseInt(color.slice(0, 2), 16);
+            values.green = parseInt(color.slice(2, 4), 16);
+            values.blue = parseInt(color.slice(4, 6), 16);
         }
+
+        // --- RGB ---
+    } else if (color.startsWith('rgb(')) {
+        const parts = color.slice(4, -1).split(',').map(p => parseFloat(p.trim()));
+        [values.red, values.green, values.blue] = parts;
+
+        // --- RGBA ---
+    } else if (color.startsWith('rgba(')) {
+        const parts = color.slice(5, -1).split(',').map(p => parseFloat(p.trim()));
+        [values.red, values.green, values.blue, values.alpha] = parts;
+
+        // --- Tên màu chuẩn (nếu có) ---
+    } else if (typeof stdCol !== 'undefined' && stdCol[color]) {
+        return getColorValues(stdCol[color]);
     }
-    values = "rgba(" + values.red + "," + values.green + "," + values.blue + "," + values.alpha + ")";
-    return values;
+
+    return `rgba(${values.red},${values.green},${values.blue},${values.alpha})`;
 }
+
 function ShowColor(page, object) {
     var curObject = FindShape(page, object);
     if (curObject == null) return;
@@ -3009,36 +2909,46 @@ function abs(d) {
 function pow(dx, dy) {
     return Math.pow(dx, dy);
 }
-//Math
-String.prototype.replaceAll = function (strTarget, strSubString) {
-    var strText = this;
-    var intIndexOfMatch = strText.indexOf(strTarget);
-    while (intIndexOfMatch != -1) {
-        strText = strText.replace(strTarget, strSubString)
-        intIndexOfMatch = strText.indexOf(strTarget);
-    }
-    return (strText);
-}
+
 function replaceStr(myString, oldpath, newpath, pos, count) {
-    if ((typeof myString == 'undefined') || (myString == null))
-        return "";
-    if ((typeof pos != 'undefined') || (pos != null)) {
-        if ((typeof count == 'undefined') || (count == null))
-            count = 1;
-        myString = myString.toString();
-        var strText = myString;
-        var resTring = myString.substring(pos);
-        var intIndexOfMatch = resTring.indexOf(oldpath);
-        var m_count = 0;
-        while (intIndexOfMatch != -1 && m_count < count) {
-            strText = resTring.replace(oldpath, newpath)
-            intIndexOfMatch = strText.indexOf(oldpath);
-            m_count++;
+    if (!myString) return "";
+
+    myString = myString.toString();
+
+    if (pos === undefined || pos === null) {
+        // Không có pos → thay tất cả
+        let result = "";
+        let start = 0;
+        let index;
+        while ((index = myString.indexOf(oldpath, start)) !== -1) {
+            result += myString.substring(start, index) + newpath;
+            start = index + oldpath.length;
         }
-        return strText;
-    } else
-        return myString.toString().replaceAll(oldpath, newpath);
+        result += myString.substring(start);
+        return result;
+    }
+
+    if (count === undefined || count === null) count = 1;
+
+    // Có pos → chỉ replace từ pos trở đi
+    let before = myString.substring(0, pos);
+    let after = myString.substring(pos);
+
+    let result = "";
+    let start = 0;
+    let replaced = 0;
+    let index;
+
+    while ((index = after.indexOf(oldpath, start)) !== -1 && replaced < count) {
+        result += after.substring(start, index) + newpath;
+        start = index + oldpath.length;
+        replaced++;
+    }
+    result += after.substring(start);
+
+    return before + result;
 }
+
 //
 function rightStr(str, n) {
     var output;
@@ -3285,10 +3195,10 @@ function AllowEditableText(curClickObj) {
         m_pgObjCaller.text(textarea.value);
         m_pgObjCaller.show();
     }
-    textarea.value = curClickObj.text();
+    textarea.value = curClickObj.getText();
     curClickObj.hide();
     curentPage.draw();
-    var textPosition = curClickObj.getAbsolutePosition();
+    // var textPosition = curClickObj.getAbsolutePosition();
     var stageBox = stage.container().getBoundingClientRect();
     var scrollpage = GetScrollPositionPage();
     // so position of textarea will be the sum of positions above:           
@@ -3297,7 +3207,7 @@ function AllowEditableText(curClickObj) {
     if (detectmob()){
         // restore 
         codeWidth = -2;
-        Scale = m_dZoomScale / ZoomScaleMobileDevice;       
+        //Scale = m_dZoomScale / ZoomScaleMobileDevice;  
     }
      var padding = curClickObj.getPadding();
      var boderWidth = curClickObj.getStrokeWidth()
@@ -3334,6 +3244,7 @@ function AllowEditableText(curClickObj) {
     //textarea.style.transformOrigin = 'left top';
     textarea.style.textAlign = curClickObj.align();
     textarea.style.color = curClickObj.textFill();
+    textarea.placeholder = "Shift+Enter ↵";
     rotation = curClickObj.rotation();
     var transform = '';
     if (rotation) {
@@ -3389,20 +3300,34 @@ function AllowEditableText(curClickObj) {
     textarea.addEventListener('keydown', function (e) {
         // hide on enter
         // but don't hide on shift + enter
-        //if (e.keyCode === 13 && !e.shiftKey) {
-        //    curClickObj.text(textarea.value);
-        //    removeTextarea();
-        //}
-        // on esc do not set value back to node
-        if (e.keyCode === 27) {
-            removeTextarea();
+        if (textarea) {
+            if (e.keyCode === 13 && !e.shiftKey) {
+                e.preventDefault();
+                curClickObj.text(textarea.value);
+                removeTextarea();
+            }
+            else if (e.keyCode === 27) {
+                e.preventDefault();
+                removeTextarea();
+            }
+            else {
+                setTextareaWidth(curClickObj.width() * Scale);
+            }
         }
     });
-    textarea.addEventListener('keydown', function (e) {
-        //  scale = curClickObj.getAbsoluteScale().x;
-        setTextareaWidth(curClickObj.width() * Scale);
-                 //  textarea.style.height = 'auto';
-                 //  textarea.style.height = textarea.scrollHeight + textNode.fontSize() + 'px';
+    // Ngăn paste
+    textarea.addEventListener("paste", function (e) {
+        e.preventDefault();
+    });
+
+    // Ngăn drag & drop
+    textarea.addEventListener("drop", function (e) {
+        e.preventDefault();
+    });
+
+    // Ngăn mở context menu (chuột phải)
+    textarea.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
     });
     function handleOutsideClick(e) {
         if (e.target !== textarea) {
@@ -3464,4 +3389,149 @@ function isString(str) { // 16/08/2020
                 curObject.setAttr("sidesY", posY);               
             else return curObject.getAttr("sidesY");
         }
-         // End Quang Add 07/01/2021
+// End Quang Add 07/01/2021
+// Nếu autoPlay == false → chỉ gán src mà không phát âm thanh.
+// Nếu autoPlay == true hoặc không truyền biến → sẽ phát âm thanh(play).
+function SpeakAI(n, autoPlay = true) {
+    // 1. Khai báo biến audioSpeakVN (giả định đã được khai báo ở phạm vi lớn hơn)
+    // Nếu audioSpeakVN chưa được khai báo, bạn cần thêm dòng sau (hoặc tìm cách lấy nó):
+    // const audioSpeakVN = document.getElementById("yourAudioElementId"); 
+
+    // Dừng âm thanh hiện tại nếu đang phát
+    if (!audioSpeakVN.paused) {
+        audioSpeakVN.pause();
+    }
+
+    // Dữ liệu gửi đi
+    const dataToSend = {
+        txtText: n,
+        txtVoice: "nova",
+        txtModel: "tts-1"
+    };
+
+    // 🚀 Sử dụng API fetch thay thế cho $.ajax
+    fetch("/Home/StartReading", {
+        method: "POST",
+        headers: {
+            // Quan trọng: Chỉ định loại nội dung là JSON
+            "Content-Type": "application/json",
+        },
+        // Chuyển đối tượng JavaScript thành chuỗi JSON
+        body: JSON.stringify(dataToSend)
+    })
+        .then(response => {
+            // Kiểm tra xem request có thành công không (status 200-299)
+            if (!response.ok) {
+                // Ném lỗi để chuyển sang khối .catch
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            // Lấy phản hồi dưới dạng văn bản (URL)
+            return response.text();
+        })
+        .then(audioUrl => {
+
+            console.log("Reading started successfully:", audioUrl);
+            audioUrl = audioUrl.trim().replace(/^"|"$/g, "");
+
+            if (!audioUrl.startsWith("https")) {
+                console.error("URL audio không hợp lệ:", audioUrl);
+                return;
+            }
+            // Gán URL và tải lại
+            audioSpeakVN.src = audioUrl;
+            audioSpeakVN.load();
+
+            if (autoPlay) {
+                // Sử dụng sự kiện 'canplaythrough' để đảm bảo trình duyệt đã tải đủ để phát
+                audioSpeakVN.oncanplaythrough = function () {
+                    // Đảm bảo event handler chỉ chạy một lần
+                    audioSpeakVN.oncanplaythrough = null;
+
+                    audioSpeakVN.play()
+                        .catch(error => {
+                            console.error("Autoplay bị chặn:", error);
+                            // Gợi ý: Có thể hiện nút "Play" cho người dùng nhấn thủ công
+                        });
+                };
+            }
+        })
+        .catch(error => {
+            console.error("Error in starting reading:", error);
+            alert("Error occurred: " + error.message);
+            // Ẩn loader (giả định biến loader đã được khai báo)
+            const loader = document.getElementById("loader");
+            if (loader) {
+                loader.style.display = "none";
+            }
+        });
+}
+
+// End Quang Add 03/10/2025
+Kinetic.Text.prototype.autoHeight = function () {
+    const context = this.getContext()._context;
+    const text = this.text() || '';
+    const width = this.width() * m_dZoomScale;
+
+    const fontSize = this.fontSize() || 12;
+    const lineHeight = this.lineHeight() || 1.2;
+    const fontFamily = this.fontFamily() || 'sans-serif';
+    const fontStyle = this.fontStyle ? (this.fontStyle() || '') : '';
+    const padding = (typeof this.getPadding === 'function') ? (this.getPadding() || 0) : 0;
+
+    context.save();
+    context.font = `${fontStyle} ${fontSize}px ${fontFamily}`;
+
+    let lines = [];
+    text.split('\n').forEach(paragraph => {
+        if (paragraph === '') {
+            lines.push(''); // dòng trống
+            return;
+        }
+        let words = paragraph.split(/\s+/);
+        let line = '';
+        words.forEach(word => {
+            const testLine = line + word + ' ';
+            if (context.measureText(testLine).width > (width - padding * 2)) {
+                if (line.trim() !== '') lines.push(line);
+                line = word + ' ';
+            } else {
+                line = testLine;
+            }
+        });
+        if (line.trim() !== '') lines.push(line);
+    });
+    context.restore();
+    // scale
+    let zScace = m_dZoomScale;
+    if (zScace < 1) {
+        const hclient = document.getElementById("Doc").clientHeight;
+        zScace = hclient / (stage.height());
+    }
+    // loại bỏ dòng trống cuối
+    while (lines.length > 0 && lines[lines.length - 1].trim() === '') {
+        lines.pop();
+    }
+    // tính chiều cao
+    const perLineHeight = fontSize * lineHeight * zScace;
+    // hack thêm 1 dòng so với thục thế, không biết vì sao
+    let newHeight = ((lines.length + 1) * perLineHeight) + padding * 2;
+
+    // set height
+    this.height(newHeight);
+
+    // --- DEBUG ---
+    console.log("[autoHeight]",
+        "lines =", lines.length,
+        "perLineHeight =", perLineHeight.toFixed(2),
+        "zScace =", zScace.toFixed(3),
+        "newHeight =", newHeight.toFixed(2),
+        "text preview =", text.substring(0, 40).replace(/\n/g, "\\n") + "..."
+    );
+    return newHeight;
+};
+
+function AutoHeight(page, object) {
+    var curObject = FindShape(page, object);
+    if (curObject == null) return;
+    curObject.autoHeight();
+}

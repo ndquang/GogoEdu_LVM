@@ -4,7 +4,7 @@ hashIDText['ID_TEXT1']='What is the measure of this angle? Choose the best estim
 hashIDText['ID_TEXT2']='';
 hashIDText['ID_TEXT3']='135°';
 hashIDText['ID_TEXT4']='90 : 8 = ';
-hashIDText['ID_TEXT5']='99';
+hashIDText['ID_TEXT5']='';
 hashIDText['ID_TEXT6']='OK';
 hashIDText['ID_TEXT7']='Số đo của góc này là bao nhiêu? Chọn ước tính tốt nhất.';
 hashIDText['ID_TEXT8']='Tính giá trị của biểu thức';

@@ -1,6 +1,7 @@
-﻿folder_Resource ='data/ki_lo_met-vuong';
+﻿folder_Resource ='/data/ki_lo_met-vuong';
 var _diem =0;
 var kq =0;
+var _bTestAndCreat = false;
 function  CreateGame()
 {
 	
@@ -114,22 +115,29 @@ function  CreateGame()
 			SetText("","so1", "m² ");	
 		}
 	}
+	SetFontColor("","so2","#0000ff");	
 	SetText("","so2","");
+	_bTestAndCreat = false;
 	AllowEditText("","so2",1);
-	_diem = GetVer();	
 	SetShowObject("","msg",0);
 	SetFontColor("","so2","#0000FF");
 	InvalidateObj("","");
 }
 function  CheckKQ()
 {	
+if(_bTestAndCreat)
+{
+CreateGame();
+return;
+}
+
 		if(GetText("","so2")==kq)
 			{	
 			_diem++;
 			SetText("","m_diem",_diem+" điểm, Đúng");
 			SetColor("","m_diem","#99ff33");
 			SetFontColor("","so2","#00ff00");		
-			//Speak("Đúng","VN");
+			Speak("Đúng","VN");
 		}
 	else {
 		_diem--;
@@ -138,16 +146,43 @@ function  CheckKQ()
 		SetColor("","m_diem","#ff9999");
 		SetFontColor("","so2","#ff0000");		
 		}
+		_bTestAndCreat = true;
 		UpdateScore(_diem);
 		SetShowObject("","msg",1);
 		AllowEditText("","so2",0);
 		InvalidateObj("","");
 }
+
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	if (typeof _score != "undefined")
+	{
+		_diem  = _score
+	}
+	SetText("","diem",_diem );
+	SetShowObject("","msg",0);
+	CreateGame();
+}
+
+function Page_1_OnKeyDown()
+{
+
+var key = GetKeyDown("","");
+	if(key == "\r")
+	{
+		if (textarea) {
+			 SetText("","so2",textarea.value);	 
+		}
+		CheckKQ();
+	}
+}
+
+
+
 function Page_1()
 {
 SetDigitEditText("","so2","number");
-CreateGame();
-SetMoveView("","msg",1);
+GetVer("callBackGetVer");
   return;
 }
  
@@ -169,7 +204,7 @@ var Page_1_Backrounnd = CreText('Page_1_Backrounnd',0,0,450,250,'','#ffb7ff','',
 var so0 = CreText('so0',16,64,191,28,"123456",'rgba(0,0,0,0)','#ffffff','#0000ff','#ffffff','',20,'Arial','Normal','right','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#e5e5e5','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var so1 = CreText('so1',348,64,49,28,"4",'rgba(0,0,0,0)','#ffffff','#0000ff','#ffffff','',20,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#e5e5e5','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var dau = CreText('dau',204,64,32,28,"=",'rgba(0,0,0,0)','#ffffff','#0000ff','#000000','',20,'Arial','Normal','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#e5e5e5','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
-var so2 = CreText('so2',236,64,109,28,"99000000",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',20,'Arial','Normal','center','bottom',0,'0.00','0','0',2,'#0000ff','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var so2 = CreText('so2',236,64,109,28,"99000000",'#ffffff','#ffffff','#000000','#ffffff','',20,'Arial','Normal','center','bottom',0,'0.00','0','0',1,'#0000ff','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var title = CreText('title',10,32,306,27,"Nhập số thích hợp vào ô trống",'rgba(0,0,0,0)','#ffffff','#000000','#ffffff','',20,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var Text_1 = CreText('Text_1',-1,0,452,30,"Ki-lô-mét vuông(km²)",'#ff00ff','#ffffff','#000000','#ffffff','',16,'Arial','Bold','center','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#ff00ff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var check = CreText('check',238,106,89,35,"Kiểm tra",'#ff6820','#ffffff','#ffffff','#ffffff','',16,'Arial','Bold','center','middle',3,'0.00','5','0',1,'#ff0000','#a52a00','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
@@ -192,7 +227,8 @@ CreateGame();
 var Text_2 = CreText('Text_2',94,96,254,24,"https://gogedu.vn",'#c0c0c0','#ffffff','#000000','#ffffff','',14,'Arial','Normal','left','middle',0,'0.00','0','0',0,'rgba(0,0,0,0)','#e5e5e5','4','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var msg = new Kinetic.Group({name:'msg',x:0,y:0,width:258,height:146});
 msg.add(m_diem,Text_2,bt_lam_lai);
-Page_1.add(Page_1_Backrounnd,so0,so1,dau,so2,title,Text_1,check,msg);
+var diem = CreText('diem',406,16,30,30,"",'#ffffff','#c0c0c0','#000000','#ffffff','',14,'Arial','Normal','center','middle',2,'0.00','0','0',2,'#000000','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+Page_1.add(Page_1_Backrounnd,so0,so1,dau,so2,title,Text_1,check,msg,diem);
 stage.add(Page_1);
 InitLacVietScript();
 };

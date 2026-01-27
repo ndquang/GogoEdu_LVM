@@ -1,4 +1,4 @@
-﻿folder_Resource ='data/bd_the_thao_lop4';
+﻿folder_Resource ='/data/bd_the_thao_lop4';
 
 var objToSave = {_input0:""};
 function GetResult()
@@ -9,11 +9,10 @@ function GetResult()
     }     
     return JSON.stringify( strAllObjectJson );
 }
-
-function Page_1()
+window.callBackLoadLesson = function callBackLoadLesson(lsData)
 {
-SetMoveView("","msg",1);
-    var myJSON = LoadLesson();
+   var myJSON = lsData;
+   SetMoveView("","msg",1);
    var allowEdit = true;  
    var shMsg = true;
    if(myJSON !="" )
@@ -44,6 +43,10 @@ else  {
         AllowEditText("", x, allowEdit);
 SetShowObject("","msg",shMsg);	
 InvalidateObj("","");
+}
+function Page_1()
+{
+   LoadLesson("callBackLoadLesson");
   return;
 }
  

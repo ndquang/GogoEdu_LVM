@@ -6,4 +6,4 @@ hashIDText['ID_TEXT2']='OK';
 hashIDText['ID_TEXT3']='good job';
 hashIDText['ID_TEXT4']='44';
 hashIDText['ID_TEXT5']='Đồng ý';
-hashIDText['ID_TEXT6']='Áp dụng tính chất nhân một số với một hiệu để tính:';
+hashIDText['ID_TEXT6']='Áp dụng tính chất nhân một số với một hiệu để tính';

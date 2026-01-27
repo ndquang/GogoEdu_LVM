@@ -1,19 +1,10 @@
 ﻿folder_Resource ='/data/bieu_do_toan_4';
 
 var objToSave = {_input0:"", _input1:"",_input2:"",_input3:"",_input4:"",_input5:"",_input6:"",_input7:"",_input8:"",_input9:""};
-function GetResult()
-{
-    var strAllObjectJson = {};
-    for ( x in objToSave) {        
-                   strAllObjectJson[x] = GetText("",x);
-    }     
-    return JSON.stringify( strAllObjectJson );
-}
 
-function Page_1()
+window.callBackLoadLesson = function callBackLoadLesson(lsData)
 {
- 
-    var myJSON = LoadLesson();
+	   var myJSON = lsData;
    var allowEdit = true;  
    if(myJSON !="" )
 {
@@ -36,6 +27,19 @@ else  SetText("","thong_bao","Để làm bài học này bạn phải đăng nh�
  for ( x in objToSave) 
         AllowEditText("", x, allowEdit);
   return;
+}
+function GetResult()
+{
+    var strAllObjectJson = {};
+    for ( x in objToSave) {        
+                   strAllObjectJson[x] = GetText("",x);
+    }     
+    return JSON.stringify( strAllObjectJson );
+}
+
+function Page_1()
+{
+   LoadLesson("callBackLoadLesson");
 }
  
   window.onload = function() {

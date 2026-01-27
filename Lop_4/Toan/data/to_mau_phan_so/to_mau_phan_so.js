@@ -1,19 +1,9 @@
-﻿folder_Resource ='data/to_mau_phan_so';
+﻿folder_Resource ='/data/to_mau_phan_so';
 var _score = 0;
-var _cSubmit=0;
+var _cSubmit = 0;
 var _index = 1;
 var _bTestAndCreat = false;
 var arrayKq = ["",""];
-function  InitScore()
-{	
-	_score =GetVer();	
-	SetShowObject("","msgtext",0);
-	InvalidateObj("","");
-	SetDigitEditText("","in_0","number");
-	_bTestAndCreat = false;
-	SetText("","score",_score);
-
-}
 
 function  CreateQuestion()
 {
@@ -31,8 +21,7 @@ function  CreateQuestion()
 	}
         
        SetText("","in_0",arrayKq[0]);
-      SetText("","in_1",arrayKq[1]);
-               		_score =GetVer();					
+      SetText("","in_1",arrayKq[1]);				
 		SetText("","check","Submit");			
 		_bTestAndCreat = false;
 		SetShowObject("","msgtext",0);	
@@ -41,6 +30,11 @@ function  CreateQuestion()
 
 function  ChamDiem()
 {	
+	if(_bTestAndCreat)
+	{
+		CreateQuestion();
+		return;
+	}
 	var kq = true;
 	var lenkq=  0;
 	for(var i=1;i<=arrayKq[1];i++)
@@ -81,10 +75,21 @@ function  ChangeColor()
 InvalidateObj("","");
 
 }
+
+window.callBackGetVer = function callBackGetVer(_score,_note)
+{
+	if (_note != "undefined" &&  typeof _score != "undefined" && _note !== null && _note !== "" && _note !== 0)
+	{
+		_score =_score;
+	}
+   	SetText("","score",_score);
+	SetShowObject("","msg",0);
+	CreateQuestion();
+}
+
 function Page_1()
 {
-InitScore();
-CreateQuestion();
+GetVer("callBackGetVer");
   return;
 }
 
@@ -183,14 +188,11 @@ var check = CreText('check',248,236,116,39,"Submit",'#80ff00','#ffffff','#ffffff
 check.on('mouseup touchend dragend',function(evt)/*---dragend---*/
 {
 m_pgObjCaller = this;
-if(_bTestAndCreat)
-CreateQuestion();
-else
 ChamDiem();
   return;
 }
  );
-var score = CreText('score',545,6,47,47,"2",'rgba(0,0,0,0)','#ffffff','#ffffff','#ffffff','',36,'Arial','Bold','center','middle',2,'0.00','0','0',2,'#ffffff','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
+var score = CreText('score',545,6,47,47,"2",'rgba(0,0,0,0)','#ffffff','rgba(0,0,0,0)','#ffffff','',28,'Arial','Bold','center','middle',2,'0.00','0','0',1,'#ffffff','#ffffff','0','0','#ffffff','0','0','4','1',0,0,'rgba(0,0,0,0)',0,1.50);
 var in_1 = CreText('in_1',278,108,52,37,"",'rgba(0,0,0,0)','#ffffff','#282828','#ffffff','',24,'Arial','Normal','center','bottom',0,'0.00','1','0',2,'#0000ff','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 var c10 = CreText('c10',515,164,52,51,"",'#ffffff','#ffffff','#000000','#ffffff','',16,'Arial','Normal','center','middle',0,'0.00','0','0',2,'#ff6820','#ffffff','0','0','rgba(0,0,0,0)','0','0','4','0',0,0,'rgba(0,0,0,0)',0,1.50);
 c10.on('mouseup touchend dragend',function(evt)/*---dragend---*/

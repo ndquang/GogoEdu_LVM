@@ -71,3 +71,4 @@ hashIDText['ID_TEXT67']='23';
 hashIDText['ID_TEXT68']='23';
 hashIDText['ID_TEXT69']='23';
 hashIDText['ID_TEXT70']='Điền số còn thiếu vào dấu '?'';
+hashIDText['ID_TEXT71']='good job';
