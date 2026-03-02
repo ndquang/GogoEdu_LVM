@@ -1,0 +1,10 @@
+﻿var hashIDText = new Array();
+hashIDText['TEXT']='';
+hashIDText['ID_TEXT1']='Rotate Puzzle';
+hashIDText['ID_TEXT2']='Rotate Puzzle';
+hashIDText['ID_TEXT3']='Rotate Puzzle';
+hashIDText['ID_TEXT4']='2 x 2';
+hashIDText['ID_TEXT5']='3x3';
+hashIDText['ID_TEXT6']='4x4';
+hashIDText['ID_TEXT7']='3 x 3';
+hashIDText['ID_TEXT8']='4 x 4';

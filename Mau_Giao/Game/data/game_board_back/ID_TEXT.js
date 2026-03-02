@@ -1,0 +1,16 @@
+﻿var hashIDText = new Array();
+hashIDText['FLASH']='';
+hashIDText['ID_TEXT1']='';
+hashIDText['ID_TEXT2']='';
+hashIDText['ID_TEXT3']='';
+hashIDText['ID_TEXT4']='';
+hashIDText['ID_TEXT5']='';
+hashIDText['ID_TEXT6']='';
+hashIDText['ID_TEXT7']='';
+hashIDText['ID_TEXT8']='';
+hashIDText['ID_TEXT9']='';
+hashIDText['ID_TEXT10']='';
+hashIDText['ID_TEXT11']='';
+hashIDText['ID_TEXT12']='';
+hashIDText['ID_TEXT13']='';
+hashIDText['ID_TEXT14']='';
